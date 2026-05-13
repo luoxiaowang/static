@@ -1,1183 +1,1213 @@
 <!DOCTYPE html>
-<!-- saved from url=(0158)file:///Users/luoxiao/Desktop/code/skills/%E6%83%A0%E5%B7%9E-2026-05/%E6%83%A0%E5%B7%9E-5%E5%A4%A94%E6%99%9A%E6%97%85%E8%A1%8C%E8%AE%A1%E5%88%92.html#sec-tips -->
-<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试团队管理看板</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>武汉→惠州 5天4晚亲海慢游</title>
-<style>
-  :root {
-    --primary: #0EA5E9;
-    --primary-dark: #0284C7;
-    --primary-light: #E0F2FE;
-    --primary-50: #F0F9FF;
-    --accent: #F97316;
-    --accent-dark: #EA580C;
-    --accent-light: #FFF7ED;
-    --success: #10B981;
-    --success-light: #D1FAE5;
-    --rose: #F43F5E;
-    --rose-light: #FFF1F2;
-    --violet: #8B5CF6;
-    --bg: #F8FAFC;
-    --card: #FFFFFF;
-    --text: #0C4A6E;
-    --text-body: #334155;
-    --text-muted: #64748B;
-    --border: #E2E8F0;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
-    --shadow-lg: 0 12px 28px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
-    --radius: 16px;
-    --radius-sm: 10px;
-    --transition: 200ms ease-out;
-  }
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(39, 110, 241, 0.14), transparent 28%),
+        radial-gradient(circle at top right, rgba(54, 179, 126, 0.1), transparent 24%),
+        linear-gradient(180deg, #f4f7fb 0%, #eef3f9 100%);
+      color: #24324a;
+    }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    [v-cloak] {
+      display: none;
+    }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: var(--bg); color: var(--text-body); line-height: 1.65; -webkit-font-smoothing: antialiased;
-  }
+    .dashboard {
+      min-height: 100vh;
+      padding: 24px;
+    }
 
-  .container { max-width: 980px; margin: 0 auto; padding: 24px 20px 48px; }
+    .page-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
 
-  /* ---- SVG Icon System ---- */
-  .icon {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; flex-shrink: 0;
-  }
-  .icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .icon-sm { width: 16px; height: 16px; }
-  .icon-lg { width: 24px; height: 24px; }
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #1f5eff 0%, #2d7df6 38%, #22a2ff 100%);
+      box-shadow: 0 18px 48px rgba(31, 94, 255, 0.22);
+    }
 
-  /* ---- Hero ---- */
-  .hero {
-    position: relative; border-radius: var(--radius); padding: 56px 44px 48px;
-    margin-bottom: 36px; overflow: hidden; color: white;
-    background: linear-gradient(135deg, #0EA5E9 0%, #6366F1 50%, #8B5CF6 100%);
-  }
-  .hero::before {
-    content: ''; position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 600px 400px at 20% 80%, rgba(249,115,22,0.2) 0%, transparent 70%),
-      radial-gradient(ellipse 500px 500px at 80% 20%, rgba(139,92,246,0.3) 0%, transparent 60%),
-      radial-gradient(ellipse 300px 300px at 60% 60%, rgba(255,255,255,0.06) 0%, transparent 50%);
-  }
-  .hero-content { position: relative; z-index: 1; }
-  .hero h1 { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; line-height: 1.2; }
-  .hero-meta { display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.92rem; opacity: 0.92; }
-  .hero-meta-item { display: flex; align-items: center; gap: 7px; }
-  .hero-meta-item .icon { color: rgba(255,255,255,0.85); }
-  .hero-orb {
-    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.12; pointer-events: none;
-    animation: orbFloat 10s ease-in-out infinite alternate;
-  }
-  .hero-orb-1 { width: 300px; height: 300px; background: #F97316; top: -80px; right: -60px; }
-  .hero-orb-2 { width: 200px; height: 200px; background: #38BDF8; bottom: -60px; left: -40px; animation-delay: -5s; }
+    .hero-card::before,
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.16;
+      pointer-events: none;
+    }
 
-  @keyframes orbFloat {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(20px, -15px) scale(1.1); }
-  }
+    .hero-card::before {
+      width: 320px;
+      height: 320px;
+      right: -80px;
+      top: -100px;
+      background: rgba(255, 255, 255, 0.4);
+    }
 
-  /* ---- Section Nav ---- */
-  .section-nav {
-    display: flex; gap: 8px; margin-bottom: 32px; overflow-x: auto;
-    padding-bottom: 4px; -webkit-overflow-scrolling: touch;
-  }
-  .section-nav::-webkit-scrollbar { height: 0; }
-  .nav-pill {
-    display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
-    border-radius: 99px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;
-    background: var(--card); border: 1px solid var(--border); color: var(--text-muted);
-    cursor: pointer; transition: all var(--transition); text-decoration: none;
-  }
-  .nav-pill:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
-  .nav-pill .icon { width: 16px; height: 16px; }
+    .hero-card::after {
+      width: 260px;
+      height: 260px;
+      left: -80px;
+      bottom: -120px;
+      background: rgba(255, 255, 255, 0.24);
+    }
 
-  /* ---- Section ---- */
-  .section { margin-bottom: 40px; scroll-margin-top: 20px; }
-  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-  .section-icon {
-    display: flex; align-items: center; justify-content: center;
-    width: 36px; height: 36px; border-radius: var(--radius-sm);
-    background: var(--primary-light); color: var(--primary);
-  }
-  .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 30px 32px;
+      color: #fff;
+    }
 
-  /* ---- Weather ---- */
-  .weather-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
-  .weather-bar::-webkit-scrollbar { height: 4px; }
-  .weather-bar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-  .weather-card {
-    flex: 0 0 auto; min-width: 108px; background: var(--card); border-radius: var(--radius-sm);
-    padding: 14px 12px; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border);
-    transition: all var(--transition);
-  }
-  .weather-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-  .weather-card .w-date { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
-  .weather-card .w-icon { font-size: 28px; line-height: 1; margin: 4px 0 8px; }
-  .weather-card .w-icon svg { width: 32px; height: 32px; }
-  .weather-card .w-temp { font-size: 0.88rem; font-weight: 600; color: var(--text); }
-  .weather-card .w-temp-low { color: var(--text-muted); font-weight: 400; }
-  .weather-tip {
-    display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; padding: 14px 18px;
-    background: var(--primary-50); border: 1px solid #BAE6FD; border-radius: var(--radius-sm); font-size: 0.88rem; color: var(--primary-dark);
-  }
-  .weather-tip .icon { flex-shrink: 0; margin-top: 1px; }
+    .hero-title {
+      margin: 0 0 10px;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
 
-  /* ---- Day Card ---- */
-  .day-card {
-    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
-    border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden;
-    transition: box-shadow var(--transition);
-  }
-  .day-card:hover { box-shadow: var(--shadow-md); }
-  .day-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 22px; cursor: pointer; user-select: none;
-    transition: background var(--transition);
-  }
-  .day-header:hover { background: var(--primary-50); }
-  .day-header:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
-  .day-num {
-    display: flex; align-items: center; justify-content: center;
-    width: 40px; height: 40px; border-radius: var(--radius-sm);
-    background: linear-gradient(135deg, var(--primary), var(--violet));
-    color: white; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; margin-right: 14px;
-  }
-  .day-header-left { display: flex; align-items: center; }
-  .day-header-info h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); line-height: 1.3; }
-  .day-header-info .day-meta { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
-  .day-header .toggle-icon {
-    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    background: var(--bg); color: var(--text-muted); transition: all var(--transition);
-  }
-  .day-card.collapsed .toggle-icon { transform: rotate(-90deg); }
-  .day-body {
-    padding: 4px 22px 22px; border-top: 1px solid var(--border);
-    max-height: 3000px; overflow: hidden; transition: max-height 0.35s ease-out, padding 0.35s ease-out;
-  }
-  .day-card.collapsed .day-body { max-height: 0; padding-top: 0; padding-bottom: 0; border-top-color: transparent; }
+    .hero-subtitle {
+      margin: 0;
+      max-width: 720px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.9);
+    }
 
-  /* ---- Timeline ---- */
-  .timeline { position: relative; padding-left: 32px; padding-top: 18px; }
-  .timeline::before {
-    content: ''; position: absolute; left: 10px; top: 24px; bottom: 12px;
-    width: 2px; background: linear-gradient(to bottom, var(--primary), var(--border));
-    border-radius: 2px;
-  }
-  .tl-item { position: relative; margin-bottom: 22px; }
-  .tl-item:last-child { margin-bottom: 0; }
-  .tl-dot {
-    position: absolute; left: -28px; top: 4px; width: 14px; height: 14px;
-    border-radius: 50%; border: 2.5px solid var(--primary); background: white; z-index: 1;
-    box-shadow: 0 0 0 3px var(--primary-light);
-  }
-  .tl-item.is-meal .tl-dot { border-color: var(--accent); background: var(--accent-light); box-shadow: 0 0 0 3px var(--accent-light); }
-  .tl-time { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 3px; }
-  .tl-content h4 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-  .tl-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
-  .tl-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-  .tag {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 0.73rem; padding: 3px 10px; border-radius: 99px; font-weight: 500;
-  }
-  .tag-cost { background: var(--accent-light); color: var(--accent-dark); }
-  .tag-transport { background: var(--success-light); color: #047857; }
-  .tag-free { background: var(--primary-light); color: var(--primary-dark); }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
 
-  /* ---- Meal Card ---- */
-  .meal-card {
-    display: flex; align-items: center; gap: 14px; padding: 12px 16px;
-    background: linear-gradient(135deg, #FFF7ED, #FFFBEB); border: 1px solid #FED7AA;
-    border-radius: var(--radius-sm); margin-top: 6px;
-  }
-  .meal-icon {
-    width: 38px; height: 38px; border-radius: 10px;
-    background: white; display: flex; align-items: center; justify-content: center;
-    box-shadow: var(--shadow-sm); color: var(--accent); flex-shrink: 0;
-  }
-  .meal-info { flex: 1; min-width: 0; }
-  .meal-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
-  .meal-detail { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .meal-price { font-weight: 700; color: var(--accent-dark); white-space: nowrap; font-size: 0.95rem; }
+    .hero-pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(6px);
+      font-size: 13px;
+      color: #fff;
+    }
 
-  /* ---- Hotels ---- */
-  .hotel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .hotel-card {
-    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
-    border: 1px solid var(--border); padding: 22px; position: relative;
-    cursor: default; transition: all var(--transition);
-  }
-  .hotel-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
-  .hotel-badge {
-    position: absolute; top: 14px; right: 14px;
-    background: linear-gradient(135deg, var(--primary), var(--violet));
-    color: white; font-size: 0.72rem; font-weight: 600;
-    padding: 3px 12px; border-radius: 99px;
-  }
-  .hotel-name { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 6px; padding-right: 60px; }
-  .hotel-area { display: flex; align-items: center; gap: 5px; font-size: 0.83rem; color: var(--text-muted); margin-bottom: 12px; }
-  .hotel-price-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 12px; }
-  .hotel-price { font-size: 1.3rem; font-weight: 800; color: var(--primary); }
-  .hotel-price-unit { font-size: 0.8rem; color: var(--text-muted); }
-  .hotel-highlights { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
-  .hotel-tag { display: inline-block; font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: var(--primary-light); color: var(--primary-dark); margin-right: 4px; margin-bottom: 4px; }
+    .hero-side {
+      min-width: 300px;
+      max-width: 320px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-self: center;
+    }
 
-  /* ---- Budget ---- */
-  .budget-wrapper {
-    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
-    border: 1px solid var(--border); overflow: hidden;
-  }
-  .budget-chart { display: flex; height: 8px; overflow: hidden; }
-  .budget-chart-seg { transition: width 0.6s ease-out; }
-  .budget-table { width: 100%; border-collapse: collapse; }
-  .budget-table th, .budget-table td { padding: 12px 18px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
-  .budget-table th { background: var(--bg); color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
-  .budget-table .cat-row td { font-weight: 600; color: var(--text); background: var(--primary-50); }
-  .budget-table .cat-row .cat-icon { display: inline-flex; align-items: center; gap: 8px; }
-  .budget-table .cat-row .cat-icon .icon { color: var(--primary); }
-  .budget-table .sub-row td { color: var(--text-muted); padding-left: 48px; }
-  .budget-table .subtotal { text-align: right; font-weight: 600; color: var(--primary); }
-  .budget-table td:last-child { text-align: right; }
+    .hero-side-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
 
-  .budget-total {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 22px 24px;
-    background: linear-gradient(135deg, #0EA5E9 0%, #6366F1 50%, #8B5CF6 100%);
-    border-radius: var(--radius); color: white; margin-top: 16px;
-  }
-  .budget-total-label { font-size: 0.95rem; font-weight: 500; opacity: 0.9; }
-  .budget-total-per { font-size: 0.85rem; opacity: 0.75; margin-top: 2px; }
-  .budget-total-amount { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+    .hero-side-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.78);
+    }
 
-  /* ---- Tips ---- */
-  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-  .tip-card {
-    display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
-    background: var(--accent-light); border: 1px solid #FED7AA; border-radius: var(--radius-sm);
-    font-size: 0.88rem; color: var(--text-body);
-  }
-  .tip-icon {
-    width: 28px; height: 28px; border-radius: 8px; background: white;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: var(--shadow-sm); color: var(--accent); flex-shrink: 0;
-  }
-  .tip-icon .icon { width: 14px; height: 14px; }
+    .hero-side-value {
+      margin-top: 8px;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+    }
 
-  /* ---- Footer ---- */
-  .footer { text-align: center; padding: 28px 20px; color: var(--text-muted); font-size: 0.78rem; margin-top: 20px; }
-  .footer-line { width: 48px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--violet)); border-radius: 99px; margin: 0 auto 12px; }
+    .hero-side-tip {
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.78);
+    }
 
-  /* ---- Print ---- */
-  @media print {
-    body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .container { padding: 0; max-width: 100%; }
-    .hero { break-inside: avoid; }
-    .day-card { break-inside: avoid; }
-    .day-card.collapsed .day-body { max-height: none !important; padding: 4px 22px 22px !important; border-top: 1px solid var(--border) !important; }
-    .toggle-icon, .section-nav { display: none !important; }
-    .hotel-card:hover, .weather-card:hover, .day-card:hover { transform: none; box-shadow: var(--shadow); }
-  }
+    .section-block {
+      margin-bottom: 20px;
+    }
 
-  /* ---- Responsive ---- */
-  @media (max-width: 640px) {
-    .container { padding: 16px 14px 32px; }
-    .hero { padding: 36px 24px 32px; }
-    .hero h1 { font-size: 1.55rem; }
-    .hero-meta { gap: 12px; font-size: 0.85rem; }
-    .day-header { padding: 14px 16px; }
-    .day-num { width: 34px; height: 34px; font-size: 0.78rem; margin-right: 10px; }
-    .day-body { padding: 4px 16px 16px; }
-    .timeline { padding-left: 26px; }
-    .hotel-grid { grid-template-columns: 1fr; }
-    .tips-grid { grid-template-columns: 1fr; }
-    .budget-total { flex-direction: column; text-align: center; gap: 8px; padding: 18px; }
-    .section-nav { gap: 6px; }
-    .nav-pill { padding: 6px 12px; font-size: 0.8rem; }
-  }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding: 0 4px;
+    }
 
-  /* ---- Reduced Motion ---- */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-    .day-body { transition: none; }
-  }
+    .section-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2d3d;
+    }
 
-  /* ---- Focus ---- */
-  :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
-</style>
+    .section-desc {
+      font-size: 13px;
+      color: #7b8798;
+    }
+
+    .metric-card {
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 10px 26px rgba(31, 45, 61, 0.08);
+    }
+
+    .metric-card .el-card__body {
+      padding: 20px;
+    }
+
+    .metric-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .metric-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: #7b8798;
+    }
+
+    .metric-value {
+      margin-top: 6px;
+      font-size: 30px;
+      font-weight: 700;
+      color: #1f2d3d;
+      line-height: 1.1;
+    }
+
+    .metric-bottom {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #7b8798;
+    }
+
+    .delta-up {
+      color: #f56c6c;
+    }
+
+    .delta-down {
+      color: #67c23a;
+    }
+
+    .chart-card,
+    .table-card,
+    .panel-card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 10px 28px rgba(31, 45, 61, 0.08);
+    }
+
+    .chart-card .el-card__body,
+    .table-card .el-card__body,
+    .panel-card .el-card__body {
+      padding: 20px;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f2d3d;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: #8a97a8;
+    }
+
+    .chart-box {
+      width: 100%;
+      height: 320px;
+    }
+
+    .mini-chart-box {
+      width: 100%;
+      height: 280px;
+    }
+
+    .risk-list,
+    .action-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .risk-item,
+    .action-item {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #f7f9fc;
+      border: 1px solid #ecf1f7;
+    }
+
+    .risk-item-header,
+    .action-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .risk-item-title,
+    .action-item-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #24324a;
+    }
+
+    .risk-item-desc,
+    .action-item-desc {
+      font-size: 13px;
+      color: #6b778c;
+      line-height: 1.7;
+    }
+
+    .staff-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .staff-tile {
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #f8fbff 0%, #f2f6fb 100%);
+      border: 1px solid #edf2f8;
+    }
+
+    .staff-tile-label {
+      font-size: 13px;
+      color: #7b8798;
+    }
+
+    .staff-tile-value {
+      margin-top: 10px;
+      font-size: 26px;
+      font-weight: 700;
+      color: #1f2d3d;
+    }
+
+    .staff-tile-extra {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #8a97a8;
+      line-height: 1.6;
+    }
+
+    .health-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .health-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .panel-note {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f8fbff;
+      color: #5f6b7c;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .footer-tip {
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(223, 230, 239, 0.95);
+      font-size: 13px;
+      color: #6b778c;
+      line-height: 1.8;
+    }
+
+    .el-table th {
+      background: #f7f9fc;
+      color: #66758a;
+      font-weight: 600;
+    }
+
+    .el-table td,
+    .el-table th {
+      padding: 10px 0;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-content {
+        flex-direction: column;
+      }
+
+      .hero-side {
+        min-width: 100%;
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: 14px;
+      }
+
+      .hero-content {
+        padding: 22px 20px;
+      }
+
+      .hero-title {
+        font-size: 24px;
+      }
+
+      .hero-side {
+        grid-template-columns: 1fr;
+      }
+
+      .section-header,
+      .card-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .staff-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-box,
+      .mini-chart-box {
+        height: 260px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-
-  <!-- Hero -->
-  <div class="hero" role="banner">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-content">
-      <h1 id="heroTitle">武汉→惠州 5天4晚亲海慢游</h1>
-      <div class="hero-meta">
-        <div class="hero-meta-item">
-          <span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
-          <span id="heroDate">2026-05-01 ~ 05-05</span>
-        </div>
-        <div class="hero-meta-item">
-          <span class="icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
-          <span id="heroTravelers">6人同行，含1名8岁小朋友</span>
-        </div>
-        <div class="hero-meta-item">
-          <span class="icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></span>
-          <span>预估 <strong id="heroBudget">¥11,388</strong></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section Nav -->
-  <nav class="section-nav" aria-label="快速导航">
-    <a class="nav-pill" href="file:///Users/luoxiao/Desktop/code/skills/%E6%83%A0%E5%B7%9E-2026-05/%E6%83%A0%E5%B7%9E-5%E5%A4%A94%E6%99%9A%E6%97%85%E8%A1%8C%E8%AE%A1%E5%88%92.html#sec-weather"><span class="icon"><svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"></path><path d="M12 2v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"></path></svg></span>天气</a>
-    <a class="nav-pill" href="file:///Users/luoxiao/Desktop/code/skills/%E6%83%A0%E5%B7%9E-2026-05/%E6%83%A0%E5%B7%9E-5%E5%A4%A94%E6%99%9A%E6%97%85%E8%A1%8C%E8%AE%A1%E5%88%92.html#sec-days"><span class="icon"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>行程</a>
-    <a class="nav-pill" href="file:///Users/luoxiao/Desktop/code/skills/%E6%83%A0%E5%B7%9E-2026-05/%E6%83%A0%E5%B7%9E-5%E5%A4%A94%E6%99%9A%E6%97%85%E8%A1%8C%E8%AE%A1%E5%88%92.html#sec-hotels"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path></svg></span>住宿</a>
-    <a class="nav-pill" href="file:///Users/luoxiao/Desktop/code/skills/%E6%83%A0%E5%B7%9E-2026-05/%E6%83%A0%E5%B7%9E-5%E5%A4%A94%E6%99%9A%E6%97%85%E8%A1%8C%E8%AE%A1%E5%88%92.html#sec-budget"><span class="icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></span>预算</a>
-    <a class="nav-pill" href="file:///Users/luoxiao/Desktop/code/skills/%E6%83%A0%E5%B7%9E-2026-05/%E6%83%A0%E5%B7%9E-5%E5%A4%A94%E6%99%9A%E6%97%85%E8%A1%8C%E8%AE%A1%E5%88%92.html#sec-tips"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>贴士</a>
-  </nav>
-
-  <!-- Weather -->
-  <div class="section" id="sec-weather">
-    <div class="section-header">
-      <div class="section-icon"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"></path><path d="M12 2v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"></path></svg></span></div>
-      <h2 class="section-title">天气概览</h2>
-    </div>
-    <div class="weather-bar" id="weatherBar"><div class="weather-card">
-      <div class="w-date">05/01 周五</div>
-      <div class="w-icon" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></div>
-      <div class="w-temp">27° <span class="w-temp-low">/ 20°</span></div>
-    </div><div class="weather-card">
-      <div class="w-date">05/02 周六</div>
-      <div class="w-icon" style="color:#64748B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M4 12H2M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="9" r="4" opacity=".5"></circle><path d="M18 13h-1.26A7 7 0 0 0 6 15.26 5 5 0 1 0 9 23h9a5 5 0 0 0 0-10z"></path></svg></div>
-      <div class="w-temp">28° <span class="w-temp-low">/ 22°</span></div>
-    </div><div class="weather-card">
-      <div class="w-date">05/03 周日</div>
-      <div class="w-icon" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></div>
-      <div class="w-temp">28° <span class="w-temp-low">/ 20°</span></div>
-    </div><div class="weather-card">
-      <div class="w-date">05/04 周一</div>
-      <div class="w-icon" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></div>
-      <div class="w-temp">27° <span class="w-temp-low">/ 20°</span></div>
-    </div><div class="weather-card">
-      <div class="w-date">05/05 周二</div>
-      <div class="w-icon" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></div>
-      <div class="w-temp">26° <span class="w-temp-low">/ 21°</span></div>
-    </div></div>
-    <div class="weather-tip" id="weatherTip"><span class="icon" style="color:var(--primary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>
-    <span>速干短袖、薄外套、洞洞鞋或溯溪鞋、儿童替换衣物、防晒帽 · 降水概率 2日-4日午后阵雨和雷暴概率偏高 · 海边项目尽量前置到上午，下午留给赶海、休息或弹性调整；雷雨来时不要停留在观景台、栈道和礁石边。</span></div>
-  </div>
-
-  <!-- Daily Itinerary -->
-  <div class="section" id="sec-days">
-    <div class="section-header">
-      <div class="section-icon"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span></div>
-      <h2 class="section-title">每日行程</h2>
-    </div>
-    <div id="daysContainer"><div class="day-card">
-      <div class="day-header" tabindex="0" role="button" aria-expanded="true" onclick="toggleDay(this)" onkeydown="if(event.key===&#39;Enter&#39;||event.key===&#39; &#39;){event.preventDefault();toggleDay(this)}">
-        <div class="day-header-left">
-          <div class="day-num">D1</div>
-          <div class="day-header-info">
-            <h3>抵达惠州北 → 双月湾万科入住 → 沙滩热身</h3>
-            <div class="day-meta">
-              <span>05/01 周五</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;color:#64748B">
-                <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></span> 27°/20°
-              </span>
+  <div id="app" class="dashboard" v-cloak>
+    <div class="page-shell">
+      <el-card class="hero-card" shadow="never">
+        <div class="hero-content">
+          <div>
+            <h1 class="hero-title">测试团队管理看板</h1>
+            <p class="hero-subtitle">
+              面向测试负责人、研发管理者和项目经理的统一视图，聚合版本排期、质量表现和团队人力状态，
+              用于快速识别交付风险、质量短板和资源瓶颈。
+            </p>
+            <div class="hero-meta">
+              <span class="hero-pill">统计周期：{{ overview.period }}</span>
+              <span class="hero-pill">团队：{{ overview.teamName }}</span>
+              <span class="hero-pill">最后刷新：{{ overview.lastUpdated }}</span>
+              <span class="hero-pill">看板状态：{{ overview.status }}</span>
+            </div>
+          </div>
+          <div class="hero-side">
+            <div class="hero-side-card">
+              <div class="hero-side-label">版本按期率</div>
+              <div class="hero-side-value">{{ overview.scheduleRate }}%</div>
+              <div class="hero-side-tip">较上周期 {{ overview.scheduleDelta }}</div>
+            </div>
+            <div class="hero-side-card">
+              <div class="hero-side-label">线上逃逸缺陷</div>
+              <div class="hero-side-value">{{ overview.escapeDefects }}</div>
+              <div class="hero-side-tip">目标不高于 {{ overview.escapeTarget }} 个</div>
+            </div>
+            <div class="hero-side-card">
+              <div class="hero-side-label">团队饱和度</div>
+              <div class="hero-side-value">{{ overview.capacityLoad }}%</div>
+              <div class="hero-side-tip">高于 90% 需要关注</div>
+            </div>
+            <div class="hero-side-card">
+              <div class="hero-side-label">高风险版本</div>
+              <div class="hero-side-value">{{ overview.highRiskReleases }}</div>
+              <div class="hero-side-tip">优先跟进延期与阻塞项</div>
             </div>
           </div>
         </div>
-        <div class="toggle-icon"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
-      </div>
-      <div class="day-body"><div class="timeline"><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">13:38 · 0.5h</div><div class="tl-content"><h4>抵达惠州北站</h4><p>出站后不建议再进市区折返，五一当天优先直接去海边，减少假期拥堵消耗。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">已购高铁</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">14:10 · 2.5h</div><div class="tl-content"><h4>惠州北站前往双月湾万科酒店</h4><p>6个人带行李，五一当天更建议直接叫 2 台车到酒店，不建议中途再插入海岛项目。</p><div class="tl-tags"><span class="tag tag-cost">¥650</span><span class="tag tag-transport">2台网约车/包车</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">17:00 · 1.5h</div><div class="tl-content"><h4>办理入住 + 万科沙滩轻松散步</h4><p>第一天只做熟悉酒店、小区、沙滩入口和电动车租点，给小朋友留体力。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">17:40 · 0.5h</div><div class="tl-content"><h4>租电动车</h4><p>建议第一天下午就把 2 台电动车租好，后面 5月2日和5月4日 在双月湾内部短驳更省事。优先选电量新的车。</p><div class="tl-tags"><span class="tag tag-cost">¥160</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">18:20 · 1h</div><div class="tl-content"><h4>酒店楼下沙滩追浪 + 看日落</h4><p>如果下雨就改成酒店休息，晚上吃完饭再去楼下听海。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">19:40</div><div class="tl-content"><h4>晚餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">万科周边海鲜餐厅或外卖到酒店</div>
-            <div class="meal-detail">海鲜 · 双月湾万科片区 · 推荐：椒盐濑尿虾、蒜蓉扇贝、白灼虾、椒盐鱿鱼</div>
-          </div>
-          <div class="meal-price">¥110/人</div>
-        </div></div></div></div></div>
-    </div><div class="day-card">
-      <div class="day-header" tabindex="0" role="button" aria-expanded="true" onclick="toggleDay(this)" onkeydown="if(event.key===&#39;Enter&#39;||event.key===&#39; &#39;){event.preventDefault();toggleDay(this)}">
-        <div class="day-header-left">
-          <div class="day-num">D2</div>
-          <div class="day-header-info">
-            <h3>双月湾亲子海边日：观景台 + 海龟湾 + 大澳村沙滩赶海</h3>
-            <div class="day-meta">
-              <span>05/02 周六</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;color:#64748B">
-                <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M4 12H2M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="9" r="4" opacity=".5"></circle><path d="M18 13h-1.26A7 7 0 0 0 6 15.26 5 5 0 1 0 9 23h9a5 5 0 0 0 0-10z"></path></svg></span> 28°/22°
-              </span>
+      </el-card>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2 class="section-title">核心指标总览</h2>
+          <div class="section-desc">管理层一屏快速掌握本周期交付与质量态势</div>
+        </div>
+        <el-row :gutter="16">
+          <el-col :xs="24" :sm="12" :lg="4" v-for="item in metrics" :key="item.label">
+            <el-card class="metric-card">
+              <div class="metric-top">
+                <div>
+                  <div class="metric-label">{{ item.label }}</div>
+                  <div class="metric-value">{{ item.value }}</div>
+                </div>
+                <div class="metric-icon" :style="{ background: item.color }">
+                  <i :class="item.icon"></i>
+                </div>
+              </div>
+              <el-progress
+                :percentage="item.progress"
+                :stroke-width="8"
+                :show-text="false"
+                :color="item.progressColor">
+              </el-progress>
+              <div class="metric-bottom">
+                <span>{{ item.note }}</span>
+                <span :class="item.deltaType">{{ item.delta }}</span>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2 class="section-title">版本排期视图</h2>
+          <div class="section-desc">围绕版本健康度、里程碑和交付风险进行管理</div>
+        </div>
+        <el-row :gutter="16">
+          <el-col :xs="24" :lg="16">
+            <el-card class="chart-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">版本交付趋势</h3>
+                  <div class="card-subtitle">计划上线数、按期交付数与延期版本数趋势</div>
+                </div>
+                <el-tag type="primary" effect="plain">最近 6 周</el-tag>
+              </div>
+              <div id="releaseTrendChart" class="chart-box"></div>
+            </el-card>
+          </el-col>
+          <el-col :xs="24" :lg="8">
+            <el-card class="panel-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">风险版本清单</h3>
+                  <div class="card-subtitle">优先处理阻塞、延期和覆盖不足版本</div>
+                </div>
+              </div>
+              <div class="risk-list">
+                <div class="risk-item" v-for="item in riskReleases" :key="item.name">
+                  <div class="risk-item-header">
+                    <span class="risk-item-title">{{ item.name }}</span>
+                    <el-tag :type="item.tagType" size="mini">{{ item.level }}</el-tag>
+                  </div>
+                  <div class="risk-item-desc">{{ item.desc }}</div>
+                </div>
+              </div>
+              <div class="panel-note">
+                当前建议优先跟进 UAT 阻塞项、核心链路回归和上线窗口变更，避免风险继续传导到发布阶段。
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <el-card class="table-card" style="margin-top: 16px;">
+          <div class="card-title-row">
+            <div>
+              <h3 class="card-title">版本执行明细</h3>
+              <div class="card-subtitle">测试启动、执行、回归和上线准备的综合视图</div>
             </div>
           </div>
+          <el-table :data="releaseTable" stripe>
+            <el-table-column prop="name" label="版本" min-width="150"></el-table-column>
+            <el-table-column prop="owner" label="负责人" min-width="90"></el-table-column>
+            <el-table-column prop="testWindow" label="测试周期" min-width="160"></el-table-column>
+            <el-table-column label="健康度" min-width="120">
+              <template slot-scope="scope">
+                <span class="health-cell">
+                  <span class="health-dot" :style="{ background: scope.row.healthColor }"></span>
+                  <span>{{ scope.row.health }}</span>
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="执行进度" min-width="150">
+              <template slot-scope="scope">
+                <el-progress :percentage="scope.row.executionProgress" :stroke-width="10"></el-progress>
+              </template>
+            </el-table-column>
+            <el-table-column prop="defectStatus" label="缺陷状态" min-width="160"></el-table-column>
+            <el-table-column prop="risk" label="主要风险" min-width="220"></el-table-column>
+          </el-table>
+        </el-card>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2 class="section-title">质量数据视图</h2>
+          <div class="section-desc">关注缺陷趋势、回归质量和自动化覆盖的健康情况</div>
         </div>
-        <div class="toggle-icon"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
-      </div>
-      <div class="day-body"><div class="timeline"><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">06:00 · 1.5h</div><div class="tl-content"><h4>大星山观景台看双月湾全景</h4><p>这段不建议完全靠电动车，清晨打车更稳。看完就回酒店吃早餐，避免小朋友太累。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">短途打车</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">08:00</div><div class="tl-content"><h4>早餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">酒店早餐或港口镇早茶店</div>
-            <div class="meal-detail">粤式简餐 · 酒店附近 · 推荐：云吞面、肠粉、艇仔粥</div>
-          </div>
-          <div class="meal-price">¥28/人</div>
-        </div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">09:30 · 2.5h</div><div class="tl-content"><h4>海龟湾旅游区 + 会仙桥栈道</h4><p>成人票常见为30元；临海栈道风大，带孩子别跑跳。若遇雷雨，这段直接取消。</p><div class="tl-tags"><span class="tag tag-cost">¥30</span><span class="tag tag-transport">短途打车</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">12:30</div><div class="tl-content"><h4>午餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">港口海鲜市场现买现加工</div>
-            <div class="meal-detail">海鲜加工 · 双月湾港口海鲜市场 · 推荐：花甲、皮皮虾、海胆炒饭、清蒸鱼</div>
-          </div>
-          <div class="meal-price">¥110/人</div>
-        </div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">15:00 · 1h</div><div class="tl-content"><h4>酒店午休 + 等低潮</h4><p>5月2日大亚湾最低潮位约在16:00，下午这段最适合给小朋友安排赶海。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">15:40 · 2.5h</div><div class="tl-content"><h4>电动车去大澳村沙滩赶海</h4><p>大澳村沙滩更安静，也更适合拍日落。按 2026-05-02 大亚湾最低潮约 16:00 来卡时间，带小桶、小铲子、洞洞鞋即可。</p><div class="tl-tags"><span class="tag tag-cost">¥30</span><span class="tag tag-transport">电动车短驳</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">18:40</div><div class="tl-content"><h4>晚餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">港口镇海鲜晚餐</div>
-            <div class="meal-detail">海鲜烧烤 · 港口镇 · 推荐：炭烤生蚝、炒花甲、避风塘虾</div>
-          </div>
-          <div class="meal-price">¥95/人</div>
-        </div></div></div></div></div>
-    </div><div class="day-card">
-      <div class="day-header" tabindex="0" role="button" aria-expanded="true" onclick="toggleDay(this)" onkeydown="if(event.key===&#39;Enter&#39;||event.key===&#39; &#39;){event.preventDefault();toggleDay(this)}">
-        <div class="day-header-left">
-          <div class="day-num">D3</div>
-          <div class="day-header-info">
-            <h3>三角洲岛 + 磨子石公园 + 巽寮湾海边一线</h3>
-            <div class="day-meta">
-              <span>05/03 周日</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;color:#64748B">
-                <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></span> 28°/20°
-              </span>
-            </div>
-          </div>
+        <el-row :gutter="16">
+          <el-col :xs="24" :lg="12">
+            <el-card class="chart-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">缺陷收敛趋势</h3>
+                  <div class="card-subtitle">新增、关闭、存量缺陷变化</div>
+                </div>
+              </div>
+              <div id="defectTrendChart" class="chart-box"></div>
+            </el-card>
+          </el-col>
+          <el-col :xs="24" :lg="12">
+            <el-card class="chart-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">缺陷严重级别分布</h3>
+                  <div class="card-subtitle">便于识别阻塞与严重缺陷占比</div>
+                </div>
+              </div>
+              <div id="severityChart" class="chart-box"></div>
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="16" style="margin-top: 16px;">
+          <el-col :xs="24" :lg="8">
+            <el-card class="panel-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">关键质量指标</h3>
+                  <div class="card-subtitle">行业通用质量运营口径</div>
+                </div>
+              </div>
+              <div class="staff-grid">
+                <div class="staff-tile" v-for="item in qualityTiles" :key="item.label">
+                  <div class="staff-tile-label">{{ item.label }}</div>
+                  <div class="staff-tile-value">{{ item.value }}</div>
+                  <div class="staff-tile-extra">{{ item.extra }}</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :xs="24" :lg="16">
+            <el-card class="table-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">模块质量画像</h3>
+                  <div class="card-subtitle">帮助判断问题集中区域和回归优先级</div>
+                </div>
+              </div>
+              <el-table :data="moduleQuality" stripe>
+                <el-table-column prop="module" label="模块" min-width="120"></el-table-column>
+                <el-table-column prop="newDefects" label="本周新增缺陷" min-width="120"></el-table-column>
+                <el-table-column prop="openDefects" label="未关闭缺陷" min-width="120"></el-table-column>
+                <el-table-column prop="passRate" label="回归通过率" min-width="130"></el-table-column>
+                <el-table-column prop="automationCoverage" label="自动化覆盖率" min-width="130"></el-table-column>
+                <el-table-column prop="comment" label="质量评估" min-width="220"></el-table-column>
+              </el-table>
+            </el-card>
+          </el-col>
+        </el-row>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2 class="section-title">人力数据视图</h2>
+          <div class="section-desc">观察团队负载、角色分布和资源风险</div>
         </div>
-        <div class="toggle-icon"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
-      </div>
-      <div class="day-body"><div class="timeline"><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">07:30 · 1h</div><div class="tl-content"><h4>双月湾出发前往磨子石公园码头</h4><p>三角洲岛乘船点通常在磨子石公园一带，双月湾过去不适合用电动车硬骑，早出发能避开码头排队。</p><div class="tl-tags"><span class="tag tag-cost">¥260</span><span class="tag tag-transport">2台网约车/包车</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">09:00 · 0.5h</div><div class="tl-content"><h4>乘快艇上三角洲岛</h4><p>常见票型含往返快艇，公开信息多为磨子石公园码头上船，最晚下岛常见为18:00，建议以当天票务通知为准。</p><div class="tl-tags"><span class="tag tag-cost">¥168</span><span class="tag tag-transport">快艇</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">09:30 · 3.5h</div><div class="tl-content"><h4>三角洲岛亲子玩海</h4><p>这天主打海岛踩水、沙滩拍照、浅水区活动，不建议把高强度水上项目全上给小朋友。若早上下雨，这整天直接改回双月湾酒店休闲。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">13:00</div><div class="tl-content"><h4>午餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">磨子石公园/巽寮湾片区午餐</div>
-            <div class="meal-detail">简餐/海鲜 · 磨子石公园周边 · 推荐：炒粉、鱼丸汤、海鲜饭、椰子水</div>
-          </div>
-          <div class="meal-price">¥75/人</div>
-        </div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">14:20 · 1h</div><div class="tl-content"><h4>磨子石公园</h4><p>磨子石是这条线最好拍的礁石海岸，停留 40-60 分钟就够，不建议暴晒久走。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">15:30 · 1.5h</div><div class="tl-content"><h4>巽寮湾金海湾乌斯怀亚沙滩 / 蓝湾视野点</h4><p>这段作为巽寮湾轻松海边体验，不追求打卡全覆盖，重点看沙滩质感和酒店海岸线。蓝湾名称公开资料不够统一，这里按巽寮湾海边视野点处理。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">短途打车/步行</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">17:20 · 1h</div><div class="tl-content"><h4>返程回双月湾万科</h4><p>这一整天不建议靠电动车跨湾骑行，来回直接叫车更省体力。</p><div class="tl-tags"><span class="tag tag-cost">¥260</span><span class="tag tag-transport">2台网约车/包车</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">18:30</div><div class="tl-content"><h4>双月湾晚餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">回万科附近吃晚餐</div>
-            <div class="meal-detail">海鲜/家常菜 · 双月湾万科片区 · 推荐：海鲜粥、盐焗虾、炒时蔬</div>
-          </div>
-          <div class="meal-price">¥90/人</div>
-        </div></div></div></div></div>
-    </div><div class="day-card">
-      <div class="day-header" tabindex="0" role="button" aria-expanded="true" onclick="toggleDay(this)" onkeydown="if(event.key===&#39;Enter&#39;||event.key===&#39; &#39;){event.preventDefault();toggleDay(this)}">
-        <div class="day-header-left">
-          <div class="day-num">D4</div>
-          <div class="day-header-info">
-            <h3>双月湾慢收尾：蓝湾/万科沙滩 + 升级住东山海海景酒店</h3>
-            <div class="day-meta">
-              <span>05/04 周一</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;color:#64748B">
-                <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></span> 27°/20°
-              </span>
-            </div>
-          </div>
+        <el-row :gutter="16">
+          <el-col :xs="24" :lg="8">
+            <el-card class="panel-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">团队人力概览</h3>
+                  <div class="card-subtitle">是否有饱和、缺口与加班风险</div>
+                </div>
+              </div>
+              <div class="staff-grid">
+                <div class="staff-tile" v-for="item in staffOverview" :key="item.label">
+                  <div class="staff-tile-label">{{ item.label }}</div>
+                  <div class="staff-tile-value">{{ item.value }}</div>
+                  <div class="staff-tile-extra">{{ item.extra }}</div>
+                </div>
+              </div>
+              <div class="panel-note">
+                当前自动化投入占比偏低，建议将稳定模块逐步转入自动化回归，释放手工回归压力。
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :xs="24" :lg="8">
+            <el-card class="chart-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">人力投入分布</h3>
+                  <div class="card-subtitle">按角色观察团队结构</div>
+                </div>
+              </div>
+              <div id="staffMixChart" class="mini-chart-box"></div>
+            </el-card>
+          </el-col>
+          <el-col :xs="24" :lg="8">
+            <el-card class="chart-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">版本人力占用</h3>
+                  <div class="card-subtitle">识别资源集中和冲突区域</div>
+                </div>
+              </div>
+              <div id="workloadChart" class="mini-chart-box"></div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2 class="section-title">风险与行动建议</h2>
+          <div class="section-desc">用运营动作把风险转成明确的管理项</div>
         </div>
-        <div class="toggle-icon"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
+        <el-row :gutter="16">
+          <el-col :xs="24" :lg="12">
+            <el-card class="panel-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">本周期主要风险</h3>
+                  <div class="card-subtitle">建议在周会 / 版本会中重点跟踪</div>
+                </div>
+              </div>
+              <div class="risk-list">
+                <div class="risk-item" v-for="item in risks" :key="item.title">
+                  <div class="risk-item-header">
+                    <span class="risk-item-title">{{ item.title }}</span>
+                    <el-tag :type="item.type" size="mini">{{ item.level }}</el-tag>
+                  </div>
+                  <div class="risk-item-desc">{{ item.desc }}</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :xs="24" :lg="12">
+            <el-card class="panel-card">
+              <div class="card-title-row">
+                <div>
+                  <h3 class="card-title">建议管理动作</h3>
+                  <div class="card-subtitle">适合直接作为团队负责人行动项</div>
+                </div>
+              </div>
+              <div class="action-list">
+                <div class="action-item" v-for="item in actions" :key="item.title">
+                  <div class="action-item-header">
+                    <span class="action-item-title">{{ item.title }}</span>
+                    <el-tag type="info" size="mini">{{ item.owner }}</el-tag>
+                  </div>
+                  <div class="action-item-desc">{{ item.desc }}</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </section>
+
+      <div class="footer-tip">
+        当前页面为单文件演示版，适合先确认结构和指标口径。后续如果你需要，我可以继续把它改成接真实接口的数据版，或者按你们团队的实际流程替换成更贴合的测试指标。
       </div>
-      <div class="day-body"><div class="timeline"><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">08:30 · 1.5h</div><div class="tl-content"><h4>海边早餐 + 酒店周边电动车兜风</h4><p>今天把远距离项目全收掉，只保留双月湾内部轻松玩法。</p><div class="tl-tags"><span class="tag tag-cost">¥28</span><span class="tag tag-transport">步行/电动车</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">10:30 · 1.5h</div><div class="tl-content"><h4>蓝湾沙滩/万科周边轻松补海边</h4><p>这段主打补拍和放空，不再跑远景点。蓝湾名称资料不统一，所以按双月湾东侧海边活动理解。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">电动车短驳</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">13:00 · 1h</div><div class="tl-content"><h4>退房后转住东山海高配海景酒店</h4><p>推荐优先住双月湾东山海片区的檀悦都喜天丽，这晚主要是升级酒店体验。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">打车/自驾短驳</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">15:30 · 2h</div><div class="tl-content"><h4>酒店休息 + 私家沙滩/无边泳池体验</h4><p>把最后一晚留给酒店本身，适合小朋友玩水，大人拍海景和慢慢吃下午茶。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">17:40 · 1h</div><div class="tl-content"><h4>东山海海边散步看日落</h4><p>东山海这边更适合看日出海景和高配酒店体验，最后一晚不用再折腾。</p><div class="tl-tags"><span class="tag tag-free">免费</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">19:00</div><div class="tl-content"><h4>酒店晚餐或东山海附近海鲜餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">东山海酒店餐厅或附近海鲜餐厅</div>
-            <div class="meal-detail">海鲜/粤菜 · 双月湾东山海片区 · 推荐：海鲜拼盘、白灼虾、蒸鱼、儿童友好炒饭</div>
-          </div>
-          <div class="meal-price">¥120/人</div>
-        </div></div></div></div></div>
-    </div><div class="day-card">
-      <div class="day-header" tabindex="0" role="button" aria-expanded="true" onclick="toggleDay(this)" onkeydown="if(event.key===&#39;Enter&#39;||event.key===&#39; &#39;){event.preventDefault();toggleDay(this)}">
-        <div class="day-header-left">
-          <div class="day-num">D5</div>
-          <div class="day-header-info">
-            <h3>海景酒店慢早晨 → 惠州北返程</h3>
-            <div class="day-meta">
-              <span>05/05 周二</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;color:#64748B">
-                <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"></path><path d="M8 19v2M12 19v2M16 19v2"></path></svg></span> 26°/21°
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="toggle-icon"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
-      </div>
-      <div class="day-body"><div class="timeline"><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">08:30 · 2.5h</div><div class="tl-content"><h4>酒店早餐 + 海边慢玩</h4><p>返程高铁是 15:48，从海边酒店出发要留足节日路况缓冲，所以这天不再插额外景点。</p><div class="tl-tags"><span class="tag tag-cost">¥35</span><span class="tag tag-transport">步行</span></div></div></div><div class="tl-item is-meal"><div class="tl-dot"></div><div class="tl-time">11:30</div><div class="tl-content"><h4>午餐</h4><div class="meal-card">
-          <div class="meal-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span></div>
-          <div class="meal-info">
-            <div class="meal-name">酒店周边简餐后出发</div>
-            <div class="meal-detail">简餐 · 双月湾东山海片区 · 推荐：汤粉、炒饭、儿童餐、海鲜粥</div>
-          </div>
-          <div class="meal-price">¥60/人</div>
-        </div></div></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-time">12:15 · 3h</div><div class="tl-content"><h4>前往惠州北站返程</h4><p>你们 15:48 从惠州北出发，建议最迟 12:15 左右离开海边酒店，给五一返程拥堵和到站缓冲留足时间。</p><div class="tl-tags"><span class="tag tag-cost">¥650</span><span class="tag tag-transport">2台网约车/包车</span></div></div></div></div></div>
-    </div></div>
+    </div>
   </div>
 
-  <!-- Hotels -->
-  <div class="section" id="sec-hotels">
-    <div class="section-header">
-      <div class="section-icon" style="background:var(--accent-light);color:var(--accent);"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path></svg></span></div>
-      <h2 class="section-title">住宿推荐</h2>
-    </div>
-    <div class="hotel-grid" id="hotelGrid"><div class="hotel-card">
-      <div class="hotel-badge">推荐</div>
-      <div class="hotel-name">双月湾万科片区海景公寓/酒店</div>
-      <div class="hotel-area"><span class="icon icon-sm" style="color:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>双月湾</div>
-      <div class="hotel-price-row"><span class="hotel-price">¥780</span><span class="hotel-price-unit">/晚</span></div>
-      <div class="hotel-highlights"><span class="hotel-tag">你们已确定连住3晚</span><span class="hotel-tag">下楼就是沙滩</span><span class="hotel-tag">适合孩子反复玩沙玩海</span><span class="hotel-tag">周边可短距离电动车活动</span></div>
-    </div><div class="hotel-card">
-
-      <div class="hotel-name">双月湾东山海高配海景酒店（首推檀悦都喜天丽）</div>
-      <div class="hotel-area"><span class="icon icon-sm" style="color:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>双月湾东边 / 东山海</div>
-      <div class="hotel-price-row"><span class="hotel-price">¥1380</span><span class="hotel-price-unit">/晚</span></div>
-      <div class="hotel-highlights"><span class="hotel-tag">最后一晚升级体验</span><span class="hotel-tag">海景和公区更强</span><span class="hotel-tag">亲子和拍照体验更好</span><span class="hotel-tag">离海近</span><span class="hotel-tag">适合把5月4日晚留给酒店本身</span></div>
-    </div></div>
-  </div>
-
-  <!-- Budget -->
-  <div class="section" id="sec-budget">
-    <div class="section-header">
-      <div class="section-icon" style="background:var(--success-light);color:var(--success);"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></span></div>
-      <h2 class="section-title">预算明细</h2>
-    </div>
-    <div class="budget-wrapper">
-      <div class="budget-chart" id="budgetChart"><div class="budget-chart-seg" style="width:20.5%;background:#0EA5E9"></div><div class="budget-chart-seg" style="width:32.7%;background:#8B5CF6"></div><div class="budget-chart-seg" style="width:33.2%;background:#F97316"></div><div class="budget-chart-seg" style="width:10.2%;background:#F43F5E"></div><div class="budget-chart-seg" style="width:3.5%;background:#64748B"></div></div>
-      <table class="budget-table" id="budgetTable">
-        <thead><tr><th>分类</th><th>项目</th><th style="text-align:right">费用</th></tr></thead>
-        <tbody><tr class="cat-row"><td colspan="2"><span class="cat-icon"><span class="icon icon-sm" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path></svg></span>交通</span></td><td class="subtotal">¥2,330</td></tr><tr class="sub-row"><td></td><td>惠州北 → 双月湾（2台车参考）</td><td>¥650</td></tr><tr class="sub-row"><td></td><td>双月湾 ↔ 三角洲岛码头往返（2台车参考）</td><td>¥520</td></tr><tr class="sub-row"><td></td><td>双月湾 → 惠州市区（2台车参考）</td><td>¥520</td></tr><tr class="sub-row"><td></td><td>市区 → 惠州北（参考）</td><td>¥120</td></tr><tr class="sub-row"><td></td><td>双月湾内部短打车 + 电动车（估算）</td><td>¥520</td></tr><tr class="cat-row"><td colspan="2"><span class="cat-icon"><span class="icon icon-sm" style="color:#8B5CF6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 7v14M21 7v14M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3"></path><rect x="7" y="10" width="3" height="3" rx=".5"></rect><rect x="14" y="10" width="3" height="3" rx=".5"></rect><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path></svg></span>住宿</span></td><td class="subtotal">¥3,720</td></tr><tr class="sub-row"><td></td><td>双月湾万科 3晚（参考）</td><td>¥2,340</td></tr><tr class="sub-row"><td></td><td>双月湾东山海高配海景酒店 1晚（参考）</td><td>¥1,380</td></tr><tr class="cat-row"><td colspan="2"><span class="cat-icon"><span class="icon icon-sm" style="color:#F97316"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span>餐饮</span></td><td class="subtotal">¥3,780</td></tr><tr class="sub-row"><td></td><td>5天餐饮（按6人家庭/朋友同行粗估，参考）</td><td>¥3,780</td></tr><tr class="cat-row"><td colspan="2"><span class="cat-icon"><span class="icon icon-sm" style="color:#F43F5E"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2M13 17v2M13 11v2"></path></svg></span>门票</span></td><td class="subtotal">¥1,158</td></tr><tr class="sub-row"><td></td><td>海龟湾门票 × 5（儿童按现场规则核验）</td><td>¥150</td></tr><tr class="sub-row"><td></td><td>三角洲岛往返快艇票 × 6（参考单价168元）</td><td>¥1,008</td></tr><tr class="cat-row"><td colspan="2"><span class="cat-icon"><span class="icon icon-sm" style="color:#64748B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg></span>其他</span></td><td class="subtotal">¥400</td></tr><tr class="sub-row"><td></td><td>饮品、防晒补给、赶海小工具（估算）</td><td>¥400</td></tr></tbody>
-      </table>
-    </div>
-    <div class="budget-total" id="budgetTotal">
-      <div>
-        <div class="budget-total-label">预估总费用</div>
-        <div class="budget-total-per">人均 ¥1,898</div>
-      </div>
-      <div class="budget-total-amount">¥11,388</div>
-    </div>
-  </div>
-
-  <!-- Tips -->
-  <div class="section" id="sec-tips">
-    <div class="section-header">
-      <div class="section-icon" style="background:var(--rose-light);color:var(--rose);"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span></div>
-      <h2 class="section-title">实用贴士</h2>
-    </div>
-    <div class="tips-grid" id="tipsList"><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>这版已经按你们的新要求重排成“双月湾万科连住3晚”，不再换去巽寮湾住宿，整个节奏更适合带 8 岁小朋友。</span></div><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>双月湾内部可以以电动车短驳为主，但三角洲岛当天建议直接叫车去磨子石公园码头，再坐快艇上岛，省体力也更稳。</span></div><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>赶海最看低潮窗口。按 2026-05-01 到 2026-05-04 的大亚湾潮汐表，5月2日最低潮约16:00，5月3日约16:00，5月4日约17:00，这三天都适合安排傍晚赶海。</span></div><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>三角洲岛公开信息常见为 08:30-18:00 开放，乘船点多在磨子石公园码头一带，建议你们上岛前一天再核一次最晚登船和下岛时间。</span></div><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>孩子赶海重点玩“找螃蟹、贝壳、寄居蟹”，不要把目标定成抓很多海货；洞洞鞋、小桶、小铲子、防晒和替换衣服比网兜更重要。</span></div><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>双月湾东边最后一晚我更推荐东山海片区的高配海景酒店，优先级建议是：檀悦都喜天丽 &gt; 享海/日出银沙这类次一级海景酒店。</span></div><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>“蓝湾沙滩”这个名字公开资料里不够统一，我在行程里把它作为双月湾东侧海边补拍位处理，实际导航时建议以你们酒店前台或当地人为准确认。</span></div><div class="tip-card"><div class="tip-icon"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span></div><span>机票和酒店为动态定价，以上住宿、票务和市内交通都含参考价成分，实际以你们下单当天价格为准。</span></div></div>
-  </div>
-
-  <footer class="footer">
-    <div class="footer-line"></div>
-    <p>由 AI 生成 · 价格与信息仅供参考，请以实际为准 · 2026-04-17</p>
-  </footer>
-
-</div>
-
-<script>
-const tripData = {
-  "title": "武汉→惠州 5天4晚亲海慢游",
-  "dateRange": "2026-05-01 ~ 05-05",
-  "travelers": "6人同行，含1名8岁小朋友",
-  "generationDate": "2026-04-17",
-  "weather": {
-    "summary": "按 2026-04-30 查询，惠东 5月1日-5日整体为多云到雷阵雨节奏：5月1日阴天 27-28℃，5月2日-4日午后雷阵雨概率更高，5月5日仍有阵雨风险。",
-    "avgHigh": 28,
-    "avgLow": 21,
-    "rainfall": "2日-4日午后阵雨和雷暴概率偏高",
-    "clothing": "速干短袖、薄外套、洞洞鞋或溯溪鞋、儿童替换衣物、防晒帽",
-    "tips": "海边项目尽量前置到上午，下午留给赶海、休息或弹性调整；雷雨来时不要停留在观景台、栈道和礁石边。"
-  },
-  "days": [
-    {
-      "date": "05/01",
-      "weekday": "周五",
-      "theme": "抵达惠州北 → 双月湾万科入住 → 沙滩热身",
-      "weather": {
-        "icon": "rainy",
-        "high": 27,
-        "low": 20
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          overview: {
+            period: '2026 年 5 月第 2 周',
+            teamName: '支付与交易测试团队',
+            lastUpdated: '2026-05-13 10:30',
+            status: '稳定运行，局部有风险',
+            scheduleRate: 87,
+            scheduleDelta: '+5%',
+            escapeDefects: 3,
+            escapeTarget: 2,
+            capacityLoad: 91,
+            highRiskReleases: 2
+          },
+          metrics: [
+            {
+              label: '进行中版本',
+              value: '8',
+              note: '本月计划上线 11 个版本',
+              delta: '+2 个',
+              deltaType: 'delta-up',
+              progress: 73,
+              progressColor: '#409EFF',
+              icon: 'el-icon-date',
+              color: 'linear-gradient(135deg, #1f78ff, #4ea1ff)'
+            },
+            {
+              label: '按期交付率',
+              value: '87%',
+              note: '行业建议保持在 85% 以上',
+              delta: '+5%',
+              deltaType: 'delta-down',
+              progress: 87,
+              progressColor: '#67C23A',
+              icon: 'el-icon-circle-check',
+              color: 'linear-gradient(135deg, #2db36c, #6ad58f)'
+            },
+            {
+              label: '准入通过率',
+              value: '92%',
+              note: '上线前准入一次通过率',
+              delta: '+1%',
+              deltaType: 'delta-down',
+              progress: 92,
+              progressColor: '#E6A23C',
+              icon: 'el-icon-s-claim',
+              color: 'linear-gradient(135deg, #ff9f30, #ffc05a)'
+            },
+            {
+              label: '未关闭缺陷',
+              value: '126',
+              note: '其中阻塞和严重共 17 个',
+              delta: '-14 个',
+              deltaType: 'delta-down',
+              progress: 64,
+              progressColor: '#F56C6C',
+              icon: 'el-icon-warning-outline',
+              color: 'linear-gradient(135deg, #f56c6c, #ff8b8b)'
+            },
+            {
+              label: '线上逃逸缺陷',
+              value: '3',
+              note: '支付核心链路需继续关注',
+              delta: '+1 个',
+              deltaType: 'delta-up',
+              progress: 35,
+              progressColor: '#F56C6C',
+              icon: 'el-icon-bell',
+              color: 'linear-gradient(135deg, #7b61ff, #9d88ff)'
+            },
+            {
+              label: '团队饱和度',
+              value: '91%',
+              note: '超过 90% 容易出现回归挤压',
+              delta: '+4%',
+              deltaType: 'delta-up',
+              progress: 91,
+              progressColor: '#909399',
+              icon: 'el-icon-user',
+              color: 'linear-gradient(135deg, #5f6b7c, #8b97a8)'
+            }
+          ],
+          riskReleases: [
+            {
+              name: '支付中台 5.12',
+              level: '高风险',
+              tagType: 'danger',
+              desc: 'UAT 阻塞缺陷 2 个未关闭，核心支付链路回归覆盖仍不足。'
+            },
+            {
+              name: '结算平台 3.8',
+              level: '中风险',
+              tagType: 'warning',
+              desc: '需求变更进入测试后期，回归范围扩大，当前上线窗口偏紧。'
+            },
+            {
+              name: '商户控制台 2.4',
+              level: '关注',
+              tagType: 'info',
+              desc: '自动化覆盖率偏低，依赖手工回归，测试资源被多版本抢占。'
+            }
+          ],
+          releaseTable: [
+            {
+              name: '支付中台 5.12',
+              owner: '张敏',
+              testWindow: '05-08 ~ 05-19',
+              health: '高风险',
+              healthColor: '#F56C6C',
+              executionProgress: 76,
+              defectStatus: '阻塞 2 / 严重 4 / 一般 13',
+              risk: '支付核心链路缺少稳定回归窗口'
+            },
+            {
+              name: '收银台 4.3',
+              owner: '王璐',
+              testWindow: '05-06 ~ 05-16',
+              health: '正常',
+              healthColor: '#67C23A',
+              executionProgress: 88,
+              defectStatus: '阻塞 0 / 严重 1 / 一般 8',
+              risk: '灰度范围待最终确认'
+            },
+            {
+              name: '结算平台 3.8',
+              owner: '李昊',
+              testWindow: '05-10 ~ 05-22',
+              health: '中风险',
+              healthColor: '#E6A23C',
+              executionProgress: 62,
+              defectStatus: '阻塞 1 / 严重 3 / 一般 10',
+              risk: '需求临时变更导致回归范围扩大'
+            },
+            {
+              name: '商户控制台 2.4',
+              owner: '周宁',
+              testWindow: '05-11 ~ 05-20',
+              health: '关注',
+              healthColor: '#909399',
+              executionProgress: 58,
+              defectStatus: '阻塞 0 / 严重 2 / 一般 6',
+              risk: '自动化覆盖不足，人工回归成本高'
+            }
+          ],
+          qualityTiles: [
+            {
+              label: '回归通过率',
+              value: '94.2%',
+              extra: '低于 95% 需要排查不稳定模块和环境问题'
+            },
+            {
+              label: '自动化覆盖率',
+              value: '61%',
+              extra: '支付、结算核心链路建议提升到 75%+'
+            },
+            {
+              label: '缺陷修复及时率',
+              value: '89%',
+              extra: '严重缺陷修复效率较上周提升 6%'
+            },
+            {
+              label: '冒烟通过率',
+              value: '97%',
+              extra: '说明基础可用性整体稳定'
+            }
+          ],
+          moduleQuality: [
+            {
+              module: '支付核心链路',
+              newDefects: 12,
+              openDefects: 26,
+              passRate: '91%',
+              automationCoverage: '68%',
+              comment: '核心链路问题集中，建议优先做专项回归'
+            },
+            {
+              module: '结算与对账',
+              newDefects: 9,
+              openDefects: 21,
+              passRate: '93%',
+              automationCoverage: '57%',
+              comment: '需求变更多，质量波动较明显'
+            },
+            {
+              module: '商户后台',
+              newDefects: 5,
+              openDefects: 14,
+              passRate: '96%',
+              automationCoverage: '49%',
+              comment: '整体平稳，但自动化覆盖偏低'
+            },
+            {
+              module: '风控规则',
+              newDefects: 4,
+              openDefects: 8,
+              passRate: '98%',
+              automationCoverage: '73%',
+              comment: '质量较好，可作为自动化建设样板'
+            }
+          ],
+          staffOverview: [
+            {
+              label: '团队总人数',
+              value: '18',
+              extra: '手工测试 11 人，自动化测试 4 人，测试开发 3 人'
+            },
+            {
+              label: '当前版本投入',
+              value: '15',
+              extra: '3 人在做平台建设和专项治理'
+            },
+            {
+              label: '人均支持版本数',
+              value: '1.8',
+              extra: '高于 2 时容易造成测试切换损耗'
+            },
+            {
+              label: '加班预警人数',
+              value: '5',
+              extra: '主要集中在支付与结算版本线'
+            }
+          ],
+          risks: [
+            {
+              title: '核心版本测试窗口被压缩',
+              level: '高',
+              type: 'danger',
+              desc: '需求变更晚、开发提测晚，导致支付中台和结算版本都在挤压回归时间。'
+            },
+            {
+              title: '自动化覆盖不足带来人工回归压力',
+              level: '中',
+              type: 'warning',
+              desc: '商户后台和结算链路的自动化建设滞后，回归仍然高度依赖人工。'
+            },
+            {
+              title: '关键测试角色存在单点',
+              level: '中',
+              type: 'warning',
+              desc: '支付链路只有 1 名核心熟手，一旦请假或切线会影响节奏。'
+            }
+          ],
+          actions: [
+            {
+              title: '建立高风险版本日跟进机制',
+              owner: '测试负责人',
+              desc: '对阻塞缺陷、回归完成率和上线准入项按天追踪，保证风险尽早暴露。'
+            },
+            {
+              title: '补齐支付与结算自动化用例',
+              owner: '自动化负责人',
+              desc: '优先覆盖高频回归场景，把手工重复成本高的链路先沉淀到自动化。'
+            },
+            {
+              title: '调整跨版本人力分配',
+              owner: '测试经理',
+              desc: '把当前做平台建设的 1 至 2 人阶段性支援版本高峰，缓解回归挤压。'
+            }
+          ]
+        };
       },
-      "activities": [
-        {
-          "time": "13:38",
-          "name": "抵达惠州北站",
-          "duration": "0.5h",
-          "cost": 0,
-          "transport": "已购高铁",
-          "note": "出站后不建议再进市区折返，五一当天优先直接去海边，减少假期拥堵消耗。"
-        },
-        {
-          "time": "14:10",
-          "name": "惠州北站前往双月湾万科酒店",
-          "duration": "2.5h",
-          "cost": 650,
-          "transport": "2台网约车/包车",
-          "note": "6个人带行李，五一当天更建议直接叫 2 台车到酒店，不建议中途再插入海岛项目。"
-        },
-        {
-          "time": "17:00",
-          "name": "办理入住 + 万科沙滩轻松散步",
-          "duration": "1.5h",
-          "cost": 0,
-          "transport": "步行",
-          "note": "第一天只做熟悉酒店、小区、沙滩入口和电动车租点，给小朋友留体力。"
-        },
-        {
-          "time": "17:40",
-          "name": "租电动车",
-          "duration": "0.5h",
-          "cost": 160,
-          "transport": "步行",
-          "note": "建议第一天下午就把 2 台电动车租好，后面 5月2日和5月4日 在双月湾内部短驳更省事。优先选电量新的车。"
-        },
-        {
-          "time": "18:20",
-          "name": "酒店楼下沙滩追浪 + 看日落",
-          "duration": "1h",
-          "cost": 0,
-          "transport": "步行",
-          "note": "如果下雨就改成酒店休息，晚上吃完饭再去楼下听海。"
-        },
-        {
-          "time": "19:40",
-          "name": "晚餐",
-          "meal": {
-            "name": "万科周边海鲜餐厅或外卖到酒店",
-            "cuisine": "海鲜",
-            "perPerson": 110,
-            "recommended": "椒盐濑尿虾、蒜蓉扇贝、白灼虾、椒盐鱿鱼",
-            "location": "双月湾万科片区"
-          }
-        }
-      ]
-    },
-    {
-      "date": "05/02",
-      "weekday": "周六",
-      "theme": "双月湾亲子海边日：观景台 + 海龟湾 + 大澳村沙滩赶海",
-      "weather": {
-        "icon": "partlyCloudy",
-        "high": 28,
-        "low": 22
+      mounted: function () {
+        this.initCharts();
+        window.addEventListener('resize', this.handleResize);
       },
-      "activities": [
-        {
-          "time": "06:00",
-          "name": "大星山观景台看双月湾全景",
-          "duration": "1.5h",
-          "cost": 0,
-          "transport": "短途打车",
-          "note": "这段不建议完全靠电动车，清晨打车更稳。看完就回酒店吃早餐，避免小朋友太累。"
-        },
-        {
-          "time": "08:00",
-          "name": "早餐",
-          "meal": {
-            "name": "酒店早餐或港口镇早茶店",
-            "cuisine": "粤式简餐",
-            "perPerson": 28,
-            "recommended": "云吞面、肠粉、艇仔粥",
-            "location": "酒店附近"
-          }
-        },
-        {
-          "time": "09:30",
-          "name": "海龟湾旅游区 + 会仙桥栈道",
-          "duration": "2.5h",
-          "cost": 30,
-          "transport": "短途打车",
-          "note": "成人票常见为30元；临海栈道风大，带孩子别跑跳。若遇雷雨，这段直接取消。"
-        },
-        {
-          "time": "12:30",
-          "name": "午餐",
-          "meal": {
-            "name": "港口海鲜市场现买现加工",
-            "cuisine": "海鲜加工",
-            "perPerson": 110,
-            "recommended": "花甲、皮皮虾、海胆炒饭、清蒸鱼",
-            "location": "双月湾港口海鲜市场"
-          }
-        },
-        {
-          "time": "15:00",
-          "name": "酒店午休 + 等低潮",
-          "duration": "1h",
-          "cost": 0,
-          "transport": "步行",
-          "note": "5月2日大亚湾最低潮位约在16:00，下午这段最适合给小朋友安排赶海。"
-        },
-        {
-          "time": "15:40",
-          "name": "电动车去大澳村沙滩赶海",
-          "duration": "2.5h",
-          "cost": 30,
-          "transport": "电动车短驳",
-          "note": "大澳村沙滩更安静，也更适合拍日落。按 2026-05-02 大亚湾最低潮约 16:00 来卡时间，带小桶、小铲子、洞洞鞋即可。"
-        },
-        {
-          "time": "18:40",
-          "name": "晚餐",
-          "meal": {
-            "name": "港口镇海鲜晚餐",
-            "cuisine": "海鲜烧烤",
-            "perPerson": 95,
-            "recommended": "炭烤生蚝、炒花甲、避风塘虾",
-            "location": "港口镇"
-          }
-        }
-      ]
-    },
-    {
-      "date": "05/03",
-      "weekday": "周日",
-      "theme": "三角洲岛 + 磨子石公园 + 巽寮湾海边一线",
-      "weather": {
-        "icon": "rainy",
-        "high": 28,
-        "low": 20
+      beforeDestroy: function () {
+        window.removeEventListener('resize', this.handleResize);
+        if (this.releaseTrendChart) this.releaseTrendChart.dispose();
+        if (this.defectTrendChart) this.defectTrendChart.dispose();
+        if (this.severityChart) this.severityChart.dispose();
+        if (this.staffMixChart) this.staffMixChart.dispose();
+        if (this.workloadChart) this.workloadChart.dispose();
       },
-      "activities": [
-        {
-          "time": "07:30",
-          "name": "双月湾出发前往磨子石公园码头",
-          "duration": "1h",
-          "cost": 260,
-          "transport": "2台网约车/包车",
-          "note": "三角洲岛乘船点通常在磨子石公园一带，双月湾过去不适合用电动车硬骑，早出发能避开码头排队。"
-        },
-        {
-          "time": "09:00",
-          "name": "乘快艇上三角洲岛",
-          "duration": "0.5h",
-          "cost": 168,
-          "transport": "快艇",
-          "note": "常见票型含往返快艇，公开信息多为磨子石公园码头上船，最晚下岛常见为18:00，建议以当天票务通知为准。"
-        },
-        {
-          "time": "09:30",
-          "name": "三角洲岛亲子玩海",
-          "duration": "3.5h",
-          "cost": 0,
-          "transport": "步行",
-          "note": "这天主打海岛踩水、沙滩拍照、浅水区活动，不建议把高强度水上项目全上给小朋友。若早上下雨，这整天直接改回双月湾酒店休闲。"
-        },
-        {
-          "time": "13:00",
-          "name": "午餐",
-          "meal": {
-            "name": "磨子石公园/巽寮湾片区午餐",
-            "cuisine": "简餐/海鲜",
-            "perPerson": 75,
-            "recommended": "炒粉、鱼丸汤、海鲜饭、椰子水",
-            "location": "磨子石公园周边"
-          }
-        },
-        {
-          "time": "14:20",
-          "name": "磨子石公园",
-          "duration": "1h",
-          "cost": 0,
-          "transport": "步行",
-          "note": "磨子石是这条线最好拍的礁石海岸，停留 40-60 分钟就够，不建议暴晒久走。"
-        },
-        {
-          "time": "15:30",
-          "name": "巽寮湾金海湾乌斯怀亚沙滩 / 蓝湾视野点",
-          "duration": "1.5h",
-          "cost": 0,
-          "transport": "短途打车/步行",
-          "note": "这段作为巽寮湾轻松海边体验，不追求打卡全覆盖，重点看沙滩质感和酒店海岸线。蓝湾名称公开资料不够统一，这里按巽寮湾海边视野点处理。"
-        },
-        {
-          "time": "17:20",
-          "name": "返程回双月湾万科",
-          "duration": "1h",
-          "cost": 260,
-          "transport": "2台网约车/包车",
-          "note": "这一整天不建议靠电动车跨湾骑行，来回直接叫车更省体力。"
-        },
-        {
-          "time": "18:30",
-          "name": "双月湾晚餐",
-          "meal": {
-            "name": "回万科附近吃晚餐",
-            "cuisine": "海鲜/家常菜",
-            "perPerson": 90,
-            "recommended": "海鲜粥、盐焗虾、炒时蔬",
-            "location": "双月湾万科片区"
-          }
-        }
-      ]
-    },
-    {
-      "date": "05/04",
-      "weekday": "周一",
-      "theme": "双月湾慢收尾：蓝湾/万科沙滩 + 升级住东山海海景酒店",
-      "weather": {
-        "icon": "rainy",
-        "high": 27,
-        "low": 20
-      },
-      "activities": [
-        {
-          "time": "08:30",
-          "name": "海边早餐 + 酒店周边电动车兜风",
-          "duration": "1.5h",
-          "cost": 28,
-          "transport": "步行/电动车",
-          "note": "今天把远距离项目全收掉，只保留双月湾内部轻松玩法。"
-        },
-        {
-          "time": "10:30",
-          "name": "蓝湾沙滩/万科周边轻松补海边",
-          "duration": "1.5h",
-          "cost": 0,
-          "transport": "电动车短驳",
-          "note": "这段主打补拍和放空，不再跑远景点。蓝湾名称资料不统一，所以按双月湾东侧海边活动理解。"
-        },
-        {
-          "time": "13:00",
-          "name": "退房后转住东山海高配海景酒店",
-          "duration": "1h",
-          "cost": 0,
-          "transport": "打车/自驾短驳",
-          "note": "推荐优先住双月湾东山海片区的檀悦都喜天丽，这晚主要是升级酒店体验。"
-        },
-        {
-          "time": "15:30",
-          "name": "酒店休息 + 私家沙滩/无边泳池体验",
-          "duration": "2h",
-          "cost": 0,
-          "transport": "步行",
-          "note": "把最后一晚留给酒店本身，适合小朋友玩水，大人拍海景和慢慢吃下午茶。"
-        },
-        {
-          "time": "17:40",
-          "name": "东山海海边散步看日落",
-          "duration": "1h",
-          "cost": 0,
-          "transport": "步行",
-          "note": "东山海这边更适合看日出海景和高配酒店体验，最后一晚不用再折腾。"
-        },
-        {
-          "time": "19:00",
-          "name": "酒店晚餐或东山海附近海鲜餐",
-          "meal": {
-            "name": "东山海酒店餐厅或附近海鲜餐厅",
-            "cuisine": "海鲜/粤菜",
-            "perPerson": 120,
-            "recommended": "海鲜拼盘、白灼虾、蒸鱼、儿童友好炒饭",
-            "location": "双月湾东山海片区"
-          }
-        }
-      ]
-    },
-    {
-      "date": "05/05",
-      "weekday": "周二",
-      "theme": "海景酒店慢早晨 → 惠州北返程",
-      "weather": {
-        "icon": "rainy",
-        "high": 26,
-        "low": 21
-      },
-      "activities": [
-        {
-          "time": "08:30",
-          "name": "酒店早餐 + 海边慢玩",
-          "duration": "2.5h",
-          "cost": 35,
-          "transport": "步行",
-          "note": "返程高铁是 15:48，从海边酒店出发要留足节日路况缓冲，所以这天不再插额外景点。"
-        },
-        {
-          "time": "11:30",
-          "name": "午餐",
-          "meal": {
-            "name": "酒店周边简餐后出发",
-            "cuisine": "简餐",
-            "perPerson": 60,
-            "recommended": "汤粉、炒饭、儿童餐、海鲜粥",
-            "location": "双月湾东山海片区"
-          }
-        },
-        {
-          "time": "12:15",
-          "name": "前往惠州北站返程",
-          "duration": "3h",
-          "cost": 650,
-          "transport": "2台网约车/包车",
-          "note": "你们 15:48 从惠州北出发，建议最迟 12:15 左右离开海边酒店，给五一返程拥堵和到站缓冲留足时间。"
-        }
-      ]
-    }
-  ],
-  "hotels": [
-    {
-      "name": "双月湾万科片区海景公寓/酒店",
-      "area": "双月湾",
-      "pricePerNight": 780,
-      "highlights": "你们已确定连住3晚;下楼就是沙滩;适合孩子反复玩沙玩海;周边可短距离电动车活动",
-      "rating": "4.5"
-    },
-    {
-      "name": "双月湾东山海高配海景酒店（首推檀悦都喜天丽）",
-      "area": "双月湾东边 / 东山海",
-      "pricePerNight": 1380,
-      "highlights": "最后一晚升级体验;海景和公区更强;亲子和拍照体验更好;离海近，适合把5月4日晚留给酒店本身",
-      "rating": "4.7"
-    }
-  ],
-  "budget": {
-    "transport": {
-      "items": [
-        {
-          "name": "惠州北 → 双月湾（2台车参考）",
-          "cost": 650
-        },
-        {
-          "name": "双月湾 ↔ 三角洲岛码头往返（2台车参考）",
-          "cost": 520
-        },
-        {
-          "name": "双月湾 → 惠州市区（2台车参考）",
-          "cost": 520
-        },
-        {
-          "name": "市区 → 惠州北（参考）",
-          "cost": 120
-        },
-        {
-          "name": "双月湾内部短打车 + 电动车（估算）",
-          "cost": 520
-        }
-      ],
-      "subtotal": 2330
-    },
-    "accommodation": {
-      "items": [
-        {
-          "name": "双月湾万科 3晚（参考）",
-          "cost": 2340
-        },
-        {
-          "name": "双月湾东山海高配海景酒店 1晚（参考）",
-          "cost": 1380
-        }
-      ],
-      "subtotal": 3720
-    },
-    "food": {
-      "items": [
-        {
-          "name": "5天餐饮（按6人家庭/朋友同行粗估，参考）",
-          "cost": 3780
-        }
-      ],
-      "subtotal": 3780
-    },
-    "tickets": {
-      "items": [
-        {
-          "name": "海龟湾门票 × 5（儿童按现场规则核验）",
-          "cost": 150
-        },
-        {
-          "name": "三角洲岛往返快艇票 × 6（参考单价168元）",
-          "cost": 1008
-        }
-      ],
-      "subtotal": 1158
-    },
-    "other": {
-      "items": [
-        {
-          "name": "饮品、防晒补给、赶海小工具（估算）",
-          "cost": 400
-        }
-      ],
-      "subtotal": 400
-    },
-    "total": 11388,
-    "perPerson": 1898
-  },
-  "tips": [
-    "这版已经按你们的新要求重排成“双月湾万科连住3晚”，不再换去巽寮湾住宿，整个节奏更适合带 8 岁小朋友。",
-    "双月湾内部可以以电动车短驳为主，但三角洲岛当天建议直接叫车去磨子石公园码头，再坐快艇上岛，省体力也更稳。",
-    "赶海最看低潮窗口。按 2026-05-01 到 2026-05-04 的大亚湾潮汐表，5月2日最低潮约16:00，5月3日约16:00，5月4日约17:00，这三天都适合安排傍晚赶海。",
-    "三角洲岛公开信息常见为 08:30-18:00 开放，乘船点多在磨子石公园码头一带，建议你们上岛前一天再核一次最晚登船和下岛时间。",
-    "孩子赶海重点玩“找螃蟹、贝壳、寄居蟹”，不要把目标定成抓很多海货；洞洞鞋、小桶、小铲子、防晒和替换衣服比网兜更重要。",
-    "双月湾东边最后一晚我更推荐东山海片区的高配海景酒店，优先级建议是：檀悦都喜天丽 > 享海/日出银沙这类次一级海景酒店。",
-    "“蓝湾沙滩”这个名字公开资料里不够统一，我在行程里把它作为双月湾东侧海边补拍位处理，实际导航时建议以你们酒店前台或当地人为准确认。",
-    "机票和酒店为动态定价，以上住宿、票务和市内交通都含参考价成分，实际以你们下单当天价格为准。"
-  ]
-};
+      methods: {
+        initCharts: function () {
+          this.releaseTrendChart = echarts.init(document.getElementById('releaseTrendChart'));
+          this.defectTrendChart = echarts.init(document.getElementById('defectTrendChart'));
+          this.severityChart = echarts.init(document.getElementById('severityChart'));
+          this.staffMixChart = echarts.init(document.getElementById('staffMixChart'));
+          this.workloadChart = echarts.init(document.getElementById('workloadChart'));
 
-// SVG icon templates (inline, no external deps)
-const SVG = {
-  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>',
-  cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
-  cloudSun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M4 12H2M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="9" r="4" opacity=".5"/><path d="M18 13h-1.26A7 7 0 0 0 6 15.26 5 5 0 1 0 9 23h9a5 5 0 0 0 0-10z"/></svg>',
-  rain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"/><path d="M8 19v2M12 19v2M16 19v2"/></svg>',
-  storm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><path d="m13 12-3 5h4l-3 5"/></svg>',
-  snow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><path d="M8 18l.01 0M12 18l.01 0M16 18l.01 0"/></svg>',
-  utensils: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>',
-  mapPin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-  lightbulb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>',
-  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-  plane: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>',
-  hotel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 7v14M21 7v14M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3"/><rect x="7" y="10" width="3" height="3" rx=".5"/><rect x="14" y="10" width="3" height="3" rx=".5"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>',
-  ticket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>',
-  box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
-  chevDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>'
-};
+          this.releaseTrendChart.setOption({
+            color: ['#409EFF', '#67C23A', '#F56C6C'],
+            tooltip: { trigger: 'axis' },
+            legend: { top: 0, right: 0, itemWidth: 12, itemHeight: 12 },
+            grid: { left: 36, right: 20, bottom: 28, top: 44 },
+            xAxis: {
+              type: 'category',
+              boundaryGap: false,
+              data: ['第1周', '第2周', '第3周', '第4周', '第5周', '第6周'],
+              axisLine: { lineStyle: { color: '#dfe7f1' } },
+              axisLabel: { color: '#7b8798' }
+            },
+            yAxis: {
+              type: 'value',
+              axisLine: { show: false },
+              splitLine: { lineStyle: { color: '#edf2f8' } },
+              axisLabel: { color: '#7b8798' }
+            },
+            series: [
+              {
+                name: '计划上线',
+                type: 'line',
+                smooth: true,
+                data: [5, 6, 8, 7, 9, 8],
+                areaStyle: { color: 'rgba(64, 158, 255, 0.12)' }
+              },
+              {
+                name: '按期交付',
+                type: 'line',
+                smooth: true,
+                data: [4, 5, 7, 6, 8, 7]
+              },
+              {
+                name: '延期版本',
+                type: 'bar',
+                barWidth: 18,
+                data: [1, 1, 2, 1, 1, 2]
+              }
+            ]
+          });
 
-const weatherIcons = { sunny: SVG.sun, cloudy: SVG.cloud, rainy: SVG.rain, stormy: SVG.storm, snowy: SVG.snow, partlyCloudy: SVG.cloudSun, overcast: SVG.cloud };
-const budgetColors = { transport: '#0EA5E9', accommodation: '#8B5CF6', food: '#F97316', tickets: '#F43F5E', other: '#64748B' };
-const budgetIcons = { transport: SVG.plane, accommodation: SVG.hotel, food: SVG.utensils, tickets: SVG.ticket, other: SVG.box };
-const budgetLabels = { transport: '交通', accommodation: '住宿', food: '餐饮', tickets: '门票', other: '其他' };
+          this.defectTrendChart.setOption({
+            color: ['#5470C6', '#91CC75', '#EE6666'],
+            tooltip: { trigger: 'axis' },
+            legend: { top: 0, right: 0 },
+            grid: { left: 36, right: 20, bottom: 28, top: 44 },
+            xAxis: {
+              type: 'category',
+              data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+              axisLine: { lineStyle: { color: '#dfe7f1' } },
+              axisLabel: { color: '#7b8798' }
+            },
+            yAxis: {
+              type: 'value',
+              splitLine: { lineStyle: { color: '#edf2f8' } },
+              axisLabel: { color: '#7b8798' }
+            },
+            series: [
+              {
+                name: '新增缺陷',
+                type: 'bar',
+                stack: 'defect',
+                barWidth: 18,
+                data: [18, 24, 21, 17, 15, 9, 6]
+              },
+              {
+                name: '关闭缺陷',
+                type: 'bar',
+                stack: 'defect',
+                barWidth: 18,
+                data: [12, 16, 19, 18, 17, 12, 7]
+              },
+              {
+                name: '未关闭存量',
+                type: 'line',
+                smooth: true,
+                data: [142, 150, 148, 139, 133, 129, 126]
+              }
+            ]
+          });
 
-function renderWeather(weather, days) {
-  const bar = document.getElementById('weatherBar');
-  bar.innerHTML = days.map(d => {
-    const icon = weatherIcons[d.weather.icon] || SVG.cloudSun;
-    return `<div class="weather-card">
-      <div class="w-date">${d.date} ${d.weekday}</div>
-      <div class="w-icon" style="color:${d.weather.icon === 'sunny' ? '#F59E0B' : d.weather.icon === 'rainy' ? '#0EA5E9' : '#64748B'}">${icon}</div>
-      <div class="w-temp">${d.weather.high}° <span class="w-temp-low">/ ${d.weather.low}°</span></div>
-    </div>`;
-  }).join('');
+          this.severityChart.setOption({
+            tooltip: { trigger: 'item' },
+            legend: { bottom: 0, itemWidth: 12, itemHeight: 12 },
+            color: ['#F56C6C', '#E6A23C', '#409EFF', '#67C23A'],
+            series: [
+              {
+                type: 'pie',
+                radius: ['42%', '68%'],
+                center: ['50%', '46%'],
+                label: {
+                  formatter: '{b}\n{d}%',
+                  color: '#4a5568'
+                },
+                data: [
+                  { value: 5, name: '阻塞' },
+                  { value: 12, name: '严重' },
+                  { value: 38, name: '一般' },
+                  { value: 71, name: '提示' }
+                ]
+              }
+            ]
+          });
 
-  const tip = document.getElementById('weatherTip');
-  tip.innerHTML = `<span class="icon" style="color:var(--primary)">${SVG.info}</span>
-    <span>${weather.clothing} · 降水概率 ${weather.rainfall} · ${weather.tips}</span>`;
-}
+          this.staffMixChart.setOption({
+            tooltip: { trigger: 'item' },
+            legend: { bottom: 0 },
+            color: ['#409EFF', '#67C23A', '#E6A23C', '#909399'],
+            series: [
+              {
+                type: 'pie',
+                radius: ['36%', '66%'],
+                center: ['50%', '44%'],
+                label: { formatter: '{b}\n{c}人' },
+                data: [
+                  { value: 11, name: '手工测试' },
+                  { value: 4, name: '自动化测试' },
+                  { value: 3, name: '测试开发' }
+                ]
+              }
+            ]
+          });
 
-function renderDays(days) {
-  const container = document.getElementById('daysContainer');
-  container.innerHTML = days.map((day, i) => {
-    const wIcon = weatherIcons[day.weather.icon] || SVG.cloudSun;
-    const acts = day.activities.map(a => {
-      const isMeal = a.meal || /[午晚早]餐/.test(a.name);
-      let html = `<div class="tl-item${isMeal ? ' is-meal' : ''}"><div class="tl-dot"></div>`;
-      html += `<div class="tl-time">${a.time}${a.duration ? ' · ' + a.duration : ''}</div><div class="tl-content">`;
-      html += `<h4>${a.name}</h4>`;
-      if (a.note) html += `<p>${a.note}</p>`;
-      if (a.meal) {
-        html += `<div class="meal-card">
-          <div class="meal-icon"><span class="icon">${SVG.utensils}</span></div>
-          <div class="meal-info">
-            <div class="meal-name">${a.meal.name}</div>
-            <div class="meal-detail">${a.meal.cuisine} · ${a.meal.location}${a.meal.recommended ? ' · 推荐：' + a.meal.recommended : ''}</div>
-          </div>
-          <div class="meal-price">¥${a.meal.perPerson}/人</div>
-        </div>`;
+          this.workloadChart.setOption({
+            tooltip: { trigger: 'axis' },
+            grid: { left: 36, right: 16, bottom: 24, top: 24 },
+            xAxis: {
+              type: 'value',
+              max: 100,
+              splitLine: { lineStyle: { color: '#edf2f8' } },
+              axisLabel: {
+                color: '#7b8798',
+                formatter: '{value}%'
+              }
+            },
+            yAxis: {
+              type: 'category',
+              axisTick: { show: false },
+              axisLine: { show: false },
+              axisLabel: { color: '#7b8798' },
+              data: ['支付中台', '收银台', '结算平台', '商户后台']
+            },
+            series: [
+              {
+                type: 'bar',
+                data: [95, 82, 88, 74],
+                barWidth: 16,
+                itemStyle: {
+                  borderRadius: [0, 10, 10, 0],
+                  color: function (params) {
+                    var colors = ['#F56C6C', '#409EFF', '#E6A23C', '#67C23A'];
+                    return colors[params.dataIndex];
+                  }
+                },
+                label: {
+                  show: true,
+                  position: 'right',
+                  color: '#4a5568',
+                  formatter: '{c}%'
+                }
+              }
+            ]
+          });
+        },
+        handleResize: function () {
+          if (this.releaseTrendChart) this.releaseTrendChart.resize();
+          if (this.defectTrendChart) this.defectTrendChart.resize();
+          if (this.severityChart) this.severityChart.resize();
+          if (this.staffMixChart) this.staffMixChart.resize();
+          if (this.workloadChart) this.workloadChart.resize();
+        }
       }
-      const tags = [];
-      if (a.cost === 0) tags.push(`<span class="tag tag-free">免费</span>`);
-      else if (a.cost) tags.push(`<span class="tag tag-cost">¥${a.cost}</span>`);
-      if (a.transport) tags.push(`<span class="tag tag-transport">${a.transport}</span>`);
-      if (tags.length) html += `<div class="tl-tags">${tags.join('')}</div>`;
-      html += `</div></div>`;
-      return html;
-    }).join('');
-
-    return `<div class="day-card">
-      <div class="day-header" tabindex="0" role="button" aria-expanded="true"
-           onclick="toggleDay(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDay(this)}">
-        <div class="day-header-left">
-          <div class="day-num">D${i + 1}</div>
-          <div class="day-header-info">
-            <h3>${day.theme}</h3>
-            <div class="day-meta">
-              <span>${day.date} ${day.weekday}</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;color:${day.weather.icon === 'sunny' ? '#F59E0B' : '#64748B'}">
-                <span class="icon icon-sm">${wIcon}</span> ${day.weather.high}°/${day.weather.low}°
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="toggle-icon"><span class="icon icon-sm">${SVG.chevDown}</span></div>
-      </div>
-      <div class="day-body"><div class="timeline">${acts}</div></div>
-    </div>`;
-  }).join('');
-}
-
-function toggleDay(el) {
-  const card = el.closest('.day-card');
-  const expanded = !card.classList.contains('collapsed');
-  card.classList.toggle('collapsed');
-  el.setAttribute('aria-expanded', !expanded);
-}
-
-function renderHotels(hotels) {
-  document.getElementById('hotelGrid').innerHTML = hotels.map((h, i) => {
-    const tags = h.highlights.split(/[;；、,，]/).filter(Boolean).map(t => `<span class="hotel-tag">${t.trim()}</span>`).join('');
-    return `<div class="hotel-card">
-      ${i === 0 ? '<div class="hotel-badge">推荐</div>' : ''}
-      <div class="hotel-name">${h.name}</div>
-      <div class="hotel-area"><span class="icon icon-sm" style="color:var(--accent)">${SVG.mapPin}</span>${h.area}</div>
-      <div class="hotel-price-row"><span class="hotel-price">¥${h.pricePerNight}</span><span class="hotel-price-unit">/晚</span></div>
-      <div class="hotel-highlights">${tags}</div>
-    </div>`;
-  }).join('');
-}
-
-function renderBudget(budget) {
-  // Chart bar
-  const cats = Object.entries(budget).filter(([k]) => !['total', 'perPerson'].includes(k));
-  const total = budget.total || cats.reduce((s, [, d]) => s + d.subtotal, 0);
-  document.getElementById('budgetChart').innerHTML = cats.map(([cat, data]) =>
-    `<div class="budget-chart-seg" style="width:${(data.subtotal / total * 100).toFixed(1)}%;background:${budgetColors[cat] || '#94A3B8'}"></div>`
-  ).join('');
-
-  // Table
-  const tbody = document.querySelector('#budgetTable tbody');
-  tbody.innerHTML = cats.map(([cat, data]) => {
-    const icon = budgetIcons[cat] || SVG.box;
-    const label = budgetLabels[cat] || cat;
-    let rows = `<tr class="cat-row"><td colspan="2"><span class="cat-icon"><span class="icon icon-sm" style="color:${budgetColors[cat]}">${icon}</span>${label}</span></td><td class="subtotal">¥${data.subtotal.toLocaleString()}</td></tr>`;
-    data.items.forEach(item => { rows += `<tr class="sub-row"><td></td><td>${item.name}</td><td>¥${item.cost.toLocaleString()}</td></tr>`; });
-    return rows;
-  }).join('');
-
-  // Total bar
-  const el = document.getElementById('budgetTotal');
-  el.querySelector('.budget-total-amount').textContent = `¥${total.toLocaleString()}`;
-  el.querySelector('.budget-total-per').textContent = `人均 ¥${(budget.perPerson || 0).toLocaleString()}`;
-}
-
-function renderTips(tips) {
-  document.getElementById('tipsList').innerHTML = tips.map(t =>
-    `<div class="tip-card"><div class="tip-icon"><span class="icon">${SVG.lightbulb}</span></div><span>${t}</span></div>`
-  ).join('');
-}
-
-if (tripData) {
-  document.getElementById('heroTitle').textContent = tripData.title;
-  if (tripData.dateRange) document.getElementById('heroDate').textContent = tripData.dateRange;
-  if (tripData.travelers) document.getElementById('heroTravelers').textContent = tripData.travelers;
-  if (tripData.budget) document.getElementById('heroBudget').textContent = `¥${(tripData.budget.total || 0).toLocaleString()}`;
-  renderWeather(tripData.weather, tripData.days);
-  renderDays(tripData.days);
-  renderHotels(tripData.hotels);
-  renderBudget(tripData.budget);
-  renderTips(tripData.tips);
-}
-</script>
-
-
-</body></html>
+    });
+  </script>
+</body>
+</html>
