@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agnes 图生图生成器</title>
+  <style>
+    :root {
+      --bg: #f3efe7;
+      --panel: rgba(255, 252, 246, 0.95);
+      --line: #d8cfc0;
+      --text: #1c1a17;
+      --muted: #6d655a;
+      --accent: #d5522f;
+      --accent-deep: #9f3116;
+      --ok: #236b41;
+      --err: #9e2f22;
+      --shadow: 0 24px 60px rgba(49, 32, 17, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(213, 82, 47, 0.18), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(44, 96, 82, 0.16), transparent 28%),
+        linear-gradient(135deg, #efe7d9 0%, #f6f2ea 44%, #ece4d4 100%);
+      padding: 28px;
+    }
+
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(216, 207, 192, 0.9);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .controls {
+      padding: 26px;
+      position: sticky;
+      top: 24px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 30px;
+      line-height: 1.08;
+    }
+
+    .sub {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input[type="file"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fffdfa;
+      color: var(--text);
+      padding: 14px 16px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    textarea {
+      min-height: 148px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input[type="file"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(213, 82, 47, 0.14);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.16s ease, opacity 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #ec7046 100%);
+      color: white;
+      box-shadow: 0 14px 32px rgba(213, 82, 47, 0.28);
+    }
+
+    .secondary {
+      background: #f2ece2;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .stage {
+      padding: 24px;
+      min-height: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .status-card,
+    .preview-card,
+    .result-card {
+      border: 1px solid rgba(216, 207, 192, 0.9);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.72);
+      padding: 18px;
+    }
+
+    .status-line {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status-line.ok {
+      color: var(--ok);
+    }
+
+    .status-line.err {
+      color: var(--err);
+    }
+
+    .preview-box,
+    .result-box {
+      width: 100%;
+      min-height: 280px;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(239, 231, 217, 0.92), rgba(249, 245, 239, 0.92));
+      border: 1px dashed rgba(159, 49, 22, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .preview-box img,
+    .result-box img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .placeholder {
+      padding: 30px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .meta {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+      min-width: 168px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: #233d72;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 12px 28px rgba(35, 61, 114, 0.2);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .copy-btn {
+      background: #1f6a55;
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(31, 106, 85, 0.2);
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(35, 61, 114, 0.06);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 920px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="panel controls">
+      <div class="eyebrow">Agnes Image 2.1 Flash</div>
+      <h1>图生图生成页面</h1>
+      <p class="sub">支持文生图和图生图。没选图片时自动走文生图，选了图片时自动走图生图。成功后会显示预览，并提供下载生成图片按钮。</p>
+
+      <div class="field">
+        <label class="label" for="imageFile">选择参考图片（可选）</label>
+        <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="promptInput">输入 Prompt</label>
+        <textarea id="promptInput" placeholder="例如：把这张图改成香港街拍电影感，保留主体构图和动作，增强霓虹灯和湿润路面反光。"></textarea>
+      </div>
+
+      <div class="field grid-two">
+        <div>
+          <label class="label" for="sizeSelect">尺寸</label>
+          <select id="sizeSelect">
+            <option value="1024x768">1024x768</option>
+            <option value="768x1024">768x1024</option>
+            <option value="1024x1024">1024x1024</option>
+            <option value="1152x768">1152x768</option>
+          </select>
+        </div>
+        <div>
+          <label class="label" for="responseSelect">返回格式</label>
+          <select id="responseSelect">
+            <option value="url">url</option>
+            <option value="b64_json">b64_json</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="generateBtn" class="primary">开始生成</button>
+        <button id="resetBtn" class="secondary" type="button">清空</button>
+      </div>
+
+      <div class="note">
+        Token 和模型参数已经内置在页面脚本里。生成结果不会自动写入本地固定目录，而是通过浏览器下载按钮保存。
+      </div>
+    </section>
+
+    <section class="panel stage">
+      <div class="status-card">
+        <div class="eyebrow">状态</div>
+        <div id="statusText" class="status-line">等待开始。</div>
+      </div>
+
+      <div class="preview-card">
+        <div class="eyebrow">参考图预览</div>
+        <div id="previewBox" class="preview-box">
+          <div class="placeholder">不选图片时将直接走文生图。</div>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <div class="eyebrow">生成结果</div>
+        <div id="resultBox" class="result-box">
+          <div class="placeholder">生成成功后，这里会显示图片预览和下载按钮。</div>
+        </div>
+        <div id="resultMeta" class="meta"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const AGNES_API_TOKEN = "sk-URS1kygpIOM5zVM4x3KVtowqlIKwSFamAE3sMbV1mX79nlNm";
+    const AGNES_API_URL = "https://apihub.agnes-ai.com/v1/images/generations";
+    const AGNES_MODEL = "agnes-image-2.1-flash";
+
+    const imageFileInput = document.getElementById("imageFile");
+    const promptInput = document.getElementById("promptInput");
+    const sizeSelect = document.getElementById("sizeSelect");
+    const responseSelect = document.getElementById("responseSelect");
+    const generateBtn = document.getElementById("generateBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const statusText = document.getElementById("statusText");
+    const previewBox = document.getElementById("previewBox");
+    const resultBox = document.getElementById("resultBox");
+    const resultMeta = document.getElementById("resultMeta");
+
+    let currentFile = null;
+    let currentObjectUrl = null;
+    let currentDownloadUrl = null;
+
+    function setStatus(text, type = "") {
+      statusText.textContent = text;
+      statusText.className = "status-line" + (type ? ` ${type}` : "");
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error("读取图片失败"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function bytesToBlobUrl(base64String, mimeType = "image/png") {
+      const binary = atob(base64String);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return URL.createObjectURL(new Blob([bytes], { type: mimeType }));
+    }
+
+    async function copyImageToClipboard(url) {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`复制图片失败：HTTP ${response.status}`);
+      }
+      const blob = await response.blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type || "image/png"]: blob
+        })
+      ]);
+    }
+
+    function clearResult() {
+      if (currentObjectUrl) {
+        URL.revokeObjectURL(currentObjectUrl);
+        currentObjectUrl = null;
+      }
+      if (currentDownloadUrl) {
+        URL.revokeObjectURL(currentDownloadUrl);
+        currentDownloadUrl = null;
+      }
+      resultBox.innerHTML = '<div class="placeholder">生成成功后，这里会显示图片预览和下载按钮。</div>';
+      resultMeta.textContent = "";
+    }
+
+    function showPreview(file) {
+      const localUrl = URL.createObjectURL(file);
+      previewBox.innerHTML = `<img src="${localUrl}" alt="参考图预览">`;
+      previewBox.querySelector("img").addEventListener("load", () => URL.revokeObjectURL(localUrl), { once: true });
+    }
+
+    async function createDownloadableUrl(imageUrl, sourceType) {
+      if (sourceType === "b64_json") {
+        return imageUrl;
+      }
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        throw new Error(`下载图片失败：HTTP ${response.status}`);
+      }
+      const blob = await response.blob();
+      return URL.createObjectURL(blob);
+    }
+
+    async function showResultImage(imageUrl, revisedPrompt = "", sourceType = "url") {
+      clearResult();
+      currentObjectUrl = imageUrl;
+      currentDownloadUrl = await createDownloadableUrl(imageUrl, sourceType);
+      const safeName = `agnes-image-${Date.now()}.png`;
+      resultBox.innerHTML = `
+        <div style="width:100%;">
+          <img src="${imageUrl}" alt="生成结果">
+          <div class="action-row">
+            <a class="download-link" href="${currentDownloadUrl}" download="${safeName}">下载生成图片</a>
+            <button id="copyImageBtn" class="download-link copy-btn" type="button">复制图片到剪贴板</button>
+          </div>
+        </div>
+      `;
+      resultMeta.textContent = `返回类型：${sourceType}${revisedPrompt ? ` | revised_prompt：${revisedPrompt}` : ""}`;
+
+      const copyBtn = document.getElementById("copyImageBtn");
+      copyBtn.addEventListener("click", async () => {
+        const originalText = copyBtn.textContent;
+        copyBtn.disabled = true;
+        try {
+          await copyImageToClipboard(currentDownloadUrl);
+          copyBtn.textContent = "已复制";
+          setStatus("图片已复制到剪贴板。", "ok");
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          setStatus(`复制失败：${message}`, "err");
+          copyBtn.textContent = "复制失败";
+        } finally {
+          setTimeout(() => {
+            copyBtn.disabled = false;
+            copyBtn.textContent = originalText;
+          }, 1200);
+        }
+      });
+    }
+
+    imageFileInput.addEventListener("change", () => {
+      const file = imageFileInput.files && imageFileInput.files[0];
+      currentFile = file || null;
+      clearResult();
+      if (!currentFile) {
+        previewBox.innerHTML = '<div class="placeholder">不选图片时将直接走文生图。</div>';
+        setStatus("等待开始。");
+        return;
+      }
+      showPreview(currentFile);
+      setStatus(`已选择图片：${currentFile.name}，将按图生图模式生成。`);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      imageFileInput.value = "";
+      promptInput.value = "";
+      sizeSelect.value = "1024x768";
+      responseSelect.value = "url";
+      currentFile = null;
+      previewBox.innerHTML = '<div class="placeholder">不选图片时将直接走文生图。</div>';
+      clearResult();
+      setStatus("已清空，可以重新开始。");
+    });
+
+    generateBtn.addEventListener("click", async () => {
+      const prompt = promptInput.value.trim();
+      if (!prompt) {
+        setStatus("请先输入 prompt。", "err");
+        return;
+      }
+
+      generateBtn.disabled = true;
+      clearResult();
+
+      try {
+        const payload = {
+          model: AGNES_MODEL,
+          prompt,
+          size: sizeSelect.value,
+          extra_body: {
+            response_format: responseSelect.value
+          }
+        };
+
+        if (currentFile) {
+          setStatus("正在读取图片并准备图生图请求...");
+          const imageDataUrl = await fileToDataUrl(currentFile);
+          payload.extra_body.image = [imageDataUrl];
+          setStatus("正在调用 Agnes 图生图接口，请稍候...");
+        } else {
+          setStatus("未选择图片，正在调用 Agnes 文生图接口，请稍候...");
+        }
+
+        const response = await fetch(AGNES_API_URL, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${AGNES_API_TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data?.error?.message || data?.message || `请求失败：HTTP ${response.status}`);
+        }
+
+        const item = data?.data?.[0];
+        if (!item) {
+          throw new Error("接口返回里没有 data[0]。");
+        }
+
+        if (item.url) {
+          setStatus("生成成功，可以预览和下载。", "ok");
+          await showResultImage(item.url, item.revised_prompt || "", "url");
+          return;
+        }
+
+        if (item.b64_json) {
+          const blobUrl = bytesToBlobUrl(item.b64_json);
+          setStatus("生成成功，可以预览和下载。", "ok");
+          await showResultImage(blobUrl, item.revised_prompt || "", "b64_json");
+          return;
+        }
+
+        throw new Error("接口返回成功，但没有可用的 url 或 b64_json。");
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        setStatus(`生成失败：${message}`, "err");
+      } finally {
+        generateBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
