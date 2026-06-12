@@ -419,6 +419,21 @@
       resultMeta.textContent = "";
     }
 
+    function showMobileResultLink(imageUrl, revisedPrompt = "", sourceType = "url") {
+      clearResult();
+      resultBox.innerHTML = `
+        <div style="width:100%;">
+          <div class="placeholder" style="padding-bottom: 18px;">
+            移动端已跳过页面内图片预览，避免浏览器在预览或转下载时失败。
+          </div>
+          <div class="action-row">
+            <a class="download-link" href="${imageUrl}" target="_blank" rel="noopener noreferrer">打开生成图片链接</a>
+          </div>
+        </div>
+      `;
+      resultMeta.textContent = `返回类型：${sourceType}${revisedPrompt ? ` | revised_prompt：${revisedPrompt}` : ""}`;
+    }
+
     function showPreview(file) {
       const localUrl = URL.createObjectURL(file);
       previewBox.innerHTML = `<img src="${localUrl}" alt="参考图预览">`;
@@ -439,23 +454,6 @@
 
     async function showResultImage(imageUrl, revisedPrompt = "", sourceType = "url") {
       clearResult();
-
-      if (isMobileClient) {
-        const mobileLink = sourceType === "url" ? imageUrl : imageUrl;
-        resultBox.innerHTML = `
-          <div style="width:100%;">
-            <div class="placeholder" style="padding-bottom: 18px;">
-              移动端已跳过页面内图片预览，避免浏览器在预览或转下载时失败。
-            </div>
-            <div class="action-row">
-              <a class="download-link" href="${mobileLink}" target="_blank" rel="noopener noreferrer">打开生成图片链接</a>
-            </div>
-          </div>
-        `;
-        resultMeta.textContent = `返回类型：${sourceType}${revisedPrompt ? ` | revised_prompt：${revisedPrompt}` : ""}`;
-        return;
-      }
-
       currentObjectUrl = imageUrl;
       currentDownloadUrl = await createDownloadableUrl(imageUrl, sourceType);
       const safeName = `agnes-image-${Date.now()}.png`;
@@ -566,6 +564,10 @@
 
         if (item.url) {
           setStatus("生成成功，可以预览和下载。", "ok");
+          if (isMobileClient) {
+            showMobileResultLink(item.url, item.revised_prompt || "", "url");
+            return;
+          }
           await showResultImage(item.url, item.revised_prompt || "", "url");
           return;
         }
@@ -573,6 +575,10 @@
         if (item.b64_json) {
           const blobUrl = bytesToBlobUrl(item.b64_json);
           setStatus("生成成功，可以预览和下载。", "ok");
+          if (isMobileClient) {
+            showMobileResultLink(blobUrl, item.revised_prompt || "", "b64_json");
+            return;
+          }
           await showResultImage(blobUrl, item.revised_prompt || "", "b64_json");
           return;
         }
