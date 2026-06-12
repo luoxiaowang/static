@@ -368,6 +368,7 @@
     let currentFile = null;
     let currentObjectUrl = null;
     let currentDownloadUrl = null;
+    const isMobileClient = window.matchMedia("(max-width: 920px)").matches || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 
     function setStatus(text, type = "") {
       statusText.textContent = text;
@@ -438,6 +439,23 @@
 
     async function showResultImage(imageUrl, revisedPrompt = "", sourceType = "url") {
       clearResult();
+
+      if (isMobileClient) {
+        const mobileLink = sourceType === "url" ? imageUrl : imageUrl;
+        resultBox.innerHTML = `
+          <div style="width:100%;">
+            <div class="placeholder" style="padding-bottom: 18px;">
+              移动端已跳过页面内图片预览，避免浏览器在预览或转下载时失败。
+            </div>
+            <div class="action-row">
+              <a class="download-link" href="${mobileLink}" target="_blank" rel="noopener noreferrer">打开生成图片链接</a>
+            </div>
+          </div>
+        `;
+        resultMeta.textContent = `返回类型：${sourceType}${revisedPrompt ? ` | revised_prompt：${revisedPrompt}` : ""}`;
+        return;
+      }
+
       currentObjectUrl = imageUrl;
       currentDownloadUrl = await createDownloadableUrl(imageUrl, sourceType);
       const safeName = `agnes-image-${Date.now()}.png`;
