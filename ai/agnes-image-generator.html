@@ -259,6 +259,35 @@
       box-shadow: 0 12px 28px rgba(31, 106, 85, 0.2);
     }
 
+    .url-result {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .url-box {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fffdfa;
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.7;
+      word-break: break-all;
+    }
+
+    .url-box a {
+      color: #233d72;
+      text-decoration: none;
+    }
+
+    .url-box a:hover {
+      text-decoration: underline;
+    }
+
     .note {
       margin-top: 18px;
       padding: 14px 16px;
@@ -277,6 +306,14 @@
       .controls {
         position: static;
       }
+
+      .result-card.mobile-hidden {
+        display: none;
+      }
+    }
+
+    .preview-card.hidden {
+      display: none;
     }
   </style>
 </head>
@@ -285,7 +322,7 @@
     <section class="panel controls">
       <div class="eyebrow">Agnes Image 2.1 Flash</div>
       <h1>图生图生成页面</h1>
-      <p class="sub">支持文生图和图生图。没选图片时自动走文生图，选了图片时自动走图生图。成功后会显示预览，并提供下载生成图片按钮。</p>
+      <p class="sub">支持文生图和图生图。没选图片时自动走文生图，选了图片时自动走图生图。结果区只保留生成后的 URL，支持点击和复制。</p>
 
       <div class="field">
         <label class="label" for="imageFile">选择参考图片（可选）</label>
@@ -322,7 +359,7 @@
       </div>
 
       <div class="note">
-        Token 和模型参数已经内置在页面脚本里。生成结果不会自动写入本地固定目录，而是通过浏览器下载按钮保存。
+        Token 和模型参数已经内置在页面脚本里。生成成功后会给出结果 URL，适合最轻量的浏览器使用方式。
       </div>
     </section>
 
@@ -332,17 +369,17 @@
         <div id="statusText" class="status-line">等待开始。</div>
       </div>
 
-      <div class="preview-card">
+      <div id="previewCard" class="preview-card hidden">
         <div class="eyebrow">参考图预览</div>
         <div id="previewBox" class="preview-box">
           <div class="placeholder">不选图片时将直接走文生图。</div>
         </div>
       </div>
 
-      <div class="result-card">
+      <div id="resultCard" class="result-card">
         <div class="eyebrow">生成结果</div>
         <div id="resultBox" class="result-box">
-          <div class="placeholder">生成成功后，这里会显示图片预览和下载按钮。</div>
+          <div class="placeholder">生成成功后，这里只显示结果 URL，支持点击和复制。</div>
         </div>
         <div id="resultMeta" class="meta"></div>
       </div>
@@ -361,14 +398,19 @@
     const generateBtn = document.getElementById("generateBtn");
     const resetBtn = document.getElementById("resetBtn");
     const statusText = document.getElementById("statusText");
+    const previewCard = document.getElementById("previewCard");
     const previewBox = document.getElementById("previewBox");
+    const resultCard = document.getElementById("resultCard");
     const resultBox = document.getElementById("resultBox");
     const resultMeta = document.getElementById("resultMeta");
 
     let currentFile = null;
-    let currentObjectUrl = null;
-    let currentDownloadUrl = null;
     const isMobileClient = window.matchMedia("(max-width: 920px)").matches || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+    if (isMobileClient) {
+      resultCard.classList.add("mobile-hidden");
+    }
+    previewCard.classList.add("hidden");
 
     function setStatus(text, type = "") {
       statusText.textContent = text;
@@ -384,54 +426,27 @@
       });
     }
 
-    function bytesToBlobUrl(base64String, mimeType = "image/png") {
-      const binary = atob(base64String);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i += 1) {
-        bytes[i] = binary.charCodeAt(i);
-      }
-      return URL.createObjectURL(new Blob([bytes], { type: mimeType }));
-    }
-
-    async function copyImageToClipboard(url) {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`复制图片失败：HTTP ${response.status}`);
-      }
-      const blob = await response.blob();
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          [blob.type || "image/png"]: blob
-        })
-      ]);
-    }
-
     function clearResult() {
-      if (currentObjectUrl) {
-        URL.revokeObjectURL(currentObjectUrl);
-        currentObjectUrl = null;
-      }
-      if (currentDownloadUrl) {
-        URL.revokeObjectURL(currentDownloadUrl);
-        currentDownloadUrl = null;
-      }
-      resultBox.innerHTML = '<div class="placeholder">生成成功后，这里会显示图片预览和下载按钮。</div>';
+      resultBox.innerHTML = '<div class="placeholder">生成成功后，这里只显示结果 URL，支持点击和复制。</div>';
       resultMeta.textContent = "";
+    }
+
+    async function copyText(text) {
+      await navigator.clipboard.writeText(text);
     }
 
     function showMobileResultLink(imageUrl, revisedPrompt = "", sourceType = "url") {
       clearResult();
       resultBox.innerHTML = `
         <div style="width:100%;">
-          <div class="placeholder" style="padding-bottom: 18px;">
-            移动端已跳过页面内图片预览，避免浏览器在预览或转下载时失败。
-          </div>
-          <div class="action-row">
-            <a class="download-link" href="${imageUrl}" target="_blank" rel="noopener noreferrer">打开生成图片链接</a>
+          <div class="placeholder">
+            移动端已跳过页面内图片预览。请直接使用上方状态区里的生成链接。
           </div>
         </div>
       `;
       resultMeta.textContent = `返回类型：${sourceType}${revisedPrompt ? ` | revised_prompt：${revisedPrompt}` : ""}`;
+      statusText.innerHTML = `生成成功。<br>图片链接：<a href="${imageUrl}" target="_blank" rel="noopener noreferrer">${imageUrl}</a>`;
+      statusText.className = "status-line ok";
     }
 
     function showPreview(file) {
@@ -440,29 +455,16 @@
       previewBox.querySelector("img").addEventListener("load", () => URL.revokeObjectURL(localUrl), { once: true });
     }
 
-    async function createDownloadableUrl(imageUrl, sourceType) {
-      if (sourceType === "b64_json") {
-        return imageUrl;
-      }
-      const response = await fetch(imageUrl);
-      if (!response.ok) {
-        throw new Error(`下载图片失败：HTTP ${response.status}`);
-      }
-      const blob = await response.blob();
-      return URL.createObjectURL(blob);
-    }
-
     async function showResultImage(imageUrl, revisedPrompt = "", sourceType = "url") {
       clearResult();
-      currentObjectUrl = imageUrl;
-      currentDownloadUrl = await createDownloadableUrl(imageUrl, sourceType);
-      const safeName = `agnes-image-${Date.now()}.png`;
       resultBox.innerHTML = `
-        <div style="width:100%;">
-          <img src="${imageUrl}" alt="生成结果">
+        <div class="url-result">
+          <div class="url-box">
+            <a href="${imageUrl}" target="_blank" rel="noopener noreferrer">${imageUrl}</a>
+          </div>
           <div class="action-row">
-            <a class="download-link" href="${currentDownloadUrl}" download="${safeName}">下载生成图片</a>
-            <button id="copyImageBtn" class="download-link copy-btn" type="button">复制图片到剪贴板</button>
+            <a class="download-link" href="${imageUrl}" target="_blank" rel="noopener noreferrer">打开链接</a>
+            <button id="copyImageBtn" class="download-link copy-btn" type="button">复制链接</button>
           </div>
         </div>
       `;
@@ -473,9 +475,9 @@
         const originalText = copyBtn.textContent;
         copyBtn.disabled = true;
         try {
-          await copyImageToClipboard(currentDownloadUrl);
+          await copyText(imageUrl);
           copyBtn.textContent = "已复制";
-          setStatus("图片已复制到剪贴板。", "ok");
+          setStatus("链接已复制到剪贴板。", "ok");
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
           setStatus(`复制失败：${message}`, "err");
@@ -494,11 +496,9 @@
       currentFile = file || null;
       clearResult();
       if (!currentFile) {
-        previewBox.innerHTML = '<div class="placeholder">不选图片时将直接走文生图。</div>';
         setStatus("等待开始。");
         return;
       }
-      showPreview(currentFile);
       setStatus(`已选择图片：${currentFile.name}，将按图生图模式生成。`);
     });
 
@@ -508,7 +508,6 @@
       sizeSelect.value = "1024x768";
       responseSelect.value = "url";
       currentFile = null;
-      previewBox.innerHTML = '<div class="placeholder">不选图片时将直接走文生图。</div>';
       clearResult();
       setStatus("已清空，可以重新开始。");
     });
@@ -573,7 +572,7 @@
         }
 
         if (item.b64_json) {
-          const blobUrl = bytesToBlobUrl(item.b64_json);
+          const blobUrl = `data:image/png;base64,${item.b64_json}`;
           setStatus("生成成功，可以预览和下载。", "ok");
           if (isMobileClient) {
             showMobileResultLink(blobUrl, item.revised_prompt || "", "b64_json");
