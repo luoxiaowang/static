@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>武汉到大连5天4晚轻松亲子旅行计划</title>
+  <style>
+    :root {
+      --ink: #173042;
+      --muted: #647888;
+      --sea: #147c91;
+      --coral: #e06f4f;
+      --sun: #f1b84b;
+      --mint: #dff3ec;
+      --foam: #f4fbf8;
+      --paper: #fffdf8;
+      --line: rgba(23, 48, 66, .14);
+      --shadow: 0 18px 48px rgba(23, 48, 66, .12);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(241, 184, 75, .22), transparent 24rem),
+        linear-gradient(135deg, #eef8f4 0%, #f9fbff 44%, #fff8ec 100%);
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 28px 20px 56px; }
+    .hero {
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+    .hero-main, .hero-side, .panel, .day, .food-card, .source-card {
+      background: rgba(255, 253, 248, .88);
+      border: 1px solid rgba(255, 255, 255, .7);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    .hero-main {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      padding: 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero-main:before {
+      content: "";
+      position: absolute;
+      inset: auto -18% -34% 26%;
+      height: 280px;
+      background:
+        repeating-radial-gradient(ellipse at center, rgba(20, 124, 145, .32) 0 2px, transparent 2px 16px);
+      transform: rotate(-7deg);
+      opacity: .7;
+    }
+    .eyebrow { color: var(--sea); font-weight: 700; letter-spacing: 0; }
+    h1 {
+      margin: 14px 0 16px;
+      max-width: 760px;
+      font-size: clamp(38px, 6vw, 78px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+    .lead {
+      margin: 0;
+      max-width: 700px;
+      color: #385366;
+      font-size: 18px;
+    }
+    .hero-tags {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,.68);
+      font-size: 14px;
+      color: #2d4b5d;
+      white-space: nowrap;
+    }
+    .hero-side {
+      border-radius: 8px;
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+      align-content: stretch;
+    }
+    .metric {
+      min-height: 98px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      padding: 18px;
+      background: linear-gradient(160deg, rgba(255,255,255,.92), rgba(223,243,236,.74));
+    }
+    .metric strong { display: block; font-size: 24px; line-height: 1.15; }
+    .metric span { color: var(--muted); font-size: 14px; }
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 38px 0 16px;
+    }
+    h2 { margin: 0; font-size: 28px; letter-spacing: 0; }
+    .section-title p { margin: 0; color: var(--muted); max-width: 620px; }
+    .weather-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .weather-card {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.72);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 140px;
+    }
+    .weather-icon { font-size: 30px; margin-bottom: 10px; }
+    .weather-card b { display: block; }
+    .weather-card small { color: var(--muted); }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 20px;
+      align-items: start;
+    }
+    .panel {
+      border-radius: 8px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .day {
+      border-radius: 8px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .day-header {
+      padding: 20px 22px;
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 16px;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(20,124,145,.12), rgba(241,184,75,.12));
+    }
+    .day-date { color: var(--sea); font-weight: 800; }
+    .day-theme { font-size: 20px; font-weight: 800; }
+    .pace { color: var(--muted); font-size: 14px; }
+    .timeline { padding: 18px 22px 22px; }
+    .activity {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    .activity:last-child { border-bottom: 0; }
+    .time { color: var(--coral); font-weight: 800; }
+    .activity h3 { margin: 0 0 6px; font-size: 17px; }
+    .activity p { margin: 4px 0; color: #3d586a; }
+    .meal {
+      margin-top: 8px;
+      padding: 12px;
+      border-left: 4px solid var(--sun);
+      background: rgba(241, 184, 75, .14);
+      border-radius: 0 8px 8px 0;
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .food-card {
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 170px;
+    }
+    .food-card h3 { margin: 0 0 8px; font-size: 18px; }
+    .food-card p { margin: 6px 0; color: #3d586a; }
+    .tips-list, .source-list { display: grid; gap: 10px; padding: 0; margin: 0; list-style: none; }
+    .tips-list li {
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(223,243,236,.72);
+      border: 1px solid var(--line);
+    }
+    .source-card { border-radius: 8px; padding: 16px; }
+    .source-card a { font-weight: 700; color: var(--sea); }
+    .note {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 8px;
+      background: rgba(224,111,79,.12);
+      color: #714332;
+      border: 1px solid rgba(224,111,79,.24);
+    }
+    @media (max-width: 900px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+      .weather-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .page { padding: 14px 12px 38px; }
+      .hero-main { padding: 28px 22px; min-height: 470px; }
+      .hero-side, .panel { padding: 16px; }
+      .weather-strip { grid-template-columns: 1fr; }
+      .day-header { grid-template-columns: 1fr; }
+      .day-date { grid-column: 1 / -1; }
+      .activity { grid-template-columns: 1fr; gap: 4px; }
+    }
+    @media print {
+      body { background: white; }
+      .hero-main, .hero-side, .panel, .day, .food-card, .source-card { box-shadow: none; background: white; }
+      .hero { min-height: auto; }
+      .day { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-main">
+        <div>
+          <div class="eyebrow">2026年7月23日 - 7月27日｜武汉出发</div>
+          <h1>大连 5天4晚轻松亲子旅行计划</h1>
+          <p class="lead">3个大人和1个8岁小孩，前3晚住青泥洼桥瑞诗酒店，最后1晚换到星海假日酒店：海边、老街、海洋馆、夜市都放进来，但每天都留出休整时间。</p>
+        </div>
+        <div class="hero-tags">
+          <span class="tag">非打卡式</span>
+          <span class="tag">每日留缓冲</span>
+          <span class="tag">海边外景前置</span>
+          <span class="tag">星海双时段</span>
+          <span class="tag">东港喷泉</span>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <div class="metric"><span>人员</span><strong>3大1小</strong><span>孩子8岁，行程按轻松亲子节奏设计</span></div>
+        <div class="metric"><span>住宿</span><strong>瑞诗 + 星海假日</strong><span>前3晚青泥洼桥，最后1晚圣亚附近</span></div>
+        <div class="metric"><span>路线策略</span><strong>打车优先</strong><span>每站补充距离、时间和推荐交通</span></div>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <h2>天气与穿衣</h2>
+        <p>中央气象台显示，7/23-7/25多云为主，7/26小雨；大连海边风和紫外线都要认真对待。</p>
+      </div>
+      <div id="weather" class="weather-strip"></div>
+      <div class="note">建议：短袖短裤/速干衣 + 薄防晒外套 + 轻便雨具。孩子带一套替换衣物和防滑凉鞋，海边不安排正式下海游泳。</div>
+    </section>
+
+    <div class="layout">
+      <section>
+        <div class="section-title">
+          <h2>每日行程</h2>
+          <p>按最终确认路线编排，每站都标注上一站到本站的距离、时间和推荐交通方式。</p>
+        </div>
+        <div id="days"></div>
+      </section>
+
+      <aside>
+        <section class="panel">
+          <h2>交通抓手</h2>
+          <ul class="tips-list">
+            <li>机场到酒店：约12公里，4人带行李建议打车，25-35分钟。</li>
+            <li>市区移动：星海、棒棰岛、南山、圣亚优先打车；东港内部步行即可。</li>
+            <li>返程：最后一晚住星海假日，13:00左右从酒店出发，14:00前到机场。</li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+
+    <section>
+      <div class="section-title">
+        <h2>美食推荐</h2>
+        <p>主线是大连海鲜老菜、海肠水饺、海胆水饺和海鲜烧烤；亲子出行优先选能坐得舒服的店。</p>
+      </div>
+      <div id="foods" class="grid-2"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>夜市选择</h2>
+        <p>夜市只安排一次就够，吃气氛，不把孩子拖到太晚。</p>
+      </div>
+      <div id="markets" class="grid-2"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <h2>雨天与降级方案</h2>
+        <p>这份行程最重要的不是全走完，而是舒服地玩完。</p>
+      </div>
+      <ul id="backups" class="tips-list"></ul>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>数据来源</h2>
+        <p>本机未检测到 flyai 与 mcporter CLI，因此机票/小红书详情无法按 skill 指定链路实查；这里保留公开来源和社区来源。</p>
+      </div>
+      <div id="sources" class="grid-2"></div>
+    </section>
+  </main>
+
+  <script id="trip-data" type="application/json">
+{
+  "weather": [
+    ["07/23", "周四", "多云", "30/24℃", "南风3-4级", "☁️"],
+    ["07/24", "周五", "阴转多云", "29/25℃", "南风3-5级", "⛅"],
+    ["07/25", "周六", "多云", "30/25℃", "南风3-5级", "🌥️"],
+    ["07/26", "周日", "小雨", "30/24℃", "微风", "🌧️"],
+    ["07/27", "周一", "阵雨概率", "28/24℃", "东南风微风", "🌦️"]
+  ],
+  "days": [
+    {
+      "date": "07/23 周四",
+      "theme": "抵达大连，慢慢进入海滨节奏",
+      "pace": "轻松，步行约5000-7000步",
+      "items": [
+        ["14:20-15:20", "大连周水子机场 → 大连瑞诗酒店", "约12公里，25-35分钟；推荐打车/网约车。4人带行李，直接到酒店最省心。"],
+        ["15:30-17:20", "酒店休息", "酒店内；入住、补水、换鞋，孩子可以小睡。"],
+        ["17:30-18:30", "瑞诗酒店 → 青泥洼桥商圈", "约0.3-0.8公里，步行5-12分钟；推荐步行。酒店就在商圈里，第一天轻松逛。"],
+        ["18:30-19:30", "青泥洼桥附近晚餐", "周边步行可达；推荐大连老菜/海鲜水饺/简餐，不吃太撑。"],
+        ["19:30-21:00", "青泥洼桥 → 西安路夜市/中央大道一带", "约5-6公里，地铁15-20分钟或打车20-30分钟；想省心就打车。"],
+        ["21:00-21:30", "西安路 → 瑞诗酒店", "约5-6公里，20-30分钟；推荐打车，第一天别太晚。"]
+      ]
+    },
+    {
+      "date": "07/24 周五",
+      "theme": "星海广场 + 莲花山 + 银沙滩 + 付家庄 + 星海夜景",
+      "pace": "中等偏满，步行约11000-13000步；银沙滩和夜景可删",
+      "items": [
+        ["08:30-09:00", "瑞诗酒店 → 百年城雕/星海广场", "约8-9公里，25-35分钟；推荐打车，直接定位“百年城雕”。"],
+        ["09:00-10:30", "百年城雕 / 星海广场喂海鸥 / 海边逛逛", "景区内步行约1-1.5公里；推荐步行，控制在1.5小时。"],
+        ["10:30-11:30", "星海广场慢逛、拍照、找地方坐一会儿", "景区内步行约0.5-1公里；注意防晒补水。"],
+        ["11:30-12:50", "星海附近午餐", "约0.5-2公里，步行或短打车5-10分钟；推荐海鲜家常菜/水饺。"],
+        ["13:10-15:00", "午餐点 → 莲花山观景台", "约4-5公里，打车15-20分钟；上山坐缆车/景区交通，不徒步硬爬。"],
+        ["15:00-15:20", "莲花山观景台 → 银沙滩", "约3-4公里，10-15分钟；推荐打车。"],
+        ["15:20-16:00", "银沙滩短停", "景区内短步行；看海岸线、拍照，不深玩。"],
+        ["16:00-16:20", "银沙滩 → 付家庄", "约1.5-2公里，打车5-10分钟或步行25-35分钟；推荐打车。"],
+        ["16:20-18:30", "付家庄看海、等日落", "景区内步行约1公里；给孩子留玩沙石时间。"],
+        ["18:30-19:40", "付家庄附近晚餐，或打车回星海附近吃", "约0.5-4公里，5-15分钟；看体力决定。"],
+        ["20:00-21:00", "晚餐点 → 星海广场夜景", "约0-4公里，0-15分钟；推荐打车，只看夜景不深逛。"],
+        ["21:00-21:30", "星海广场 → 瑞诗酒店", "约8-9公里，25-35分钟；推荐打车回酒店。"]
+      ]
+    },
+    {
+      "date": "07/25 周六",
+      "theme": "菱角湾 + 渔人码头 + 棒棰岛 + 东方威尼斯水城 + 东港喷泉",
+      "pace": "中等，步行约10000-12000步；东港段找地方坐很重要",
+      "items": [
+        ["09:00-09:40", "瑞诗酒店 → 菱角湾", "约8-10公里，25-35分钟；推荐打车，不看日出就不用太早。"],
+        ["09:40-10:30", "菱角湾", "景区内短步行；彩色房子和海湾机位，停留约50分钟即可。"],
+        ["10:30-10:40", "菱角湾 → 渔人码头", "约1公里，5-10分钟；可步行，天热或孩子累就短打车。"],
+        ["10:40-12:00", "渔人码头", "景区内步行约1公里；拍码头、看船、找饮品店坐一下。"],
+        ["12:00-13:20", "渔人码头附近午餐", "周边步行可达；推荐海鲜老菜、简餐或咖啡轻食。"],
+        ["13:20-13:40", "渔人码头 → 棒棰岛", "约5-6公里，15-25分钟；推荐打车。"],
+        ["13:40-16:00", "棒棰岛", "景区内步行约1.5-2公里；海滩、草坪、贝壳，控制2小时左右。"],
+        ["16:00-16:30", "棒棰岛 → 东方威尼斯水城", "约7-8公里，20-30分钟；推荐打车，不建议步行去东港。"],
+        ["16:30-18:30", "东方威尼斯水城", "景区内步行约1-2公里；傍晚到夜景最舒服。"],
+        ["18:30-19:30", "东港轻餐/休息", "周边步行可达；喷泉前不要吃太正式，避免卡时间。"],
+        ["19:40-20:00", "东港音乐喷泉", "威尼斯水城附近步行约10-15分钟；以当天公告和天气为准。"],
+        ["20:10-20:50", "东港 → 瑞诗酒店", "约5-6公里，15-25分钟；晚上带孩子建议打车。"]
+      ]
+    },
+    {
+      "date": "07/26 周日",
+      "theme": "市区Citywalk：东关街 + 201电车 + 俄街 + 中山广场 + 南山七七街",
+      "pace": "中等偏轻松，早出发，下午早点回瑞诗取行李并换到星海假日",
+      "items": [
+        ["08:30-08:50", "瑞诗酒店退房，行李寄存在前台", "酒店内；前一天提前问好寄存，贵重物品随身。"],
+        ["08:50-09:05", "瑞诗酒店 → 东关街", "约2-3公里，10-15分钟；推荐打车，早一点出发避开中午热度。"],
+        ["09:05-10:00", "东关街", "街区内步行约1公里；老街区、旧建筑、拍照，别逛太深。"],
+        ["10:00-10:30", "东关街站 → 胜利桥/大连火车站附近", "约2公里，含等车20-30分钟；推荐坐201有轨电车，现场确认方向。"],
+        ["10:30-11:20", "俄罗斯风情街 + 大连美术馆外观", "步行约0.5-1公里；适合拍照，商业感会有一点，不用逛太久。"],
+        ["11:20-11:30", "俄街 → 中山广场/青泥洼桥/人民路午餐区", "约1-2公里，5-10分钟；天热建议短打车。"],
+        ["11:30-12:30", "午餐", "周边步行可达；选大连老菜、水饺或简餐。"],
+        ["12:30-12:40", "午餐点 → 中山广场", "约0.5-1公里，5-10分钟；按餐厅位置决定步行或短打车。"],
+        ["12:40-13:25", "中山广场", "广场周边步行约0.8公里；看建筑群、喂鸽子、拍照。"],
+        ["13:25-13:45", "中山广场 → 南山路/南山风情街", "约1.5-2公里，10-15分钟；推荐打车到入口附近。"],
+        ["13:45-15:00", "南山路 / 南山风情街 / 七七街", "街区内步行约1-1.5公里；选咖啡店坐一会儿，不纯走路。"],
+        ["15:00-15:20", "南山/七七街 → 瑞诗酒店", "约2公里，10-15分钟；推荐打车回瑞诗取行李。"],
+        ["15:20-16:00", "瑞诗酒店前台取行李/休整", "酒店内；给孩子补水、整理行李。"],
+        ["16:00-16:35", "瑞诗酒店 → 大连星海假日酒店", "约9-10公里，25-35分钟；推荐打车，最后一晚换到圣亚附近。"],
+        ["16:35-17:30", "大连星海假日酒店入住休整", "酒店内；晚上在星海/圣亚附近吃饭，不再安排远处夜市。"]
+      ]
+    },
+    {
+      "date": "07/27 周一",
+      "theme": "星海假日酒店 + 圣亚海洋世界半天 + 返程",
+      "pace": "轻松但要守时间，15:25起飞，14:00前到机场",
+      "items": [
+        ["08:30-08:50", "星海假日酒店退房/寄存行李", "酒店内；如果可延迟退房更好，否则行李寄存在前台。"],
+        ["08:50-09:00", "星海假日酒店 → 大连圣亚海洋世界", "约0.1-1公里，步行3-12分钟；推荐步行，按实际楼栋入口导航。"],
+        ["09:00-11:40", "大连圣亚海洋世界", "场馆内步行；精简玩海洋世界+极地世界，别硬刷所有馆。"],
+        ["11:40-12:30", "圣亚/星海附近午餐", "周边步行可达；简单吃，避免返程前太赶。"],
+        ["12:30-12:50", "圣亚 → 星海假日酒店取行李", "约0.1-1公里，步行3-12分钟；看天气和孩子状态决定步行或短打车。"],
+        ["13:00-13:40", "星海假日酒店 → 大连周水子机场", "约12-13公里，25-40分钟；推荐打车/网约车，建议14:00前到机场。"],
+        ["15:25-17:55", "返程飞回武汉", "到武汉后结束行程。"]
+      ]
+    }
+  ],
+  "foods": [
+    ["品海楼·大连海鲜·北派海肠捞饭", "老虎滩/渔人码头", "150-200元~", "海肠捞饭、海胆锅贴、蒜蓉扇贝、三鲜焖子"],
+    ["旅大印象·大连家常海鲜馆", "星海/黑石礁", "90-120元~", "虾爬子锅贴、海胆水饺、老醋六样"],
+    ["日丰园海肠水饺", "小平岛/银泰等分店", "110-140元~", "海肠水饺、鲅鱼水饺、海肠捞饭"],
+    ["喜鼎海胆水饺", "东港等分店", "150-180元~", "海胆水饺、鲅鱼水饺"],
+    ["正黄旗海鲜烧烤", "延安路/中山广场方向", "150-200元~", "烤海肠、烤鸟贝、蒜蓉生蚝"]
+  ],
+  "markets": [
+    ["交大夜市/交通大学夜市", "17:00-21:30", "50元~", "小吃密集，推荐焖子、烤鱿鱼、烤冷面、羊肉串、臭豆腐冷面夹。"],
+    ["太原街夜市", "18:30-22:00", "60-100元~", "更像本地夏夜大排档，适合吃烧烤和海鲜小馆。"],
+    ["天津街/中原小吃街", "18:00-21:30", "40-80元~", "离酒店较近，适合作为到达日或返程日前的短逛备选。"]
+  ],
+  "backups": [
+    "7/24如果孩子晒累了，取消莲花山，直接回酒店午休。",
+    "7/26雨大时，老虎滩后取消夜市，改酒店泳池或青泥洼桥商场。",
+    "老虎滩排队过长，只看极地馆+珊瑚馆，不追求所有表演。",
+    "夜市只安排一次就够，重点是气氛和尝鲜，不要吃太杂。"
+  ],
+  "sources": [
+    ["中央气象台大连预报", "https://www.nmc.cn/publish/forecast/ALN/dalian.html", "7/23-7/27逐日天气"],
+    ["中国天气网大连生活指数", "https://www.weather.com.cn/weather/101070201.shtml", "穿衣、防晒、风力提示"],
+    ["Trip.com 大连瑞诗酒店信息", "https://hk.trip.com/hotels/dalian-hotel-detail-437824/swish-hotel-dalian/", "酒店位置、地铁距离、机场距离"],
+    ["Booking 大连瑞诗酒店信息", "https://www.booking.com/hotel/cn/dalian-swish-hotel.zh-cn.html", "机场到酒店车程参考"],
+    ["大连本地宝棒棰岛", "https://dl.bendibao.com/jingdian/bangchuidaochffh/", "棒棰岛开放时间、门票"],
+    ["大连本地宝东方威尼斯水城", "https://dl.bendibao.com/tour/202443/83264.shtm", "水城开放时间、免费开放信息"],
+    ["大连本地宝夜市推荐", "https://dl.bendibao.com/news/2021414/66284.shtm", "夜市选择"],
+    ["Trip Moments 交大夜市用户攻略", "https://hk.trip.com/moments/poi-old-jiaotong-university-night-market-31658725/", "交大夜市小吃参考"],
+    ["携程品海楼餐厅信息", "https://you.ctrip.com/food/4/8643684.html", "特色菜和人均参考"]
+  ]
+}
+  </script>
+  <script>
+    const data = JSON.parse(document.getElementById('trip-data').textContent);
+    const el = function(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    };
+    const weatherWrap = document.getElementById('weather');
+    data.weather.forEach(function(w) {
+      const card = el('article', 'weather-card');
+      card.appendChild(el('div', 'weather-icon', w[5]));
+      card.appendChild(el('b', '', w[0] + ' ' + w[1]));
+      card.appendChild(el('p', '', w[2] + '｜' + w[3]));
+      card.appendChild(el('small', '', w[4]));
+      weatherWrap.appendChild(card);
+    });
+    const daysWrap = document.getElementById('days');
+    data.days.forEach(function(day, index) {
+      const dayCard = el('article', 'day');
+      const header = el('div', 'day-header');
+      header.appendChild(el('div', 'day-date', day.date));
+      const titleBox = el('div');
+      titleBox.appendChild(el('div', 'day-theme', day.theme));
+      titleBox.appendChild(el('div', 'pace', day.pace));
+      header.appendChild(titleBox);
+      dayCard.appendChild(header);
+      const timeline = el('div', 'timeline');
+      day.items.forEach(function(item) {
+        const row = el('div', 'activity');
+        row.appendChild(el('div', 'time', item[0]));
+        const content = el('div');
+        content.appendChild(el('h3', '', item[1]));
+        content.appendChild(el('p', '', item[2]));
+        row.appendChild(content);
+        timeline.appendChild(row);
+      });
+      dayCard.appendChild(timeline);
+      daysWrap.appendChild(dayCard);
+    });
+    const makeCard = function(values, mode) {
+      const card = el('article', 'food-card');
+      card.appendChild(el('h3', '', values[0]));
+      if (mode === 'food') {
+        card.appendChild(el('p', '', '区域：' + values[1]));
+        card.appendChild(el('p', '', '人均：' + values[2]));
+        card.appendChild(el('p', '', '推荐：' + values[3]));
+      } else {
+        card.appendChild(el('p', '', '时间：' + values[1]));
+        card.appendChild(el('p', '', '人均：' + values[2]));
+        card.appendChild(el('p', '', values[3]));
+      }
+      return card;
+    };
+    data.foods.forEach(function(f) { document.getElementById('foods').appendChild(makeCard(f, 'food')); });
+    data.markets.forEach(function(m) { document.getElementById('markets').appendChild(makeCard(m, 'market')); });
+    data.backups.forEach(function(t) { document.getElementById('backups').appendChild(el('li', '', t)); });
+    data.sources.forEach(function(s) {
+      const card = el('article', 'source-card');
+      const link = el('a', '', s[0]);
+      link.href = s[1];
+      link.target = '_blank';
+      link.rel = 'noreferrer';
+      card.appendChild(link);
+      card.appendChild(el('p', '', s[2]));
+      document.getElementById('sources').appendChild(card);
+    });
+  </script>
+</body>
+</html>
