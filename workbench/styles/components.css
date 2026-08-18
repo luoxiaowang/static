@@ -21,6 +21,8 @@
 .record-meta > span { display: inline-flex; align-items: center; gap: 4px; }
 .record-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 1px; }
 .record-actions .el-button { margin-left: 0 !important; padding-inline: 7px; }
+.record-meta .tag-activated { --el-tag-bg-color: #f3f0ff; --el-tag-border-color: #d8ccff; --el-tag-text-color: #6f42c1; }
+html.dark .record-meta .tag-activated { --el-tag-bg-color: rgba(139, 92, 246, .18); --el-tag-border-color: rgba(139, 92, 246, .45); --el-tag-text-color: #b8a6f5; }
 .timer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
 .timer-card { transition: transform .18s ease, box-shadow .18s ease; }
 .timer-card:hover { transform: translateY(-2px); box-shadow: var(--wb-shadow-hover) !important; }
