@@ -1,9 +1,10 @@
-import { formatCountdown, formatDateTime, formatLocalDate, getPeriodRange, getTodoStatus, groupByLocalDate, toLocalDateTimeInput } from './core/date.mjs';
+import { formatCountdown, formatDateTime, formatLocalDate, formatLocalDateTimeFilename, getPeriodRange, getTodoStatus, groupByLocalDate, toLocalDateTimeInput } from './core/date.mjs';
 import { createBackup, validateBackup } from './core/backup.mjs';
 import { createDeleteConfirmation } from './core/delete-confirm.mjs';
 import { normalizePriority, selectTodos } from './core/todo-sort.mjs';
 import { createPomodoroState, getPomodoroRemaining, isPomodoroFinished, pausePomodoro, resetPomodoro, resumePomodoro, selectPomodoroDuration, startPomodoro } from './core/pomodoro.mjs';
-import { askWorkspaceAgent, recognizeFavorite } from './ai/agnes-client.mjs';
+import { askWorkspaceAgent, classifyAgentIntent, generateAgentImage, recognizeFavorite, searchWebWithAgent } from './ai/agnes-client.mjs';
+import { detectAgentIntent } from './ai/intent-router.mjs';
 import { buildWorkspaceContext } from './ai/workspace-context.mjs';
 import { clearAllData, deleteRecord, getAllData, getSetting, listRecords, mergeAllData, openDatabase, putRecord, replaceAllData, setSetting } from './storage/db.mjs';
 
@@ -83,6 +84,7 @@ const app = createApp({
     const agentDraft = ref('');
     const agentLoading = ref(false);
     const agentError = ref('');
+    const agentTaskType = ref('chat');
     const pomodoro = ref(createPomodoroState());
     const clearPhrase = ref('');
     const importInput = ref(null);
@@ -124,6 +126,7 @@ const app = createApp({
     const thoughtGroups = computed(() => groupByLocalDate(thoughts.value).map((group) => ({ ...group, dateLabel: `${group.date} · ${new Intl.DateTimeFormat('zh-CN', { weekday: 'long' }).format(new Date(`${group.date}T00:00:00`))}` })));
     const sortedFavorites = computed(() => [...favorites.value].sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
     const textDialogTitle = computed(() => textForm.store === 'ideas' ? '编辑创意灵感' : '编辑碎碎念');
+    const agentTaskLabel = computed(() => ({ chat: '正在分析工作台数据', classify: '正在识别你的需求', web: '正在联网查询', image: '正在生成图片' })[agentTaskType.value]);
     const notificationPermission = ref('Notification' in window ? Notification.permission : 'unsupported');
     const notificationLabel = computed(() => ({ granted: '已允许浏览器通知', denied: '已拒绝，将使用页面提醒', default: '尚未申请通知权限', unsupported: '当前浏览器不支持' }[notificationPermission.value]));
     const dataSummary = computed(() => [{ label: 'Todo', value: todos.value.length }, { label: '倒计时', value: timers.value.length }, { label: '灵感', value: ideas.value.length }, { label: '碎碎念', value: thoughts.value.length }, { label: '收藏', value: favorites.value.length }]);
@@ -236,23 +239,56 @@ const app = createApp({
     function visitFavorite(favorite) { window.open(favorite.url, '_blank', 'noopener,noreferrer'); }
 
     function workspaceContext() { return buildWorkspaceContext({ todos: todos.value, timers: timers.value, pomodoro: pomodoro.value, ideas: ideas.value, thoughts: thoughts.value, favorites: favorites.value }); }
-    async function runAgentRequest(messages) {
+    function agentChatMessages() {
+      return agentMessages.value.filter((item) => item.content).map(({ role, content }) => ({ role, content }));
+    }
+    async function runAgentRequest(prompt, forcedIntent = '') {
       agentLoading.value = true; agentError.value = ''; agentAbortController = new AbortController();
       try {
-        const content = await askWorkspaceAgent(messages, workspaceContext(), { signal: agentAbortController.signal });
-        agentMessages.value.push({ role: 'assistant', content });
+        let intent = forcedIntent || detectAgentIntent(prompt);
+        if (intent === 'unknown') {
+          agentTaskType.value = 'classify';
+          intent = await classifyAgentIntent(prompt, { signal: agentAbortController.signal });
+        }
+        agentTaskType.value = intent;
+        if (intent === 'web') {
+          const result = await searchWebWithAgent(prompt, workspaceContext(), { signal: agentAbortController.signal });
+          agentMessages.value.push({ role: 'assistant', kind: 'web', content: result.content, sources: result.sources });
+        } else if (intent === 'image') {
+          const result = await generateAgentImage(prompt, { signal: agentAbortController.signal });
+          agentMessages.value.push({ role: 'assistant', kind: 'image', content: '', imageUrl: result.imageUrl, prompt, revisedPrompt: result.revisedPrompt });
+        } else {
+          const content = await askWorkspaceAgent(agentChatMessages(), workspaceContext(), { signal: agentAbortController.signal });
+          agentMessages.value.push({ role: 'assistant', kind: 'text', content });
+        }
       } catch (error) { agentError.value = error.message; }
       finally { agentLoading.value = false; agentAbortController = null; }
     }
     async function sendAgentMessage() {
       const content = agentDraft.value.trim(); if (!content || agentLoading.value) return;
       agentMessages.value.push({ role: 'user', content }); agentDraft.value = '';
-      await runAgentRequest(agentMessages.value.map(({ role, content: text }) => ({ role, content: text })));
+      await runAgentRequest(content);
     }
     async function retryAgentMessage() {
       if (agentLoading.value || !agentMessages.value.some((item) => item.role === 'user')) return;
       agentMessages.value = agentMessages.value.filter((item, index, items) => !(item.role === 'assistant' && index === items.length - 1));
-      await runAgentRequest(agentMessages.value.map(({ role, content }) => ({ role, content })));
+      const prompt = [...agentMessages.value].reverse().find((item) => item.role === 'user')?.content;
+      if (prompt) await runAgentRequest(prompt);
+    }
+    async function regenerateAgentImage(item) {
+      if (agentLoading.value || !item?.prompt) return;
+      agentMessages.value.push({ role: 'user', content: `重新生成图片：${item.prompt}` });
+      await runAgentRequest(item.prompt, 'image');
+    }
+    async function downloadAgentImage(item) {
+      if (!item?.imageUrl) return;
+      let href = item.imageUrl; let objectUrl = '';
+      try {
+        if (!href.startsWith('data:')) { objectUrl = URL.createObjectURL(await (await fetch(href)).blob()); href = objectUrl; }
+        const link = document.createElement('a'); link.href = href; link.download = formatLocalDateTimeFilename().replace(/\.json$/, '.png'); link.click();
+      } catch {
+        window.open(item.imageUrl, '_blank', 'noopener,noreferrer'); message.warning('图片已在新窗口打开，请手动保存');
+      } finally { if (objectUrl) setTimeout(() => URL.revokeObjectURL(objectUrl), 1000); }
     }
     function stopAgentRequest() { agentAbortController?.abort(); }
     function clearAgentConversation() { agentAbortController?.abort(); agentMessages.value = []; agentError.value = ''; }
@@ -289,13 +325,13 @@ const app = createApp({
     }
 
     function downloadJson(data, filename) { const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-    async function exportData(prefix = '个人工作台备份') { const backup = createBackup(await getAllData()); downloadJson(backup, `${prefix}-${formatLocalDate()}-${Date.now()}.json`); await setSetting('lastExportedAt', backup.exportedAt); message.success('数据备份已导出'); }
+    async function exportData() { const backup = createBackup(await getAllData()); downloadJson(backup, formatLocalDateTimeFilename(backup.exportedAt)); await setSetting('lastExportedAt', backup.exportedAt); message.success('数据备份已导出'); }
     function chooseImport(mode) { importMode.value = mode; importInput.value.value = ''; importInput.value.click(); }
     async function handleImport(event) {
       try {
         const file = event.target.files[0]; if (!file) return; const data = validateBackup(JSON.parse(await file.text())); const replacing = importMode.value === 'replace';
         await ElementPlus.ElMessageBox.confirm(replacing ? '当前数据将被导入文件完全替换，操作前会自动导出备份。' : '相同 ID 的记录将使用导入文件内容，其余记录会追加。', replacing ? '覆盖还原' : '合并导入', { type: 'warning', confirmButtonText: replacing ? '备份并覆盖' : '确认合并', cancelButtonText: '取消' });
-        if (replacing) { await exportData('覆盖前自动备份'); await replaceAllData(data); await loadSettings(); await loadAll(); }
+        if (replacing) { await exportData(); await replaceAllData(data); await loadSettings(); await loadAll(); }
         else { await mergeAllData(data); await loadSettings(); await loadAll(); }
         message.success(replacing ? '数据已覆盖还原' : '数据已合并导入');
       } catch (error) { if (error !== 'cancel') message.error(error.message || '导入失败'); }
@@ -312,7 +348,7 @@ const app = createApp({
     onBeforeUnmount(() => { clearInterval(clockTimer); clearTimeout(deleteResetTimer); agentAbortController?.abort(); });
     watch(activeView, cancelDeleteConfirmation);
 
-    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, priorityMeta, openTodoDialog, saveTodo, toggleTodo, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
+    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, agentTaskLabel, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, priorityMeta, openTodoDialog, saveTodo, toggleTodo, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, downloadAgentImage, regenerateAgentImage, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
   },
 });
 

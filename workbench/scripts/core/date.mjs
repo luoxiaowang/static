@@ -71,6 +71,14 @@ export function formatLocalDate(value = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+export function formatLocalDateTimeFilename(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  const time = [date.getHours(), date.getMinutes(), date.getSeconds()]
+    .map((part) => String(part).padStart(2, '0'))
+    .join('-');
+  return `${formatLocalDate(date)}-${time}.json`;
+}
+
 export function formatDateTime(value) {
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return '无效时间';

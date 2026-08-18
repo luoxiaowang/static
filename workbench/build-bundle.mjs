@@ -7,6 +7,7 @@ const sources = [
   'scripts/core/delete-confirm.mjs',
   'scripts/core/todo-sort.mjs',
   'scripts/core/pomodoro.mjs',
+  'scripts/ai/intent-router.mjs',
   'scripts/ai/agnes-client.mjs',
   'scripts/ai/workspace-context.mjs',
   'scripts/storage/db.mjs',

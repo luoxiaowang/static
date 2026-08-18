@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import * as dateUtils from '../scripts/core/date.mjs';
 
 import {
   getCountdownParts,
@@ -7,6 +8,11 @@ import {
   getTodoStatus,
   groupByLocalDate,
 } from '../scripts/core/date.mjs';
+
+test('导出文件名直接使用本机日期时间', () => {
+  const localTime = new Date(2026, 7, 18, 14, 8, 20);
+  assert.equal(dateUtils.formatLocalDateTimeFilename(localTime), '2026-08-18-14-08-20.json');
+});
 
 test('已完成 Todo 始终返回 completed', () => {
   assert.equal(getTodoStatus({ completed: true }, new Date('2026-08-18T10:00:00')), 'completed');

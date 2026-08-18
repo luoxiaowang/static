@@ -1,3 +1,5 @@
+import { formatLocalDate } from '../core/date.mjs';
+
 function latestFirst(records, field = 'createdAt') {
   return [...(records || [])].sort((a, b) => new Date(b[field] || 0).getTime() - new Date(a[field] || 0).getTime());
 }
@@ -24,10 +26,21 @@ function createSections(data) {
   ];
 }
 
-export function buildWorkspaceContext(data = {}, { maxChars = 24000 } = {}) {
-  const context = createSections(data)
+export function buildWorkspaceContext(data = {}, { maxChars = 24000, now = new Date(), timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '本机时区' } = {}) {
+  const localTime = [now.getHours(), now.getMinutes(), now.getSeconds()]
+    .map((part) => String(part).padStart(2, '0'))
+    .join(':');
+  const timeContext = [
+    '## 当前时间基准',
+    `当前本机日期：${formatLocalDate(now)}`,
+    `当前本机时间：${localTime}`,
+    `本机时区：${timeZone}`,
+    '涉及“今天”“明天”“昨天”等相对日期时，必须以这里的当前本机日期时间为准。',
+  ].join('\n');
+  const businessContext = createSections(data)
     .map(([label, value]) => `## ${label}\n${JSON.stringify(value)}`)
     .join('\n\n');
+  const context = `${timeContext}\n\n${businessContext}`;
   if (context.length <= maxChars) return context;
   const marker = '\n[上下文已截断]';
   return `${context.slice(0, Math.max(0, maxChars - marker.length))}${marker}`;

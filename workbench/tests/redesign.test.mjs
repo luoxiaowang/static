@@ -118,9 +118,32 @@ test('页面提供分组灵感、收藏夹和 Agent 助手流程', async () => {
   assert.match(html, /clearAgentConversation/);
 });
 
+test('Agent 自动路由联网查询与图片生成并展示对应结果', async () => {
+  const source = await readFile(new URL('scripts/vue-app.mjs', root), 'utf8');
+  const html = await readFile(new URL('index.html', root), 'utf8');
+  const styles = await readFile(new URL('styles/components.css', root), 'utf8');
+
+  for (const name of ['detectAgentIntent', 'classifyAgentIntent', 'searchWebWithAgent', 'generateAgentImage', 'agentTaskLabel', 'downloadAgentImage', 'regenerateAgentImage']) {
+    assert.match(source, new RegExp(`\\b${name}\\b`));
+  }
+  assert.match(html, /item\.sources/);
+  assert.match(html, /item\.imageUrl/);
+  assert.match(html, /downloadAgentImage/);
+  assert.match(html, /regenerateAgentImage/);
+  for (const className of ['agent-sources', 'agent-image-card', 'agent-generated-image']) {
+    assert.match(styles, new RegExp(`\\.${className}`));
+  }
+});
+
 test('通知授权按钮会根据真实权限更新文案', async () => {
   const html = await readFile(new URL('index.html', root), 'utf8');
   assert.match(html, /notificationPermission === 'granted' \? '已授权' : '申请权限'/);
+});
+
+test('导出按钮不会把点击事件传给文件名生成逻辑', async () => {
+  const html = await readFile(new URL('index.html', root), 'utf8');
+  assert.match(html, /@click="exportData\(\)"/);
+  assert.doesNotMatch(html, /@click="exportData"/);
 });
 
 test('删除按钮第一次进入确认，窗口内第二次执行删除', () => {

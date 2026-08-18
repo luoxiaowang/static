@@ -80,6 +80,14 @@ function formatLocalDate(value = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+function formatLocalDateTimeFilename(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  const time = [date.getHours(), date.getMinutes(), date.getSeconds()]
+    .map((part) => String(part).padStart(2, '0'))
+    .join('-');
+  return `${formatLocalDate(date)}-${time}.json`;
+}
+
 function formatDateTime(value) {
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return '无效时间';
@@ -281,9 +289,27 @@ function isPomodoroFinished(state, now = Date.now()) {
 }
 
 
+// ---- scripts/ai/intent-router.mjs ----
+const IMAGE_INTENT = /(?:生成|画|绘制|制作|设计|创建|做)(?:一张|一个|一幅|些)?[^，。！？\n]{0,12}(?:图片|图像|海报|封面|插画|壁纸|头像)|文生图/i;
+const WORKSPACE_INTENT = /todo|待办|任务|倒计时|番茄钟|灵感|碎碎念|收藏夹|工作台/i;
+const WEB_INTENT = /联网|上网|搜索|搜一下|查一下|查询|最新|新闻|天气|价格|行情|实时|近期|最近发布|官网/i;
+
+function detectAgentIntent(text = '') {
+  const content = String(text).trim();
+  if (!content) return 'chat';
+  if (IMAGE_INTENT.test(content)) return 'image';
+  if (WORKSPACE_INTENT.test(content)) return 'chat';
+  if (WEB_INTENT.test(content)) return 'web';
+  return 'unknown';
+}
+
+
 // ---- scripts/ai/agnes-client.mjs ----
 const AGNES_API_URL = 'https://apihub.agnes-ai.com/v1/chat/completions';
+const AGNES_RESPONSES_URL = 'https://apihub.agnes-ai.com/v1/responses';
+const AGNES_IMAGES_URL = 'https://apihub.agnes-ai.com/v1/images/generations';
 const AGNES_MODEL = 'agnes-2.5-flash';
+const AGNES_IMAGE_MODEL = 'agnes-image-2.1-flash';
 const AGNES_API_KEY = 'sk-URS1kygpIOM5zVM4x3K' + 'VtowqlIKwSFamAE3sMbV1mX79nlNm';
 
 function friendlyHttpError(status) {
@@ -294,33 +320,50 @@ function friendlyHttpError(status) {
 }
 
 async function requestAgnes(messages, { fetchImpl = fetch, signal } = {}) {
+  const payload = await requestJson(AGNES_API_URL, { model: AGNES_MODEL, messages, temperature: 0.2, max_tokens: 1800 }, {
+    fetchImpl,
+    signal,
+    timeoutMs: 60000,
+    timeoutMessage: 'AI 响应超时，请稍后重试',
+  });
+  const content = payload?.choices?.[0]?.message?.content;
+  if (typeof content !== 'string' || !content.trim()) throw new Error('AgnesAI 没有返回有效内容');
+  return content.trim();
+}
+
+async function requestJson(url, body, { fetchImpl = fetch, signal, timeoutMs, timeoutMessage } = {}) {
+  const controller = new AbortController();
+  let timedOut = false;
+  const abortFromParent = () => controller.abort(signal?.reason);
+  if (signal?.aborted) abortFromParent();
+  else signal?.addEventListener('abort', abortFromParent, { once: true });
+  const timer = setTimeout(() => { timedOut = true; controller.abort(); }, timeoutMs);
   let response;
   try {
-    response = await fetchImpl(AGNES_API_URL, {
+    response = await fetchImpl(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${AGNES_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ model: AGNES_MODEL, messages, temperature: 0.2, max_tokens: 1800 }),
-      signal,
+      body: JSON.stringify(body),
+      signal: controller.signal,
     });
   } catch (error) {
-    if (error?.name === 'AbortError') throw new Error('AI 请求已停止');
+    if (error?.name === 'AbortError') throw new Error(timedOut ? timeoutMessage : 'AI 请求已停止');
     throw new Error('无法连接 AgnesAI，请检查网络或浏览器跨域限制');
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener('abort', abortFromParent);
   }
 
   if (!response.ok) throw friendlyHttpError(response.status);
 
-  let payload;
   try {
-    payload = await response.json();
+    return await response.json();
   } catch {
     throw new Error('AgnesAI 返回了无法解析的响应');
   }
-  const content = payload?.choices?.[0]?.message?.content;
-  if (typeof content !== 'string' || !content.trim()) throw new Error('AgnesAI 没有返回有效内容');
-  return content.trim();
 }
 
 function parseFavoriteRecognition(content) {
@@ -356,10 +399,70 @@ function askWorkspaceAgent(messages, workspaceContext, { fetchImpl = fetch, sign
   return requestAgnes([
     {
       role: 'system',
-      content: `你是个人工作台的只读 Agent 助手。根据提供的数据进行检索、总结、规划与建议，不得声称已经修改数据。\n\n当前工作台数据：\n${workspaceContext}`,
+      content: `你是个人工作台的只读 Agent 助手。根据提供的数据进行检索、总结、规划与建议，不得声称已经修改数据。涉及今天、明天、昨天或是否到期时，必须以工作台上下文中的当前本机日期时间为准，不得使用模型自身日期。\n\n当前工作台数据：\n${workspaceContext}`,
     },
     ...messages,
   ], { fetchImpl, signal });
+}
+
+async function classifyAgentIntent(text, { fetchImpl = fetch, signal } = {}) {
+  try {
+    const content = await requestAgnes([
+      {
+        role: 'system',
+        content: '判断用户意图，只输出合法 JSON：{"intent":"chat|web|image"}。chat 表示普通问答或工作台数据咨询；web 表示必须联网获取实时或外部信息；image 表示生成图片。',
+      },
+      { role: 'user', content: text },
+    ], { fetchImpl, signal });
+    const parsed = JSON.parse(content.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim());
+    return ['chat', 'web', 'image'].includes(parsed.intent) ? parsed.intent : 'chat';
+  } catch (error) {
+    if (error?.message === 'AI 请求已停止') throw error;
+    return 'chat';
+  }
+}
+
+async function searchWebWithAgent(text, workspaceContext, { fetchImpl = fetch, signal } = {}) {
+  const payload = await requestJson(AGNES_RESPONSES_URL, {
+    model: AGNES_MODEL,
+    instructions: `你是个人工作台的联网查询助手。必须联网搜索后回答，不得依赖模型记忆猜测实时信息。回答使用中文，并给出可验证来源。以下工作台上下文仅用于理解用户问题：\n${workspaceContext}`,
+    input: text,
+    tools: [{ type: 'web_search_preview' }],
+  }, { fetchImpl, signal, timeoutMs: 90000, timeoutMessage: '联网查询超时，请稍后重试' });
+
+  const outputText = (payload?.output || [])
+    .filter((item) => item?.type === 'message')
+    .flatMap((item) => item.content || [])
+    .filter((item) => item?.type === 'output_text');
+  const content = outputText.map((item) => item.text || '').join('\n\n').trim();
+  if (!content) throw new Error('AgnesAI 联网查询没有返回有效内容');
+
+  const sourceMap = new Map();
+  outputText.flatMap((item) => item.annotations || []).forEach((annotation) => {
+    const citation = annotation?.url_citation || annotation;
+    if (typeof citation?.url !== 'string' || !/^https?:\/\//i.test(citation.url)) return;
+    if (!sourceMap.has(citation.url)) sourceMap.set(citation.url, { title: citation.title || new URL(citation.url).hostname, url: citation.url });
+  });
+  const sources = [...sourceMap.values()];
+  if (!sources.length) throw new Error('AgnesAI 联网查询没有返回可验证的来源');
+  return { content, sources };
+}
+
+async function generateAgentImage(prompt, { fetchImpl = fetch, signal } = {}) {
+  const payload = await requestJson(AGNES_IMAGES_URL, {
+    model: AGNES_IMAGE_MODEL,
+    prompt: `根据以下需求生成高质量图片。若画面包含文字，必须使用准确、清晰的简体中文：${prompt}`,
+    size: '1024x1024',
+    extra_body: { response_format: 'url' },
+  }, { fetchImpl, signal, timeoutMs: 120000, timeoutMessage: '图片生成超时，请稍后重试' });
+  const image = payload?.data?.[0];
+  const imageUrl = typeof image?.url === 'string' && image.url
+    ? image.url
+    : typeof image?.b64_json === 'string' && image.b64_json
+      ? `data:image/png;base64,${image.b64_json}`
+      : '';
+  if (!imageUrl) throw new Error('AgnesAI 没有返回有效图片');
+  return { imageUrl, revisedPrompt: typeof image.revised_prompt === 'string' ? image.revised_prompt : '' };
 }
 
 
@@ -390,10 +493,21 @@ function createSections(data) {
   ];
 }
 
-function buildWorkspaceContext(data = {}, { maxChars = 24000 } = {}) {
-  const context = createSections(data)
+function buildWorkspaceContext(data = {}, { maxChars = 24000, now = new Date(), timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '本机时区' } = {}) {
+  const localTime = [now.getHours(), now.getMinutes(), now.getSeconds()]
+    .map((part) => String(part).padStart(2, '0'))
+    .join(':');
+  const timeContext = [
+    '## 当前时间基准',
+    `当前本机日期：${formatLocalDate(now)}`,
+    `当前本机时间：${localTime}`,
+    `本机时区：${timeZone}`,
+    '涉及“今天”“明天”“昨天”等相对日期时，必须以这里的当前本机日期时间为准。',
+  ].join('\n');
+  const businessContext = createSections(data)
     .map(([label, value]) => `## ${label}\n${JSON.stringify(value)}`)
     .join('\n\n');
+  const context = `${timeContext}\n\n${businessContext}`;
   if (context.length <= maxChars) return context;
   const marker = '\n[上下文已截断]';
   return `${context.slice(0, Math.max(0, maxChars - marker.length))}${marker}`;
@@ -575,6 +689,7 @@ const app = createApp({
     const agentDraft = ref('');
     const agentLoading = ref(false);
     const agentError = ref('');
+    const agentTaskType = ref('chat');
     const pomodoro = ref(createPomodoroState());
     const clearPhrase = ref('');
     const importInput = ref(null);
@@ -616,6 +731,7 @@ const app = createApp({
     const thoughtGroups = computed(() => groupByLocalDate(thoughts.value).map((group) => ({ ...group, dateLabel: `${group.date} · ${new Intl.DateTimeFormat('zh-CN', { weekday: 'long' }).format(new Date(`${group.date}T00:00:00`))}` })));
     const sortedFavorites = computed(() => [...favorites.value].sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
     const textDialogTitle = computed(() => textForm.store === 'ideas' ? '编辑创意灵感' : '编辑碎碎念');
+    const agentTaskLabel = computed(() => ({ chat: '正在分析工作台数据', classify: '正在识别你的需求', web: '正在联网查询', image: '正在生成图片' })[agentTaskType.value]);
     const notificationPermission = ref('Notification' in window ? Notification.permission : 'unsupported');
     const notificationLabel = computed(() => ({ granted: '已允许浏览器通知', denied: '已拒绝，将使用页面提醒', default: '尚未申请通知权限', unsupported: '当前浏览器不支持' }[notificationPermission.value]));
     const dataSummary = computed(() => [{ label: 'Todo', value: todos.value.length }, { label: '倒计时', value: timers.value.length }, { label: '灵感', value: ideas.value.length }, { label: '碎碎念', value: thoughts.value.length }, { label: '收藏', value: favorites.value.length }]);
@@ -728,23 +844,56 @@ const app = createApp({
     function visitFavorite(favorite) { window.open(favorite.url, '_blank', 'noopener,noreferrer'); }
 
     function workspaceContext() { return buildWorkspaceContext({ todos: todos.value, timers: timers.value, pomodoro: pomodoro.value, ideas: ideas.value, thoughts: thoughts.value, favorites: favorites.value }); }
-    async function runAgentRequest(messages) {
+    function agentChatMessages() {
+      return agentMessages.value.filter((item) => item.content).map(({ role, content }) => ({ role, content }));
+    }
+    async function runAgentRequest(prompt, forcedIntent = '') {
       agentLoading.value = true; agentError.value = ''; agentAbortController = new AbortController();
       try {
-        const content = await askWorkspaceAgent(messages, workspaceContext(), { signal: agentAbortController.signal });
-        agentMessages.value.push({ role: 'assistant', content });
+        let intent = forcedIntent || detectAgentIntent(prompt);
+        if (intent === 'unknown') {
+          agentTaskType.value = 'classify';
+          intent = await classifyAgentIntent(prompt, { signal: agentAbortController.signal });
+        }
+        agentTaskType.value = intent;
+        if (intent === 'web') {
+          const result = await searchWebWithAgent(prompt, workspaceContext(), { signal: agentAbortController.signal });
+          agentMessages.value.push({ role: 'assistant', kind: 'web', content: result.content, sources: result.sources });
+        } else if (intent === 'image') {
+          const result = await generateAgentImage(prompt, { signal: agentAbortController.signal });
+          agentMessages.value.push({ role: 'assistant', kind: 'image', content: '', imageUrl: result.imageUrl, prompt, revisedPrompt: result.revisedPrompt });
+        } else {
+          const content = await askWorkspaceAgent(agentChatMessages(), workspaceContext(), { signal: agentAbortController.signal });
+          agentMessages.value.push({ role: 'assistant', kind: 'text', content });
+        }
       } catch (error) { agentError.value = error.message; }
       finally { agentLoading.value = false; agentAbortController = null; }
     }
     async function sendAgentMessage() {
       const content = agentDraft.value.trim(); if (!content || agentLoading.value) return;
       agentMessages.value.push({ role: 'user', content }); agentDraft.value = '';
-      await runAgentRequest(agentMessages.value.map(({ role, content: text }) => ({ role, content: text })));
+      await runAgentRequest(content);
     }
     async function retryAgentMessage() {
       if (agentLoading.value || !agentMessages.value.some((item) => item.role === 'user')) return;
       agentMessages.value = agentMessages.value.filter((item, index, items) => !(item.role === 'assistant' && index === items.length - 1));
-      await runAgentRequest(agentMessages.value.map(({ role, content }) => ({ role, content })));
+      const prompt = [...agentMessages.value].reverse().find((item) => item.role === 'user')?.content;
+      if (prompt) await runAgentRequest(prompt);
+    }
+    async function regenerateAgentImage(item) {
+      if (agentLoading.value || !item?.prompt) return;
+      agentMessages.value.push({ role: 'user', content: `重新生成图片：${item.prompt}` });
+      await runAgentRequest(item.prompt, 'image');
+    }
+    async function downloadAgentImage(item) {
+      if (!item?.imageUrl) return;
+      let href = item.imageUrl; let objectUrl = '';
+      try {
+        if (!href.startsWith('data:')) { objectUrl = URL.createObjectURL(await (await fetch(href)).blob()); href = objectUrl; }
+        const link = document.createElement('a'); link.href = href; link.download = formatLocalDateTimeFilename().replace(/\.json$/, '.png'); link.click();
+      } catch {
+        window.open(item.imageUrl, '_blank', 'noopener,noreferrer'); message.warning('图片已在新窗口打开，请手动保存');
+      } finally { if (objectUrl) setTimeout(() => URL.revokeObjectURL(objectUrl), 1000); }
     }
     function stopAgentRequest() { agentAbortController?.abort(); }
     function clearAgentConversation() { agentAbortController?.abort(); agentMessages.value = []; agentError.value = ''; }
@@ -781,13 +930,13 @@ const app = createApp({
     }
 
     function downloadJson(data, filename) { const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-    async function exportData(prefix = '个人工作台备份') { const backup = createBackup(await getAllData()); downloadJson(backup, `${prefix}-${formatLocalDate()}-${Date.now()}.json`); await setSetting('lastExportedAt', backup.exportedAt); message.success('数据备份已导出'); }
+    async function exportData() { const backup = createBackup(await getAllData()); downloadJson(backup, formatLocalDateTimeFilename(backup.exportedAt)); await setSetting('lastExportedAt', backup.exportedAt); message.success('数据备份已导出'); }
     function chooseImport(mode) { importMode.value = mode; importInput.value.value = ''; importInput.value.click(); }
     async function handleImport(event) {
       try {
         const file = event.target.files[0]; if (!file) return; const data = validateBackup(JSON.parse(await file.text())); const replacing = importMode.value === 'replace';
         await ElementPlus.ElMessageBox.confirm(replacing ? '当前数据将被导入文件完全替换，操作前会自动导出备份。' : '相同 ID 的记录将使用导入文件内容，其余记录会追加。', replacing ? '覆盖还原' : '合并导入', { type: 'warning', confirmButtonText: replacing ? '备份并覆盖' : '确认合并', cancelButtonText: '取消' });
-        if (replacing) { await exportData('覆盖前自动备份'); await replaceAllData(data); await loadSettings(); await loadAll(); }
+        if (replacing) { await exportData(); await replaceAllData(data); await loadSettings(); await loadAll(); }
         else { await mergeAllData(data); await loadSettings(); await loadAll(); }
         message.success(replacing ? '数据已覆盖还原' : '数据已合并导入');
       } catch (error) { if (error !== 'cancel') message.error(error.message || '导入失败'); }
@@ -804,7 +953,7 @@ const app = createApp({
     onBeforeUnmount(() => { clearInterval(clockTimer); clearTimeout(deleteResetTimer); agentAbortController?.abort(); });
     watch(activeView, cancelDeleteConfirmation);
 
-    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, priorityMeta, openTodoDialog, saveTodo, toggleTodo, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
+    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, agentTaskLabel, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, priorityMeta, openTodoDialog, saveTodo, toggleTodo, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, downloadAgentImage, regenerateAgentImage, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
   },
 });
 
