@@ -931,7 +931,26 @@ const app = createApp({
     }
 
     function downloadJson(data, filename) { const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-    async function exportData() { const backup = createBackup(await getAllData()); downloadJson(backup, formatLocalDateTimeFilename(backup.exportedAt)); await setSetting('lastExportedAt', backup.exportedAt); message.success('数据备份已导出'); }
+    async function exportData() {
+      const backup = createBackup(await getAllData());
+      const filename = formatLocalDateTimeFilename(backup.exportedAt);
+      if (typeof window.showSaveFilePicker === 'function') {
+        try {
+          const handle = await window.showSaveFilePicker({ suggestedName: filename, types: [{ description: 'JSON 备份', accept: { 'application/json': ['.json'] } }] });
+          const writable = await handle.createWritable();
+          await writable.write(JSON.stringify(backup, null, 2));
+          await writable.close();
+        } catch (error) {
+          if (error?.name === 'AbortError') return;
+          message.error(error?.message || '导出失败');
+          return;
+        }
+      } else {
+        downloadJson(backup, filename);
+      }
+      await setSetting('lastExportedAt', backup.exportedAt);
+      message.success('数据备份已导出');
+    }
     function chooseImport(mode) { importMode.value = mode; importInput.value.value = ''; importInput.value.click(); }
     async function handleImport(event) {
       try {
