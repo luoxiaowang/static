@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
+  <script>
+    if (location.protocol !== 'file:' && !location.pathname.endsWith('/')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="color-scheme" content="light dark">
   <meta name="description" content="Todo、倒计时、灵感与碎碎念个人工作台"><title>个人工作台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23409eff'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-size='38' font-family='sans-serif' font-weight='700' fill='white'%3EW%3C/text%3E%3C/svg%3E">
