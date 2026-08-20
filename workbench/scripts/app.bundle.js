@@ -382,16 +382,20 @@ function parseFavoriteRecognition(content) {
 }
 
 async function recognizeFavorite(url, { fetchImpl = fetch, signal } = {}) {
-  const content = await requestAgnes([
-    {
-      role: 'system',
-      content: '你是网页内容识别助手。必须实际读取用户提供的网页后再回答；无法访问时明确说明失败，禁止根据 URL 猜测。只输出合法 JSON。',
-    },
-    {
-      role: 'user',
-      content: `读取网页 ${url}，生成简洁结果。只返回：{"title":"网页标题","summary":"不超过160字的摘要","outline":"Markdown 分层大纲"}`,
-    },
-  ], { fetchImpl, signal });
+  const payload = await requestJson(AGNES_RESPONSES_URL, {
+    model: AGNES_MODEL,
+    instructions: '你是网页内容识别助手。必须实际读取用户提供的网页后再回答；读取失败时明确说明失败，禁止根据 URL 猜测。只输出合法 JSON：{"title":"网页标题","summary":"不超过160字的摘要","outline":"Markdown 分层大纲"}',
+    input: `读取网页 ${url}，生成标题、摘要和 Markdown 分层大纲。`,
+    tools: [{ type: 'web_search_preview' }],
+  }, { fetchImpl, signal, timeoutMs: 90000, timeoutMessage: '网页识别超时，请稍后重试' });
+  const content = (payload?.output || [])
+    .filter((item) => item?.type === 'message')
+    .flatMap((item) => item.content || [])
+    .filter((item) => item?.type === 'output_text')
+    .map((item) => item.text || '')
+    .join('\n\n')
+    .trim();
+  if (!content) throw new Error('AgnesAI 网页识别没有返回有效内容');
   return parseFavoriteRecognition(content);
 }
 

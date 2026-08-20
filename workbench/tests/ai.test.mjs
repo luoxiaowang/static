@@ -19,14 +19,25 @@ function jsonResponse(payload, { ok = true, status = 200 } = {}) {
 }
 
 test('收藏识别解析 AgnesAI 返回的 JSON', async () => {
-  const fetchImpl = async () => response({ content: '```json\n{"title":"示例","summary":"简洁摘要","outline":"## 大纲"}\n```' });
+  const fetchImpl = async (url, options) => {
+    assert.match(url, /\/v1\/responses$/);
+    assert.equal(JSON.parse(options.body).tools[0].type, 'web_search_preview');
+    return jsonResponse({ output: [{ type: 'message', content: [{ type: 'output_text', text: '```json\n{"title":"示例","summary":"简洁摘要","outline":"## 大纲"}\n```' }] }] });
+  };
   const result = await recognizeFavorite('https://example.com/article', { fetchImpl });
   assert.deepEqual(result, { title: '示例', summary: '简洁摘要', outline: '## 大纲' });
 });
 
 test('收藏识别失败时不猜测或填充内容', async () => {
-  const fetchImpl = async () => response({ content: '{"title":"","summary":"","outline":""}' });
+  const fetchImpl = async () => jsonResponse({ output: [{ type: 'message', content: [{ type: 'output_text', text: '{"title":"","summary":"","outline":""}' }] }] });
   await assert.rejects(() => recognizeFavorite('https://example.com', { fetchImpl }), /无法解析 AI 返回的收藏内容/);
+});
+
+test('收藏识别空内容时明确失败', async () => {
+  await assert.rejects(
+    () => recognizeFavorite('https://example.com', { fetchImpl: async () => jsonResponse({ output: [] }) }),
+    /没有返回有效内容/,
+  );
 });
 
 test('AI 错误信息可理解且不暴露认证信息', async () => {
