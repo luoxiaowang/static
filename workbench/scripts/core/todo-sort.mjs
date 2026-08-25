@@ -7,6 +7,7 @@ export function normalizePriority(value) {
 export function sortTodos(records) {
   return [...records].sort((a, b) => {
     if (Boolean(a.completed) !== Boolean(b.completed)) return a.completed ? 1 : -1;
+    if (Boolean(a.activated) !== Boolean(b.activated)) return a.activated ? -1 : 1;
 
     const priorityDifference = PRIORITY_WEIGHT[normalizePriority(a.priority)] - PRIORITY_WEIGHT[normalizePriority(b.priority)];
     if (priorityDifference) return priorityDifference;
