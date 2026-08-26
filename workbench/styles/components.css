@@ -73,6 +73,7 @@ html.dark .record-meta .tag-activated { --el-tag-bg-color: rgba(139, 92, 246, .1
 .favorite-card:hover { transform: translateY(-2px); box-shadow: var(--wb-shadow-hover) !important; }
 .favorite-card .el-card__body { display: flex; flex-direction: column; padding: 18px; }
 .favorite-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.favorite-status { display: inline-flex; flex: 0 0 auto; align-items: center; }
 .favorite-domain { display: inline-flex; align-items: center; min-width: 0; gap: 6px; color: var(--wb-primary); font-size: 12px; overflow-wrap: anywhere; }
 .favorite-card h3 { margin: 18px 0 9px; font-size: 16px; line-height: 1.45; overflow-wrap: anywhere; }
 .favorite-card > .el-card__body > p { margin: 0 0 15px; color: var(--wb-text-regular); font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
