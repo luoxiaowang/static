@@ -75,9 +75,7 @@ html.dark .record-meta .tag-activated { --el-tag-bg-color: rgba(139, 92, 246, .1
 .favorite-head { display: flex; align-items: center; gap: 12px; }
 .favorite-domain { display: inline-flex; align-items: center; min-width: 0; flex: 1; gap: 6px; color: var(--wb-primary); font-size: 12px; }
 .favorite-domain-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.favorite-status { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; --el-tag-bg-color: color-mix(in srgb, var(--el-color-primary) 12%, transparent); --el-tag-border-color: color-mix(in srgb, var(--el-color-primary) 45%, transparent); }
-.read-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--el-color-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--el-color-primary) 22%, transparent); }
-.read-dot.is-read { background: var(--wb-text-muted); box-shadow: 0 0 0 3px color-mix(in srgb, var(--wb-text-muted) 22%, transparent); }
+.favorite-status { flex: 0 0 auto; display: inline-flex; align-items: center; --el-tag-bg-color: color-mix(in srgb, var(--el-color-primary) 12%, transparent); --el-tag-border-color: color-mix(in srgb, var(--el-color-primary) 45%, transparent); }
 .favorite-card.is-read { opacity: .72; }
 .favorite-card.is-read h3 { font-weight: 520; }
 .favorite-card.is-read h3, .favorite-card.is-read .favorite-domain, .favorite-card.is-read .favorite-foot { color: var(--wb-text-muted); }
