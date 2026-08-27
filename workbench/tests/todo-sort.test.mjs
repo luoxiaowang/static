@@ -37,3 +37,30 @@ test('Todo 可以在当前日期和全部记录之间切换', () => {
   assert.deepEqual(selectTodos(records, { showAll: false, date: '2026-08-18' }).map((item) => item.id), ['today']);
   assert.deepEqual(selectTodos(records, { showAll: true, date: '2026-08-18' }).map((item) => item.id), ['tomorrow', 'today']);
 });
+
+test('今日视图展示时间范围内开始的未完成 Todo', () => {
+  const records = [
+    { ...base, id: 'started-today', priority: 'medium' },
+    { ...base, id: 'started-yesterday', date: '2026-08-17', priority: 'low' },
+    { ...base, id: 'started-earlier', date: '2026-08-10', priority: 'high' },
+    { ...base, id: 'started-tomorrow', date: '2026-08-19', priority: 'high' },
+    { ...base, id: 'started-later', date: '2026-08-20', priority: 'medium' },
+  ];
+
+  assert.deepEqual(
+    selectTodos(records, { showAll: false, date: '2026-08-18' }).map((item) => item.id),
+    ['started-earlier', 'started-today', 'started-yesterday'],
+  );
+});
+
+test('今日视图仅展示当天完成的 Todo', () => {
+  const records = [
+    { ...base, id: 'done-today', completed: true, priority: 'high' },
+    { ...base, id: 'done-yesterday', date: '2026-08-17', completed: true, priority: 'high' },
+  ];
+
+  assert.deepEqual(
+    selectTodos(records, { showAll: false, date: '2026-08-18' }).map((item) => item.id),
+    ['done-today'],
+  );
+});

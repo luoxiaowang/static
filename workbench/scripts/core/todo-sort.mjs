@@ -24,5 +24,6 @@ export function sortTodos(records) {
 }
 
 export function selectTodos(records, { showAll = false, date = '' } = {}) {
-  return sortTodos(showAll ? records : records.filter((item) => item.date === date));
+  if (showAll) return sortTodos(records);
+  return sortTodos(records.filter((item) => (item.completed ? item.date === date : !item.date || item.date <= date)));
 }
