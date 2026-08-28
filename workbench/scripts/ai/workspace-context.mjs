@@ -5,7 +5,7 @@ function latestFirst(records, field = 'createdAt') {
 }
 
 function compactTodo(item) {
-  return { title: item.title, priority: item.priority || 'medium', date: item.date, dueAt: item.dueAt || '', completed: Boolean(item.completed), note: item.note || '' };
+  return { title: item.title, date: item.date, dueAt: item.dueAt || '', completed: Boolean(item.completed), note: item.note || '' };
 }
 
 function createSections(data) {

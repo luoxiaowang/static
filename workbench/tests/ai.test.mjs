@@ -164,7 +164,7 @@ test('图片生成兼容 Base64 并拒绝空结果', async () => {
 
 test('工作台上下文覆盖所有业务数据且排除设置', () => {
   const context = buildWorkspaceContext({
-    todos: [{ id: 't1', title: '写方案', priority: 'high', completed: false }],
+    todos: [{ id: 't1', title: '写方案', completed: false }],
     timers: [{ id: 'c1', name: '上线', targetAt: '2026-08-20T10:00:00.000Z' }],
     pomodoro: { status: 'paused', remainingMs: 60000 },
     ideas: [{ id: 'i1', content: '新创意', createdAt: '2026-08-18T10:00:00.000Z' }],

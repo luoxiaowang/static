@@ -211,26 +211,12 @@ function createDeleteConfirmation(windowMs = 5000) {
 
 
 // ---- scripts/core/todo-sort.mjs ----
-const PRIORITY_WEIGHT = { high: 0, medium: 1, low: 2 };
-
-function normalizePriority(value) {
-  return Object.hasOwn(PRIORITY_WEIGHT, value) ? value : 'medium';
-}
-
 function sortTodos(records) {
   return [...records].sort((a, b) => {
     if (Boolean(a.completed) !== Boolean(b.completed)) return a.completed ? 1 : -1;
-    if (Boolean(a.activated) !== Boolean(b.activated)) return a.activated ? -1 : 1;
 
-    const priorityDifference = PRIORITY_WEIGHT[normalizePriority(a.priority)] - PRIORITY_WEIGHT[normalizePriority(b.priority)];
-    if (priorityDifference) return priorityDifference;
-
-    if (a.dueAt && b.dueAt) {
-      const dueDifference = new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime();
-      if (dueDifference) return dueDifference;
-    } else if (a.dueAt || b.dueAt) {
-      return a.dueAt ? -1 : 1;
-    }
+    const orderDifference = Number(a.sortOrder ?? Infinity) - Number(b.sortOrder ?? Infinity);
+    if (orderDifference) return orderDifference;
 
     return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
   });
@@ -478,7 +464,7 @@ function latestFirst(records, field = 'createdAt') {
 }
 
 function compactTodo(item) {
-  return { title: item.title, priority: item.priority || 'medium', date: item.date, dueAt: item.dueAt || '', completed: Boolean(item.completed), note: item.note || '' };
+  return { title: item.title, date: item.date, dueAt: item.dueAt || '', completed: Boolean(item.completed), note: item.note || '' };
 }
 
 function createSections(data) {
@@ -706,7 +692,7 @@ const app = createApp({
     let clockTimer;
     let agentAbortController;
 
-    const todoForm = reactive({ id: '', title: '', note: '', date: formatLocalDate(), dueAt: '', priority: 'medium', activated: false });
+    const todoForm = reactive({ id: '', title: '', note: '', date: formatLocalDate(), dueAt: '', activated: false });
     const timerForm = reactive({ id: '', name: '', targetAt: '' });
     const textForm = reactive({ store: '', id: '', content: '' });
     const favoriteForm = reactive({ id: '', url: '', title: '', summary: '', outline: '' });
@@ -730,6 +716,9 @@ const app = createApp({
     const todayLabel = computed(() => new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', weekday: 'short' }).format(new Date(now.value)));
     const currentPage = computed(() => pageMeta[activeView.value]);
     const visibleTodos = computed(() => selectTodos(todos.value, { showAll: showAllTodos.value, date: selectedTodoDate.value }));
+    const dragTodoId = ref('');
+    const dragTargetId = ref('');
+    const dragOverTodoId = ref('');
     const sortedTimers = computed(() => [...timers.value].sort((a, b) => a.targetAt.localeCompare(b.targetAt)));
     const ideaFilterOptions = [{ label: '全部', value: 'all' }, { label: '未实现', value: 'pending' }, { label: '已实现', value: 'implemented' }];
     const filteredIdeas = computed(() => [...ideas.value].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).filter((item) => ideaFilter.value === 'all' || (ideaFilter.value === 'implemented' ? item.implemented : !item.implemented)));
@@ -786,18 +775,41 @@ const app = createApp({
     function shiftTodoDate(amount) { const [y, m, d] = selectedTodoDate.value.split('-').map(Number); selectedTodoDate.value = formatLocalDate(new Date(y, m - 1, d + amount)); }
     function goToday() { selectedTodoDate.value = formatLocalDate(); }
     function todoStatus(todo) { const status = getTodoStatus(todo, new Date(now.value)); return { completed: { label: '已完成', type: 'success' }, overdue: { label: '已过期', type: 'danger' }, 'due-soon': { label: '即将到期', type: 'warning' }, active: { label: '进行中', type: 'info' } }[status]; }
-    function priorityMeta(todo) { return { high: { label: '高优先级', type: 'danger' }, medium: { label: '中优先级', type: 'primary' }, low: { label: '低优先级', type: 'info' } }[normalizePriority(todo.priority)]; }
     function openTodoDialog(todo) {
-      Object.assign(todoForm, todo ? { ...todo, dueAt: todo.dueAt || '', priority: normalizePriority(todo.priority) } : { id: '', title: '', note: '', date: selectedTodoDate.value, dueAt: '', priority: 'medium', activated: false });
+      Object.assign(todoForm, todo ? { ...todo, dueAt: todo.dueAt || '' } : { id: '', title: '', note: '', date: selectedTodoDate.value, dueAt: '', activated: false });
       todoDialogOpen.value = true;
     }
     async function saveTodo() {
       const existing = todos.value.find((item) => item.id === todoForm.id); const stamp = new Date().toISOString();
-      const record = { id: todoForm.id || crypto.randomUUID(), title: todoForm.title.trim(), note: todoForm.note.trim(), date: todoForm.date, dueAt: todoForm.dueAt ? new Date(todoForm.dueAt).toISOString() : '', priority: normalizePriority(todoForm.priority), activated: existing?.activated || false, completed: existing?.completed || false, completedAt: existing?.completedAt || null, createdAt: existing?.createdAt || stamp, updatedAt: stamp };
+      const record = { id: todoForm.id || crypto.randomUUID(), title: todoForm.title.trim(), note: todoForm.note.trim(), date: todoForm.date, dueAt: todoForm.dueAt ? new Date(todoForm.dueAt).toISOString() : '', sortOrder: existing?.sortOrder ?? todos.value.length, activated: existing?.activated || false, completed: existing?.completed || false, completedAt: existing?.completedAt || null, createdAt: existing?.createdAt || stamp, updatedAt: stamp };
       await putRecord('todos', record); todoDialogOpen.value = false; selectedTodoDate.value = record.date; await loadAll(); message.success(existing ? 'Todo 已更新' : 'Todo 已创建');
     }
     async function toggleTodo(todo) { const completed = !todo.completed; await putRecord('todos', { ...todo, completed, completedAt: completed ? new Date().toISOString() : null, updatedAt: new Date().toISOString() }); await loadAll(); }
     async function toggleActivated(todo) { await putRecord('todos', { ...todo, activated: !todo.activated, updatedAt: new Date().toISOString() }); await loadAll(); }
+    function onTodoDragStart(todo) { dragTodoId.value = todo.id; dragTargetId.value = ''; }
+    function onTodoDragEnter(todo) { dragOverTodoId.value = todo.id; dragTargetId.value = todo.id; }
+    function onTodoDragEnd() { dragTodoId.value = ''; dragOverTodoId.value = ''; dragTargetId.value = ''; }
+    async function onTodoDrop() {
+      if (!dragTodoId.value) return;
+      const srcId = dragTodoId.value;
+      const targetId = dragTargetId.value;
+      onTodoDragEnd();
+
+      const visibleIds = visibleTodos.value.map((item) => item.id);
+      const from = visibleIds.indexOf(srcId);
+      const to = targetId ? visibleIds.indexOf(targetId) : visibleIds.length - 1;
+      if (from < 0 || to < 0 || from === to) return;
+
+      const globalIds = sortTodos(todos.value).map((item) => item.id);
+      const ordered = [...globalIds.filter((id) => id !== srcId)];
+      const targetPosition = ordered.indexOf(targetId);
+      ordered.splice(targetPosition >= 0 ? targetPosition + 1 : ordered.length, 0, srcId);
+
+      const byId = new Map(todos.value.map((item) => [item.id, item]));
+      const updated = ordered.map((id, index) => ({ ...byId.get(id), sortOrder: index }));
+      for (const record of updated) await putRecord('todos', record);
+      await loadAll();
+    }
     function openTimerDialog(timer) { Object.assign(timerForm, timer ? { ...timer } : { id: '', name: '', targetAt: new Date(Date.now() + 86400000).toISOString() }); timerDialogOpen.value = true; }
     async function saveTimer() { const existing = timers.value.find((item) => item.id === timerForm.id); const stamp = new Date().toISOString(); const targetAt = new Date(timerForm.targetAt).toISOString(); await putRecord('timers', { id: timerForm.id || crypto.randomUUID(), name: timerForm.name.trim(), targetAt, notifiedAt: existing?.targetAt === targetAt ? existing.notifiedAt : null, createdAt: existing?.createdAt || stamp, updatedAt: stamp }); timerDialogOpen.value = false; await loadAll(); message.success(existing ? '倒计时已更新' : '倒计时已创建'); }
     function timerExpired(timer) { return new Date(timer.targetAt).getTime() <= now.value; }
@@ -980,7 +992,7 @@ const app = createApp({
     onBeforeUnmount(() => { clearInterval(clockTimer); clearTimeout(deleteResetTimer); agentAbortController?.abort(); });
     watch(activeView, cancelDeleteConfirmation);
 
-    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, agentTaskLabel, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, priorityMeta, openTodoDialog, saveTodo, toggleTodo, toggleActivated, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, toggleFavoriteRead, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, downloadAgentImage, regenerateAgentImage, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
+    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, agentTaskLabel, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, dragTodoId, dragTargetId, dragOverTodoId, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, openTodoDialog, saveTodo, toggleTodo, toggleActivated, onTodoDragStart, onTodoDragEnter, onTodoDrop, onTodoDragEnd, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, toggleFavoriteRead, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, downloadAgentImage, regenerateAgentImage, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
   },
 });
 

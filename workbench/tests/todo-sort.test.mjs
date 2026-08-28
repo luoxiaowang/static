@@ -1,50 +1,39 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { normalizePriority, selectTodos, sortTodos } from '../scripts/core/todo-sort.mjs';
+import { selectTodos, sortTodos } from '../scripts/core/todo-sort.mjs';
 
 const base = { completed: false, date: '2026-08-18', createdAt: '2026-08-18T08:00:00.000Z' };
 
-test('旧 Todo 缺少优先级时按中优先级处理', () => {
-  assert.equal(normalizePriority(), 'medium');
-  assert.equal(normalizePriority('unknown'), 'medium');
-});
-
-test('Todo 按未完成、已激活、优先级、到期时间排序', () => {
+test('Todo 未完成在前，组内按手动排序、创建时间兜底', () => {
   const records = [
-    { ...base, id: 'low', priority: 'low', dueAt: '2026-08-18T11:00:00.000Z' },
-    { ...base, id: 'medium', dueAt: '2026-08-18T10:00:00.000Z' },
-    { ...base, id: 'high-none', priority: 'high', dueAt: '' },
-    { ...base, id: 'high-late', priority: 'high', dueAt: '2026-08-20T11:00:00.000Z' },
-    { ...base, id: 'high-near', priority: 'high', dueAt: '2026-08-19T11:00:00.000Z' },
-    { ...base, id: 'active-low', priority: 'low', activated: true, dueAt: '2026-08-18T12:00:00.000Z' },
-    { ...base, id: 'active-high', priority: 'high', activated: true, dueAt: '2026-08-18T13:00:00.000Z' },
-    { ...base, id: 'done', priority: 'high', completed: true, activated: true, dueAt: '2026-08-18T09:00:00.000Z' },
+    { ...base, id: 'old', sortOrder: 0 },
+    { ...base, id: 'second', sortOrder: 1 },
+    { ...base, id: 'newer-no-order', createdAt: '2026-08-18T09:00:00.000Z' },
+    { ...base, id: 'older-no-order', createdAt: '2026-08-18T07:00:00.000Z' },
+    { ...base, id: 'done', completed: true, sortOrder: 0 },
   ];
 
-  assert.deepEqual(
-    sortTodos(records).map((item) => item.id),
-    ['active-high', 'active-low', 'high-near', 'high-late', 'high-none', 'medium', 'low', 'done'],
-  );
+  assert.deepEqual(sortTodos(records).map((item) => item.id), ['old', 'second', 'older-no-order', 'newer-no-order', 'done']);
 });
 
 test('Todo 可以在当前日期和全部记录之间切换', () => {
   const records = [
-    { ...base, id: 'today', priority: 'medium' },
-    { ...base, id: 'tomorrow', date: '2026-08-19', priority: 'high' },
+    { ...base, id: 'today', sortOrder: 0 },
+    { ...base, id: 'tomorrow', date: '2026-08-19', sortOrder: 1 },
   ];
 
   assert.deepEqual(selectTodos(records, { showAll: false, date: '2026-08-18' }).map((item) => item.id), ['today']);
-  assert.deepEqual(selectTodos(records, { showAll: true, date: '2026-08-18' }).map((item) => item.id), ['tomorrow', 'today']);
+  assert.deepEqual(selectTodos(records, { showAll: true, date: '2026-08-18' }).map((item) => item.id), ['today', 'tomorrow']);
 });
 
 test('今日视图展示时间范围内开始的未完成 Todo', () => {
   const records = [
-    { ...base, id: 'started-today', priority: 'medium' },
-    { ...base, id: 'started-yesterday', date: '2026-08-17', priority: 'low' },
-    { ...base, id: 'started-earlier', date: '2026-08-10', priority: 'high' },
-    { ...base, id: 'started-tomorrow', date: '2026-08-19', priority: 'high' },
-    { ...base, id: 'started-later', date: '2026-08-20', priority: 'medium' },
+    { ...base, id: 'started-today', sortOrder: 1 },
+    { ...base, id: 'started-yesterday', date: '2026-08-17', sortOrder: 2 },
+    { ...base, id: 'started-earlier', date: '2026-08-10', sortOrder: 0 },
+    { ...base, id: 'started-tomorrow', date: '2026-08-19', sortOrder: 3 },
+    { ...base, id: 'started-later', date: '2026-08-20', sortOrder: 4 },
   ];
 
   assert.deepEqual(
@@ -55,8 +44,8 @@ test('今日视图展示时间范围内开始的未完成 Todo', () => {
 
 test('今日视图仅展示当天完成的 Todo', () => {
   const records = [
-    { ...base, id: 'done-today', completed: true, priority: 'high' },
-    { ...base, id: 'done-yesterday', date: '2026-08-17', completed: true, priority: 'high' },
+    { ...base, id: 'done-today', completed: true },
+    { ...base, id: 'done-yesterday', date: '2026-08-17', completed: true },
   ];
 
   assert.deepEqual(

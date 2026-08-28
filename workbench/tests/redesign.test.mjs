@@ -73,7 +73,7 @@ test('导入和清空数据后会重新加载主题生日与声音设置', async
 
 test('Vue 应用接入 Todo 排序、番茄钟、收藏夹和 AI 上下文模块', async () => {
   const source = await readFile(new URL('scripts/vue-app.mjs', root), 'utf8');
-  assert.match(source, /import \{ normalizePriority, selectTodos \} from '.\/core\/todo-sort\.mjs'/);
+  assert.match(source, /import \{ selectTodos, sortTodos \} from '.\/core\/todo-sort\.mjs'/);
   assert.match(source, /from '.\/core\/pomodoro\.mjs'/);
   assert.match(source, /from '.\/ai\/agnes-client\.mjs'/);
   assert.match(source, /from '.\/ai\/workspace-context\.mjs'/);
@@ -97,10 +97,12 @@ test('创意灵感按本地日期聚合', async () => {
   assert.match(source, /const ideaGroups = computed\(\(\) => groupByLocalDate\(filteredIdeas\.value\)/);
 });
 
-test('页面提供 Todo 全部视图、优先级和番茄钟控制', async () => {
+test('页面提供 Todo 全部视图、拖拽排序和番茄钟控制', async () => {
   const html = await readFile(new URL('index.html', root), 'utf8');
   assert.match(html, /全部 Todo/);
-  assert.match(html, /v-model="todoForm\.priority"/);
+  assert.match(html, /draggable="true"/);
+  assert.match(html, /onTodoDrop/);
+  assert.doesNotMatch(html, /todoForm\.priority|priorityMeta/);
   assert.match(html, />30 分钟</);
   assert.match(html, />1 小时</);
   assert.match(html, /beginPomodoro/);
