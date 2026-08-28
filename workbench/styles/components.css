@@ -12,7 +12,8 @@
 .task-card { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; cursor: grab; }
 .task-card:active { cursor: grabbing; }
 .task-card.is-dragging { opacity: .45; border-style: dashed; }
-.task-card.is-drag-over { border-color: var(--wb-primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--wb-primary) 35%, transparent) !important; }
+.task-card.is-insert-before { border-top: 2px solid var(--wb-primary); box-shadow: none !important; }
+.task-card.is-insert-after { border-bottom: 2px solid var(--wb-primary); box-shadow: none !important; }
 .task-card:hover { transform: translateY(-1px); box-shadow: var(--wb-shadow-hover) !important; }
 .task-card .el-card__body { display: flex; align-items: flex-start; gap: 14px; padding: 17px 18px; }
 .task-card.is-done { opacity: .72; }
