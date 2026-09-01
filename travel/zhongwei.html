@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>固原·中卫 6日亲子自驾</title>
+<style>
+  :root {
+    --primary: #0EA5E9;
+    --primary-dark: #0284C7;
+    --primary-light: #E0F2FE;
+    --primary-50: #F0F9FF;
+    --accent: #F97316;
+    --accent-dark: #EA580C;
+    --accent-light: #FFF7ED;
+    --success: #10B981;
+    --success-light: #D1FAE5;
+    --rose: #F43F5E;
+    --rose-light: #FFF1F2;
+    --violet: #8B5CF6;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #0C4A6E;
+    --text-body: #334155;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 28px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 200ms ease-out;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text-body); line-height: 1.65; -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 24px 20px 48px; }
+
+  /* ---- SVG Icon System ---- */
+  .icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; flex-shrink: 0;
+  }
+  .icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .icon-sm { width: 16px; height: 16px; }
+  .icon-lg { width: 24px; height: 24px; }
+
+  /* ---- Hero ---- */
+  .hero {
+    position: relative; border-radius: var(--radius); padding: 56px 44px 48px;
+    margin-bottom: 36px; overflow: hidden; color: white;
+    background: linear-gradient(135deg, #0EA5E9 0%, #6366F1 50%, #8B5CF6 100%);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 80%, rgba(249,115,22,0.2) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 500px at 80% 20%, rgba(139,92,246,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 300px 300px at 60% 60%, rgba(255,255,255,0.06) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero h1 { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; line-height: 1.2; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.92rem; opacity: 0.92; }
+  .hero-meta-item { display: flex; align-items: center; gap: 7px; }
+  .hero-meta-item .icon { color: rgba(255,255,255,0.85); }
+  .hero-orb {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.12; pointer-events: none;
+    animation: orbFloat 10s ease-in-out infinite alternate;
+  }
+  .hero-orb-1 { width: 300px; height: 300px; background: #F97316; top: -80px; right: -60px; }
+  .hero-orb-2 { width: 200px; height: 200px; background: #38BDF8; bottom: -60px; left: -40px; animation-delay: -5s; }
+
+  @keyframes orbFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(20px, -15px) scale(1.1); }
+  }
+
+  /* ---- Section Nav ---- */
+  .section-nav {
+    display: flex; gap: 8px; margin-bottom: 32px; overflow-x: auto;
+    padding-bottom: 4px; -webkit-overflow-scrolling: touch;
+  }
+  .section-nav::-webkit-scrollbar { height: 0; }
+  .nav-pill {
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+    border-radius: 99px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;
+    background: var(--card); border: 1px solid var(--border); color: var(--text-muted);
+    cursor: pointer; transition: all var(--transition); text-decoration: none;
+  }
+  .nav-pill:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+  .nav-pill .icon { width: 16px; height: 16px; }
+
+  /* ---- Section ---- */
+  .section { margin-bottom: 40px; scroll-margin-top: 20px; }
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .section-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: var(--radius-sm);
+    background: var(--primary-light); color: var(--primary);
+  }
+  .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+
+  /* ---- Weather ---- */
+  .weather-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+  .weather-bar::-webkit-scrollbar { height: 4px; }
+  .weather-bar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  .weather-card {
+    flex: 0 0 auto; min-width: 108px; background: var(--card); border-radius: var(--radius-sm);
+    padding: 14px 12px; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+    transition: all var(--transition);
+  }
+  .weather-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .weather-card .w-date { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+  .weather-card .w-icon { font-size: 28px; line-height: 1; margin: 4px 0 8px; }
+  .weather-card .w-icon svg { width: 32px; height: 32px; }
+  .weather-card .w-temp { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+  .weather-card .w-temp-low { color: var(--text-muted); font-weight: 400; }
+  .weather-tip {
+    display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; padding: 14px 18px;
+    background: var(--primary-50); border: 1px solid #BAE6FD; border-radius: var(--radius-sm); font-size: 0.88rem; color: var(--primary-dark);
+  }
+  .weather-tip .icon { flex-shrink: 0; margin-top: 1px; }
+
+  /* ---- Day Card ---- */
+  .day-card {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden;
+    transition: box-shadow var(--transition);
+  }
+  .day-card:hover { box-shadow: var(--shadow-md); }
+  .day-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px; cursor: pointer; user-select: none;
+    transition: background var(--transition);
+  }
+  .day-header:hover { background: var(--primary-50); }
+  .day-header:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+  .day-num {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--primary), var(--violet));
+    color: white; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; margin-right: 14px;
+  }
+  .day-header-left { display: flex; align-items: center; }
+  .day-header-info h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .day-header-info .day-meta { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .day-header .toggle-icon {
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: var(--bg); color: var(--text-muted); transition: all var(--transition);
+  }
+  .day-card.collapsed .toggle-icon { transform: rotate(-90deg); }
+  .day-body {
+    padding: 4px 22px 22px; border-top: 1px solid var(--border);
+    max-height: 3000px; overflow: hidden; transition: max-height 0.35s ease-out, padding 0.35s ease-out;
+  }
+  .day-card.collapsed .day-body { max-height: 0; padding-top: 0; padding-bottom: 0; border-top-color: transparent; }
+
+  /* ---- Timeline ---- */
+  .timeline { position: relative; padding-left: 32px; padding-top: 18px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 10px; top: 24px; bottom: 12px;
+    width: 2px; background: linear-gradient(to bottom, var(--primary), var(--border));
+    border-radius: 2px;
+  }
+  .tl-item { position: relative; margin-bottom: 22px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -28px; top: 4px; width: 14px; height: 14px;
+    border-radius: 50%; border: 2.5px solid var(--primary); background: white; z-index: 1;
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  .tl-item.is-meal .tl-dot { border-color: var(--accent); background: var(--accent-light); box-shadow: 0 0 0 3px var(--accent-light); }
+  .tl-time { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 3px; }
+  .tl-content h4 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .tl-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+  .activity-preview { display: block; width: min(100%, 420px); margin: 12px 0 4px; padding: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #F8FAFC; cursor: zoom-in; text-align: left; box-shadow: var(--shadow-sm); }
+  .activity-preview:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .preview-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: min(100%, 860px); margin-top: 10px; }
+  .preview-gallery .activity-preview { width: 100%; margin: 0; }
+  .preview-art { display: block; aspect-ratio: 16 / 7; background: #E0F2FE; }
+  .preview-art svg { display: block; width: 100%; height: 100%; min-width: 0; }
+  .preview-art img { display: block; width: 100%; height: 100%; min-width: 0; object-fit: cover; background: #E0F2FE; }
+  .preview-caption { display: block; padding: 6px 10px; color: var(--text-muted); font-size: 0.75rem; }
+  .attraction-intro { margin-top: 9px; padding: 10px 12px; border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; background: var(--primary-50); color: var(--text-body); font-size: 0.82rem; line-height: 1.55; }
+  .image-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(15, 23, 42, .78); cursor: zoom-out; }
+  .image-modal-panel { width: min(900px, 96vw); max-height: 90vh; padding: 14px; border-radius: 16px; background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.28); }
+  .image-modal-panel svg { display: block; width: 100%; max-height: 78vh; }
+  .image-modal-panel img { display: block; width: auto; height: auto; max-width: 100%; max-height: 78vh; object-fit: contain; margin: 0 auto; }
+  .image-modal-title { padding: 8px 4px 0; color: var(--text); font-size: .9rem; font-weight: 600; }
+  .tl-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.73rem; padding: 3px 10px; border-radius: 99px; font-weight: 500;
+  }
+  .tag-cost { background: var(--accent-light); color: var(--accent-dark); }
+  .tag-transport { background: var(--success-light); color: #047857; }
+  .tag-free { background: var(--primary-light); color: var(--primary-dark); }
+
+  /* ---- Meal Card ---- */
+  .meal-card {
+    display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+    background: linear-gradient(135deg, #FFF7ED, #FFFBEB); border: 1px solid #FED7AA;
+    border-radius: var(--radius-sm); margin-top: 6px;
+  }
+  .meal-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: white; display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-sm); color: var(--accent); flex-shrink: 0;
+  }
+  .meal-info { flex: 1; min-width: 0; }
+  .meal-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+  .meal-detail { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .meal-price { font-weight: 700; color: var(--accent-dark); white-space: nowrap; font-size: 0.95rem; }
+
+  /* ---- Hotels ---- */
+  .hotel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .hotel-card {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    border: 1px solid var(--border); padding: 22px; position: relative;
+    cursor: default; transition: all var(--transition);
+  }
+  .hotel-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+  .hotel-badge {
+    position: absolute; top: 14px; right: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--violet));
+    color: white; font-size: 0.72rem; font-weight: 600;
+    padding: 3px 12px; border-radius: 99px;
+  }
+  .hotel-name { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 6px; padding-right: 60px; }
+  .hotel-area { display: flex; align-items: center; gap: 5px; font-size: 0.83rem; color: var(--text-muted); margin-bottom: 12px; }
+  .hotel-price-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 12px; }
+  .hotel-price { font-size: 1.3rem; font-weight: 800; color: var(--primary); }
+  .hotel-price-unit { font-size: 0.8rem; color: var(--text-muted); }
+  .hotel-highlights { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+  .hotel-tag { display: inline-block; font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: var(--primary-light); color: var(--primary-dark); margin-right: 4px; margin-bottom: 4px; }
+
+  /* ---- Budget ---- */
+  .budget-wrapper {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  .budget-chart { display: flex; height: 8px; overflow: hidden; }
+  .budget-chart-seg { transition: width 0.6s ease-out; }
+  .budget-table { width: 100%; border-collapse: collapse; }
+  .budget-table th, .budget-table td { padding: 12px 18px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .budget-table th { background: var(--bg); color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .budget-table .cat-row td { font-weight: 600; color: var(--text); background: var(--primary-50); }
+  .budget-table .cat-row .cat-icon { display: inline-flex; align-items: center; gap: 8px; }
+  .budget-table .cat-row .cat-icon .icon { color: var(--primary); }
+  .budget-table .sub-row td { color: var(--text-muted); padding-left: 48px; }
+  .budget-table .subtotal { text-align: right; font-weight: 600; color: var(--primary); }
+  .budget-table td:last-child { text-align: right; }
+
+  .budget-total {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 24px;
+    background: linear-gradient(135deg, #0EA5E9 0%, #6366F1 50%, #8B5CF6 100%);
+    border-radius: var(--radius); color: white; margin-top: 16px;
+  }
+  .budget-total-label { font-size: 0.95rem; font-weight: 500; opacity: 0.9; }
+  .budget-total-per { font-size: 0.85rem; opacity: 0.75; margin-top: 2px; }
+  .budget-total-amount { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+
+  /* ---- Tips ---- */
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .tip-card {
+    display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
+    background: var(--accent-light); border: 1px solid #FED7AA; border-radius: var(--radius-sm);
+    font-size: 0.88rem; color: var(--text-body);
+  }
+  .tip-icon {
+    width: 28px; height: 28px; border-radius: 8px; background: white;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-sm); color: var(--accent); flex-shrink: 0;
+  }
+  .tip-icon .icon { width: 14px; height: 14px; }
+
+  /* ---- Footer ---- */
+  .footer { text-align: center; padding: 28px 20px; color: var(--text-muted); font-size: 0.78rem; margin-top: 20px; }
+  .footer-line { width: 48px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--violet)); border-radius: 99px; margin: 0 auto 12px; }
+
+  /* ---- Print ---- */
+  @media print {
+    body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .container { padding: 0; max-width: 100%; }
+    .hero { break-inside: avoid; }
+    .day-card { break-inside: avoid; }
+    .day-card.collapsed .day-body { max-height: none !important; padding: 4px 22px 22px !important; border-top: 1px solid var(--border) !important; }
+    .toggle-icon, .section-nav { display: none !important; }
+    .hotel-card:hover, .weather-card:hover, .day-card:hover { transform: none; box-shadow: var(--shadow); }
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .container { padding: 16px 14px 32px; }
+    .hero { padding: 36px 24px 32px; }
+    .hero h1 { font-size: 1.55rem; }
+    .hero-meta { gap: 12px; font-size: 0.85rem; }
+    .day-header { padding: 14px 16px; }
+    .day-num { width: 34px; height: 34px; font-size: 0.78rem; margin-right: 10px; }
+    .day-body { padding: 4px 16px 16px; }
+    .timeline { padding-left: 26px; }
+    .hotel-grid { grid-template-columns: 1fr; }
+    .tips-grid { grid-template-columns: 1fr; }
+    .budget-total { flex-direction: column; text-align: center; gap: 8px; padding: 18px; }
+    .section-nav { gap: 6px; }
+    .nav-pill { padding: 6px 12px; font-size: 0.8rem; }
+  }
+
+  /* ---- Reduced Motion ---- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    .day-body { transition: none; }
+  }
+
+  /* ---- Focus ---- */
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero" role="banner">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-content">
+      <h1 id="heroTitle">固原·中卫 6日亲子自驾</h1>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <span id="heroDate">2026年10月1日—10月6日</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span id="heroTravelers">2大1小｜武汉出发</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          <span>预估 <strong id="heroBudget">¥8090</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Nav -->
+  <nav class="section-nav" aria-label="快速导航">
+    <a class="nav-pill" href="#sec-weather"><span class="icon"><svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"/><path d="M12 2v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg></span>天气</a>
+    <a class="nav-pill" href="#sec-days"><span class="icon"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>行程</a>
+    <a class="nav-pill" href="#sec-hotels"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg></span>住宿</a>
+    <a class="nav-pill" href="#sec-budget"><span class="icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>预算</a>
+    <a class="nav-pill" href="#sec-tips"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>注意事项</a>
+  </nav>
+
+  <!-- Weather -->
+  <div class="section" id="sec-weather">
+    <div class="section-header">
+      <div class="section-icon"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"/><path d="M12 2v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg></span></div>
+      <h2 class="section-title">天气概览</h2>
+    </div>
+    <div class="weather-bar" id="weatherBar"></div>
+    <div class="weather-tip" id="weatherTip"></div>
+  </div>
+
+  <!-- Daily Itinerary -->
+  <div class="section" id="sec-days">
+    <div class="section-header">
+      <div class="section-icon"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg></span></div>
+      <h2 class="section-title">每日行程</h2>
+    </div>
+    <div id="daysContainer"></div>
+  </div>
+
+  <!-- Hotels -->
+  <div class="section" id="sec-hotels">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--accent-light);color:var(--accent);"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg></span></div>
+      <h2 class="section-title">住宿推荐</h2>
+    </div>
+    <div class="hotel-grid" id="hotelGrid"></div>
+  </div>
+
+  <!-- Budget -->
+  <div class="section" id="sec-budget">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--success-light);color:var(--success);"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span></div>
+      <h2 class="section-title">预算明细（仅供参考）</h2>
+    </div>
+    <div class="section-note">以下金额仅作行程预算参考，机票、租车、住宿和门票价格请以实际预订及现场价格为准。</div>
+    <div class="budget-wrapper">
+      <div class="budget-chart" id="budgetChart"></div>
+      <table class="budget-table" id="budgetTable">
+        <thead><tr><th>分类</th><th>项目</th><th style="text-align:right">费用</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="budget-total" id="budgetTotal">
+      <div>
+        <div class="budget-total-label">预估总费用</div>
+        <div class="budget-total-per">人均 ¥2697</div>
+      </div>
+      <div class="budget-total-amount">¥8090</div>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="section" id="sec-tips">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--rose-light);color:var(--rose);"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span></div>
+      <h2 class="section-title">出行注意事项</h2>
+    </div>
+    <div class="tips-grid" id="tipsList"></div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-line"></div>
+    <p>由 AI 生成 · 价格与信息仅供参考，请以实际为准 · 2026-09-01</p>
+  </footer>
+
+</div>
+
+<script>
+const tripData = {
+  "generationDate": "2026-09-01",
+  "title": "固原·中卫 6日亲子自驾",
+  "dateRange": "2026年10月1日—10月6日",
+  "travelers": "2大1小｜武汉出发",
+  "weather": {
+    "summary": "10月初宁夏秋高气爽，昼夜温差明显；沙漠早晚偏冷",
+    "avgHigh": 20,
+    "avgLow": 8,
+    "rainfall": "临近出发再查",
+    "clothing": "长袖、薄羽绒/抓绒外套，沙漠备帽子和防风衣",
+    "tips": "当前超出15天预报范围，温度为季节参考；每天出发前查看天气和景区公告"
+  },
+  "days": [
+    {
+      "date": "10/01",
+      "weekday": "周四",
+      "theme": "落地后游须弥山石窟",
+      "weather": {
+        "icon": "partlyCloudy",
+        "high": 20,
+        "low": 8
+      },
+      "activities": [
+        {
+          "time": "12:10",
+          "name": "抵达固原六盘山机场，取车",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "机场租车",
+          "note": "取车、儿童安全座椅、补水和零食；不安排固原景点"
+        },
+        {
+          "time": "13:30",
+          "name": "前往须弥山石窟",
+          "duration": "约1h",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "航班准点、取车顺利的前提下出发；建议准备简单午餐和饮水"
+        },
+        {
+          "time": "14:30",
+          "name": "须弥山石窟",
+          "duration": "2.5h",
+          "cost": 65,
+          "transport": "景区步行",
+          "note": "先逛须弥山博物馆，再看大佛楼区和最大石窟观景平台；台阶较多，控制步行量"
+        },
+        {
+          "time": "17:00",
+          "name": "返回固原市区入住",
+          "duration": "约1h",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "晚上不再安排景点，早点休息，为次日火石寨留体力"
+        },
+        {
+          "time": "18:30",
+          "name": "晚餐",
+          "meal": {
+            "name": "固原本地菜",
+            "cuisine": "羊肉、暖锅、面食",
+            "perPerson": 70,
+            "recommended": "固原暖锅、羊肉",
+            "location": "酒店周边"
+          }
+        },
+        {
+          "time": "19:30",
+          "name": "固原夜市＋人民广场周边散步",
+          "duration": "1.5h",
+          "cost": 80,
+          "transport": "步行/短途驾车",
+          "note": "固原夜市位于原州区中心路、人民广场与新华百货附近，可逛小吃、烧烤、文创和儿童摊位；建议21:00左右结束，早点休息"
+        }
+      ]
+    },
+    {
+      "date": "10/02",
+      "weekday": "周五",
+      "theme": "火石寨→中卫",
+      "weather": {
+        "icon": "sunny",
+        "high": 21,
+        "low": 8
+      },
+      "activities": [
+        {
+          "time": "07:30",
+          "name": "固原→火石寨",
+          "duration": "约1.5h",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "建议早出发，给下午前往中卫留出缓冲"
+        },
+        {
+          "time": "09:00",
+          "name": "火石寨国家地质公园",
+          "duration": "2.5h",
+          "cost": 60,
+          "transport": "景区步行",
+          "note": "选择轻松线路观赏丹霞地貌，不追求走完全部栈道"
+        },
+        {
+          "time": "11:30",
+          "name": "午餐",
+          "meal": {
+            "name": "火石寨/西吉附近餐馆",
+            "cuisine": "宁夏家常菜",
+            "perPerson": 60,
+            "recommended": "羊肉、面食",
+            "location": "景区或沿途"
+          }
+        },
+        {
+          "time": "12:30",
+          "name": "火石寨→中卫",
+          "duration": "约3h",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "具体以当天导航和路况为准；中途安排服务区休息，抵达后只做入住和晚餐"
+        },
+        {
+          "time": "18:00",
+          "name": "入住中卫，稍作休息",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "市区短途",
+          "note": "长途驾车后先休息、补水，再开始夜游"
+        },
+        {
+          "time": "19:00",
+          "name": "中卫高庙＋鼓楼夜景",
+          "duration": "约45min",
+          "cost": 0,
+          "transport": "步行/短途驾车",
+          "note": "高庙是明代以来形成的古建筑群，儒释道三教合一；晚上适合看建筑灯光，步行量不大，带孩子较轻松"
+        },
+        {
+          "time": "19:45",
+          "name": "向阳街夜市",
+          "duration": "1—1.5h",
+          "cost": 80,
+          "transport": "步行",
+          "note": "中卫特色夜市，适合吃烧烤、手抓羊肉、炒拉条、酿皮和杏皮茶；参考营业时间约17:00—22:00，国庆以现场为准，孩子注意少吃重辣和内脏"
+        }
+      ]
+    },
+    {
+      "date": "10/03",
+      "weekday": "周六",
+      "theme": "沙坡头一整天",
+      "weather": {
+        "icon": "sunny",
+        "high": 22,
+        "low": 9
+      },
+      "activities": [
+        {
+          "time": "08:00",
+          "name": "水车门入园，先玩黄河区",
+          "duration": "30min",
+          "cost": 80,
+          "transport": "自驾约15公里",
+          "note": "建议从黄河区水车门进入，先完成黄河区项目；国庆开放、预约和套票核销规则以景区公告及票面为准"
+        },
+        {
+          "time": "08:30",
+          "name": "黄河快艇",
+          "duration": "30—40min",
+          "cost": 0,
+          "transport": "套票项目",
+          "note": "从水车门方向进入黄河游玩区，具体乘船点和排队顺序以现场安排为准"
+        },
+        {
+          "time": "09:15",
+          "name": "沙漠天梯/索道上行",
+          "duration": "45min",
+          "cost": 0,
+          "transport": "套票项目",
+          "note": "优先选择套票包含的上行交通，减少带孩子爬坡；到高处后看黄河、沙漠、绿洲全景"
+        },
+        {
+          "time": "10:00",
+          "name": "王维观景台＋黄河玻璃桥",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "步行",
+          "note": "先拍照观景，再根据孩子胆量体验玻璃桥；恐高或风大时可跳过玻璃桥"
+        },
+        {
+          "time": "11:00",
+          "name": "飞黄腾达/单绳滑索二选一",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "套票项目",
+          "note": "两大一小建议由一名成人陪孩子选择更舒缓的项目，具体身高、体重和年龄限制以现场为准"
+        },
+        {
+          "time": "12:00",
+          "name": "景区午餐",
+          "meal": {
+            "name": "沙坡头景区简餐",
+            "cuisine": "简餐/面食",
+            "perPerson": 60,
+            "recommended": "热食、饮水",
+            "location": "景区内"
+          }
+        },
+        {
+          "time": "13:00",
+          "name": "乘摆渡车前往沙漠区",
+          "duration": "30—40min",
+          "cost": 0,
+          "transport": "景区摆渡车",
+          "note": "两个区域之间优先乘景区摆渡车，避免自行走回头路"
+        },
+        {
+          "time": "13:45",
+          "name": "沙漠骆驼环线",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "套票项目",
+          "note": "孩子如不适应颠簸可只在沙边拍照；沙漠风大，准备帽子、墨镜和防风外套"
+        },
+        {
+          "time": "15:00",
+          "name": "沙漠冲浪车/大漠飞天",
+          "duration": "1.5h",
+          "cost": 0,
+          "transport": "套票项目",
+          "note": "优先体验沙漠冲浪车，再看孩子状态决定是否体验大漠飞天；项目顺序可能因排队调整"
+        },
+        {
+          "time": "16:30",
+          "name": "摆渡车返回黄河区，滑沙下行",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "景区摆渡车＋套票项目",
+          "note": "滑沙排队可能较久，孩子害怕时可改乘其他下行交通"
+        },
+        {
+          "time": "17:30",
+          "name": "羊皮筏子漂流返回水车门",
+          "duration": "30—45min",
+          "cost": 0,
+          "transport": "套票项目",
+          "note": "作为黄河区收尾项目；注意保管手机和儿童物品，结束后直接前往沙漠酒店"
+        },
+        {
+          "time": "18:30",
+          "name": "入住沙漠酒店，晚餐和观星",
+          "duration": "夜间",
+          "cost": 1200,
+          "transport": "景区/营地接驳",
+          "note": "沙漠酒店房态和国庆价格波动较大，需提前确认；晚上注意保暖"
+        }
+      ]
+    },
+    {
+      "date": "10/04",
+      "weekday": "周日",
+      "theme": "上午玩沙·下午五湖穿越",
+      "weather": {
+        "icon": "sunny",
+        "high": 21,
+        "low": 7
+      },
+      "activities": [
+        {
+          "time": "09:00",
+          "name": "沙漠酒店周边继续玩沙",
+          "duration": "2.5h",
+          "cost": 0,
+          "transport": "步行/营地活动",
+          "note": "上午安排轻松沙漠活动，保留体力给下午五湖穿越"
+        },
+        {
+          "time": "12:00",
+          "name": "午餐和短暂休息",
+          "meal": {
+            "name": "沙漠酒店午餐",
+            "cuisine": "酒店简餐/地方菜",
+            "perPerson": 80,
+            "recommended": "热食、饮水",
+            "location": "沙漠酒店"
+          }
+        },
+        {
+          "time": "15:00",
+          "name": "腾格里沙漠五湖穿越",
+          "duration": "约3—4h",
+          "cost": 500,
+          "transport": "越野车穿越·无人机航拍",
+          "note": "本次线路包含骆驼湖、乌兰湖、吉他湖、蛋黄湖、张家湖；乘越野车在沙漠腹地穿越，沿途在湖泊和安全观景点短暂停留，并安排无人机航拍；具体顺序、停留点及成片效果以当天车队和天气情况为准"
+        },
+        {
+          "time": "19:00",
+          "name": "返回中卫市区入住",
+          "duration": "约1h",
+          "cost": 0,
+          "transport": "接驳车/自驾",
+          "note": "五湖穿越结束时间可能受沙漠路况影响，晚餐安排在市区，早点休息"
+        }
+      ]
+    },
+    {
+      "date": "10/05",
+      "weekday": "周一",
+      "theme": "北长滩·66号公路·黄河峡谷→固原",
+      "weather": {
+        "icon": "partlyCloudy",
+        "high": 19,
+        "low": 6
+      },
+      "activities": [
+        {
+          "time": "07:30",
+          "name": "中卫市区→66号公路",
+          "duration": "约40—60min",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "建议先走66号公路再向北长滩方向走，整体更顺；提前加满油、准备饮水和零食，下载离线地图"
+        },
+        {
+          "time": "08:30",
+          "name": "66号公路、黄河峡谷沿线",
+          "duration": "约1—1.5h",
+          "cost": 0,
+          "transport": "自驾观景",
+          "note": "看荒漠山地、弯道路牌和黄河峡谷景观；只在安全停车点下车，不边开车边拍摄"
+        },
+        {
+          "time": "10:00",
+          "name": "北长滩古村落",
+          "duration": "约1.5h",
+          "cost": 0,
+          "transport": "步行",
+          "note": "看黄河村落、土墙民居和古树；孩子不要靠近河岸危险位置"
+        },
+        {
+          "time": "11:30",
+          "name": "黄河峡谷沿线观景",
+          "duration": "约1h",
+          "cost": 0,
+          "transport": "自驾观景",
+          "note": "与北长滩同属黄河上游沿线，安排短暂停留即可；雨雪、大风或道路管制时取消"
+        },
+        {
+          "time": "12:30",
+          "name": "午餐/简餐",
+          "meal": {
+            "name": "沿线农家乐或自备午餐",
+            "cuisine": "农家菜/简餐",
+            "perPerson": 60,
+            "recommended": "热水、主食、简单熟食",
+            "location": "以当天营业情况为准"
+          }
+        },
+        {
+          "time": "13:15",
+          "name": "黄河宿集（可选）",
+          "duration": "约45—60min",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "黄河宿集位于常乐镇大湾村一带，适合看夯土民宿、庭院和黄河景观；需以导航和当天开放情况为准，时间紧或孩子疲劳时直接取消"
+        },
+        {
+          "time": "14:15",
+          "name": "中卫→固原",
+          "duration": "约3—3.5h",
+          "cost": 0,
+          "transport": "高速自驾",
+          "note": "总体路线顺路，但这是全程最紧的一天；建议14:15前离开中卫方向，沿线游览超时立即删减黄河宿集并返程"
+        },
+        {
+          "time": "18:00",
+          "name": "入住固原，整理行李",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "确认次日博物馆预约、还车和机场路线"
+        },
+        {
+          "time": "18:00",
+          "name": "提前整理行李，确认机场送车",
+          "duration": "1h",
+          "cost": 0,
+          "transport": "酒店",
+          "note": "建议最晚10月5日晚完成还车流程确认"
+        }
+      ]
+    },
+    {
+      "date": "10/06",
+      "weekday": "周二",
+      "theme": "固原博物馆→返程",
+      "weather": {
+        "icon": "sunny",
+        "high": 19,
+        "low": 6
+      },
+      "activities": [
+        {
+          "time": "08:30",
+          "name": "固原博物馆简短参观",
+          "duration": "1.5h",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "重点看丝路文物、古墓馆和石刻馆；提前确认国庆假期开放及预约安排"
+        },
+        {
+          "time": "10:00",
+          "name": "退房、前往机场还车",
+          "duration": "约30min",
+          "cost": 0,
+          "transport": "自驾",
+          "note": "建议10:30前到机场；租车还车、托运行李和安检都留缓冲"
+        },
+        {
+          "time": "12:55",
+          "name": "固原→武汉返程",
+          "duration": "按航班",
+          "cost": 0,
+          "transport": "飞机",
+          "note": "以航司最终航班状态和机场要求为准"
+        }
+      ]
+    }
+  ],
+  "hotels": [
+    {
+      "name": "中卫市区亲子型酒店",
+      "area": "中卫",
+      "pricePerNight": 420,
+      "highlights": "房间宽敞;去高庙和沙坡头方便;可洗衣",
+      "rating": "4.5"
+    },
+    {
+      "name": "固原市区/机场方向酒店",
+      "area": "固原",
+      "pricePerNight": 320,
+      "highlights": "方便返程;停车;早起去机场压力小",
+      "rating": "4.3"
+    },
+    {
+      "name": "沙漠酒店/星空营地",
+      "area": "中卫沙漠周边",
+      "pricePerNight": 1200,
+      "highlights": "玩沙方便;适合看星空;国庆价格和房态波动大",
+      "rating": "4.6"
+    }
+  ],
+  "budget": {
+    "transport": {
+      "items": [
+        {
+          "name": "武汉—固原往返机票（2大1小）",
+          "cost": 4400
+        },
+        {
+          "name": "租车",
+          "cost": 1000
+        }
+      ],
+      "subtotal": 5400
+    },
+    "accommodation": {
+      "items": [
+        {
+          "name": "中卫市区2晚参考",
+          "cost": 840
+        },
+        {
+          "name": "固原2晚参考",
+          "cost": 640
+        }
+      ],
+      "subtotal": 1480
+    },
+    "tickets": {
+      "items": [
+        {
+          "name": "须弥山石窟成人门票参考",
+          "cost": 130
+        },
+        {
+          "name": "火石寨成人门票参考",
+          "cost": 120
+        },
+        {
+          "name": "沙坡头成人门票参考",
+          "cost": 160
+        },
+        {
+          "name": "沙坡头体验项目预留",
+          "cost": 300
+        },
+        {
+          "name": "五湖穿越体验预留",
+          "cost": 500
+        }
+      ],
+      "subtotal": 1210
+    },
+    "total": 8090,
+    "perPerson": 2697
+  },
+  "tips": [
+    "穿衣：10月宁夏昼夜温差大，建议按洋葱式穿法准备长袖打底、抓绒或薄羽绒、冲锋衣/防风外套；沙漠早晚和乘越野车时重点保暖。",
+    "防晒防风：准备遮阳帽、墨镜、防晒霜、润唇膏和面巾/脖套；沙漠风沙较大，手机和相机尽量使用防尘袋。",
+    "随身物品：饮用水、保温杯、纸巾、湿巾、充电宝、常用药、创可贴、晕车药和儿童零食建议随车携带。",
+    "亲子用品：儿童安全座椅、舒适运动鞋、备用衣物、薄外套和小型背包提前准备；沙漠活动不建议穿拖鞋。",
+    "五湖穿越：乘越野车穿越约3小时，按领队安排上下车；无人机航拍需提前确认是否包含、是否受风力和现场管理限制。",
+    "自驾安全：山区、峡谷和沙漠沿线路况变化较大，不在弯道和无护栏处停车；提前加油、下载离线地图，部分路段可能信号较弱。",
+    "景区与预约：国庆期间客流较大，须弥山、火石寨、沙坡头、固原博物馆的开放时间、预约和项目安排，出发前再次确认。",
+    "返程提醒：10月5日沿线游玩后还要返回固原，时间不足时优先删减黄河宿集；10月6日博物馆结束后预留还车、托运和安检时间。"
+  ]
+};
+
+// SVG icon templates (inline, no external deps)
+const SVG = {
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>',
+  cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+  cloudSun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M4 12H2M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="9" r="4" opacity=".5"/><path d="M18 13h-1.26A7 7 0 0 0 6 15.26 5 5 0 1 0 9 23h9a5 5 0 0 0 0-10z"/></svg>',
+  rain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 13V4a4 4 0 0 0-8 0v1H6a4 4 0 0 0 0 8h10a4 4 0 0 0 0-8Z"/><path d="M8 19v2M12 19v2M16 19v2"/></svg>',
+  storm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><path d="m13 12-3 5h4l-3 5"/></svg>',
+  snow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><path d="M8 18l.01 0M12 18l.01 0M16 18l.01 0"/></svg>',
+  utensils: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>',
+  mapPin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  lightbulb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  plane: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>',
+  hotel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 7v14M21 7v14M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3"/><rect x="7" y="10" width="3" height="3" rx=".5"/><rect x="14" y="10" width="3" height="3" rx=".5"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>',
+  ticket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>',
+  box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+  chevDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>'
+};
+
+const weatherIcons = { sunny: SVG.sun, cloudy: SVG.cloud, rainy: SVG.rain, stormy: SVG.storm, snowy: SVG.snow, partlyCloudy: SVG.cloudSun, overcast: SVG.cloud };
+const budgetColors = { transport: '#0EA5E9', accommodation: '#8B5CF6', food: '#F97316', tickets: '#F43F5E', other: '#64748B' };
+const budgetIcons = { transport: SVG.plane, accommodation: SVG.hotel, food: SVG.utensils, tickets: SVG.ticket, other: SVG.box };
+const budgetLabels = { transport: '交通', accommodation: '住宿', food: '餐饮', tickets: '门票', other: '其他' };
+const previewImages = {
+  '须弥山石窟': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" role="img" aria-label="须弥山石窟中文示意图"><defs><linearGradient id="xumiSky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#BFE8F5"/><stop offset="1" stop-color="#F5D7B5"/></linearGradient></defs><rect width="800" height="350" fill="url(#xumiSky)"/><path d="M0 270 150 130 255 250 410 90 580 245 700 135 800 245V350H0Z" fill="#B87855"/><path d="M285 260h230v-125q-15-35-45-45H330q-30 10-45 45Z" fill="#8B4E3B"/><path d="M315 235h170v-78q-12-20-32-26H347q-20 6-32 26Z" fill="#F3C99D"/><circle cx="400" cy="195" r="27" fill="#D58A58"/><path d="M360 238q40-35 80 0" fill="none" stroke="#7B3F2D" stroke-width="7"/><text x="34" y="48" fill="#25465B" font-size="27" font-family="Microsoft YaHei, sans-serif" font-weight="700">须弥山石窟</text><text x="34" y="82" fill="#496979" font-size="18" font-family="Microsoft YaHei, sans-serif">大佛楼区 · 石窟群 · 山间观景平台</text></svg>',
+  '须弥山博物馆': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" role="img" aria-label="须弥山博物馆与大佛楼中文示意图"><rect width="800" height="350" fill="#EAF5F5"/><path d="M0 260 180 165 330 255 500 120 800 260V350H0Z" fill="#5D8C87"/><rect x="90" y="150" width="260" height="125" rx="6" fill="#D8B27D"/><path d="M70 150h300l-35-32H105Z" fill="#9C6848"/><path d="M135 175h50v100h-50zm90 0h50v100h-50z" fill="#7C5140"/><path d="M525 245h165v-88q-12-25-35-35h-95q-23 10-35 35Z" fill="#A85E3F"/><circle cx="607" cy="190" r="23" fill="#F1C18D"/><text x="34" y="48" fill="#214B55" font-size="27" font-family="Microsoft YaHei, sans-serif" font-weight="700">须弥山博物馆＋大佛楼</text><text x="34" y="82" fill="#52737A" font-size="18" font-family="Microsoft YaHei, sans-serif">先看展陈，再到平台远观最大石窟</text></svg>',
+  '火石寨国家地质公园': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" role="img" aria-label="火石寨丹霞地貌中文示意图"><defs><linearGradient id="fireSky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#F8D7B2"/><stop offset="1" stop-color="#F6F0D4"/></linearGradient></defs><rect width="800" height="350" fill="url(#fireSky)"/><path d="M0 310 115 80 190 212 300 45 375 230 500 95 590 245 700 120 800 275V350H0Z" fill="#B94F3B"/><path d="M50 310 130 135 178 265 280 90 333 276 485 145 550 300 700 160 770 310Z" fill="#DD7651"/><path d="M235 310q60-85 120 0" fill="none" stroke="#3C725A" stroke-width="16"/><text x="34" y="48" fill="#6E352B" font-size="27" font-family="Microsoft YaHei, sans-serif" font-weight="700">火石寨国家地质公园</text><text x="34" y="82" fill="#855849" font-size="18" font-family="Microsoft YaHei, sans-serif">丹霞赤壁 · 石柱山体 · 轻松线路观景</text></svg>',
+  '火石寨国家地质公园步道': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" role="img" aria-label="火石寨步道中文示意图"><rect width="800" height="350" fill="#D9EEF0"/><path d="M0 240 150 80 260 235 420 65 550 240 700 105 800 230V350H0Z" fill="#A94E3B"/><path d="M0 300h800v50H0Z" fill="#6E9270"/><path d="M120 350C220 270 300 300 390 245s145-30 260-120" fill="none" stroke="#E8C68E" stroke-width="22"/><circle cx="605" cy="210" r="15" fill="#FFF3CF"/><path d="M598 210h15" stroke="#80533C" stroke-width="3"/><text x="34" y="48" fill="#315A5B" font-size="27" font-family="Microsoft YaHei, sans-serif" font-weight="700">火石寨轻松步道</text><text x="34" y="82" fill="#527477" font-size="18" font-family="Microsoft YaHei, sans-serif">带孩子以观景为主，量力而行</text></svg>'
+};
+previewImages['须弥山石窟'] += previewImages['须弥山博物馆'];
+previewImages['火石寨国家地质公园'] += previewImages['火石寨国家地质公园步道'];
+const onlinePreviewImages = {
+  '须弥山石窟': [
+    'https://www.pashansheshui.com/bigimg/gyxmssk3_b.jpg',
+    'https://dimg04.c-ctrip.com/images/0EQ6x12000aq167d1A6C8_W_640_10000.jpg?proc=autoorient'
+  ],
+  '火石寨国家地质公园': [
+    'https://n.sinaimg.cn/sinakd20200505ac/271/w640h431/20200505/ae6f-iteyfwv2201524.jpg',
+    'https://youimg1.c-ctrip.com/target/1005190000015rn5n1C36.jpg'
+  ]
+};
+onlinePreviewImages['腾格里沙漠五湖穿越'] = ['https://sns-webpic-qc.xhscdn.com/202609012336/d61041e49debef51fcf02de78f96685c/notes_pre_post/1040g3k8322ohv3i2na705niq7f4g8q7dbarur9o!nd_dft_wlteh_webp_3'];
+onlinePreviewImages['66号公路、黄河峡谷沿线'] = [
+  'https://dimg04.c-ctrip.com/images/0106z120009bov4hk89CC_W_640_0_Q90.jpg?proc=autoorient',
+  'https://dimg04.c-ctrip.com/images/01012120009bovdnmA7AF_W_640_0_Q90.jpg?proc=autoorient'
+];
+onlinePreviewImages['北长滩古村落'] = [
+  'https://www.nxnews.net/yc/jrww/201911/W020191122324249458033.jpg'
+];
+onlinePreviewImages['黄河峡谷沿线观景'] = [
+  'https://dimg04.c-ctrip.com/images/0102j120009bovorbDF08_W_640_0_Q90.jpg?proc=autoorient'
+];
+onlinePreviewImages['黄河宿集（可选）'] = [
+  'https://5b0988e595225.cdn.sohucs.com/images/20191202/164e75f0baf34ac98830741634390b2b.jpeg'
+];
+const attractionDescriptions = {
+  '须弥山石窟': '始凿于北魏、延续营造1500多年，是宁夏规模较大的石窟群。建议先看须弥山博物馆，再到大佛楼区和观景平台，了解丝路文化与佛教石窟艺术。',
+  '火石寨国家地质公园': '火石寨以暗红色丹霞山体和森林相映成景，擎天柱、飞来石等自然景观很有辨识度。带孩子建议选择轻松观景线路，量力而行。',
+  '腾格里沙漠五湖穿越': '本次五湖线路包含骆驼湖、乌兰湖、吉他湖、蛋黄湖、张家湖。游玩方式为乘越野车深入腾格里沙漠穿越，整体约3小时，沿途在湖泊和安全观景点短暂停留，并安排无人机航拍，适合一次性体验沙漠、湖泊和荒漠地貌。湖泊实际水色、形态、停留顺序及航拍成片效果会受天气、光线、风力和车队安排影响，以当天实际情况为准。'
+  ,'66号公路、黄河峡谷沿线': '中卫沙坡头上游一带的荒漠公路景观，沿途可见起伏山地、弯道路牌和黄河峡谷。适合自驾慢看，但弯道、坡路较多，应以安全停车点观景为主。'
+  ,'北长滩古村落': '北长滩是黄河沿岸的传统村落，村庄依山临河，能看到土墙民居、古树和河谷风景。适合短时间慢逛，带孩子要远离河岸、崖边和未开放区域。'
+  ,'黄河峡谷沿线观景': '这一段以黄河河道、峡谷山体和荒漠色彩为看点，适合在返程前安排一处短停，不建议为了拍照走到没有护栏的边缘。'
+  ,'黄河宿集（可选）': '位于中卫常乐镇大湾村一带，是夯土建筑、精品民宿、庭院和黄河景观结合的度假聚落，适合拍照、喝咖啡和短暂休息；本天时间紧，建议只作备选。'
+  ,'固原博物馆简短参观': '固原博物馆以宁夏南部历史和丝绸之路文化为主线，重点了解北朝至隋唐时期固原作为交通要道和民族交往地区的历史。短时间建议按“基本陈列→丝路文物→古墓与石刻相关展陈”的顺序参观，重点看佛教造像、金银器、墓葬文物和丝路交流遗存。整体以室内展厅为主，适合返程前带孩子进行一段安静的历史文化参观，预留约1—1.5小时即可。'
+};
+
+function renderWeather(weather, days) {
+  const bar = document.getElementById('weatherBar');
+  bar.innerHTML = days.map(d => {
+    const icon = weatherIcons[d.weather.icon] || SVG.cloudSun;
+    return `<div class="weather-card">
+      <div class="w-date">${d.date} ${d.weekday}</div>
+      <div class="w-icon" style="color:${d.weather.icon === 'sunny' ? '#F59E0B' : d.weather.icon === 'rainy' ? '#0EA5E9' : '#64748B'}">${icon}</div>
+      <div class="w-temp">${d.weather.high}° <span class="w-temp-low">/ ${d.weather.low}°</span></div>
+    </div>`;
+  }).join('');
+
+  const tip = document.getElementById('weatherTip');
+  tip.innerHTML = `<span class="icon" style="color:var(--primary)">${SVG.info}</span>
+    <span>${weather.clothing} · 降水概率 ${weather.rainfall} · ${weather.tips}</span>`;
+}
+
+function renderDays(days) {
+  const container = document.getElementById('daysContainer');
+  container.innerHTML = days.map((day, i) => {
+    const wIcon = weatherIcons[day.weather.icon] || SVG.cloudSun;
+    const acts = day.activities.map(a => {
+      const isMeal = a.meal || /[午晚早]餐/.test(a.name);
+      let html = `<div class="tl-item${isMeal ? ' is-meal' : ''}"><div class="tl-dot"></div>`;
+      html += `<div class="tl-time">${a.time}${a.duration ? ' · ' + a.duration : ''}</div><div class="tl-content">`;
+      html += `<h4>${a.name}</h4>`;
+      if (a.note) html += `<p>${a.note}</p>`;
+      if (attractionDescriptions[a.name]) html += `<div class="attraction-intro"><strong>景点介绍：</strong>${attractionDescriptions[a.name]}</div>`;
+      if (onlinePreviewImages[a.name]) {
+        const onlineCards = onlinePreviewImages[a.name].map((src, index) => `<button class="activity-preview" type="button" onclick="openPreview(this)" aria-label="点击放大${a.name}预览图${index + 1}"><span class="preview-art"><img src="${src}" alt="${a.name}预览图${index + 1}" loading="lazy" referrerpolicy="no-referrer"></span><span class="preview-caption">线上图片${index + 1} · 点击可放大查看</span></button>`).join('');
+        html += `<div class="preview-gallery">${onlineCards}</div>`;
+      }
+      if (a.meal) {
+        html += `<div class="meal-card">
+          <div class="meal-icon"><span class="icon">${SVG.utensils}</span></div>
+          <div class="meal-info">
+            <div class="meal-name">${a.meal.name}</div>
+            <div class="meal-detail">${a.meal.cuisine} · ${a.meal.location}${a.meal.recommended ? ' · 推荐：' + a.meal.recommended : ''}</div>
+          </div>
+          <div class="meal-price">¥${a.meal.perPerson}/人</div>
+        </div>`;
+      }
+      const tags = [];
+      if (a.cost === 0) tags.push(`<span class="tag tag-free">免费</span>`);
+      else if (a.cost) tags.push(`<span class="tag tag-cost">¥${a.cost}</span>`);
+      if (a.transport) tags.push(`<span class="tag tag-transport">${a.transport}</span>`);
+      if (tags.length) html += `<div class="tl-tags">${tags.join('')}</div>`;
+      html += `</div></div>`;
+      return html;
+    }).join('');
+
+    return `<div class="day-card">
+      <div class="day-header" tabindex="0" role="button" aria-expanded="true"
+           onclick="toggleDay(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDay(this)}">
+        <div class="day-header-left">
+          <div class="day-num">D${i + 1}</div>
+          <div class="day-header-info">
+            <h3>${day.theme}</h3>
+            <div class="day-meta">
+              <span>${day.date} ${day.weekday}</span>
+              <span style="display:inline-flex;align-items:center;gap:3px;color:${day.weather.icon === 'sunny' ? '#F59E0B' : '#64748B'}">
+                <span class="icon icon-sm">${wIcon}</span> ${day.weather.high}°/${day.weather.low}°
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="toggle-icon"><span class="icon icon-sm">${SVG.chevDown}</span></div>
+      </div>
+      <div class="day-body"><div class="timeline">${acts}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function openPreview(el) {
+  const modal = document.createElement('div');
+  modal.className = 'image-modal';
+  modal.innerHTML = `<div class="image-modal-panel"><div>${el.querySelector('.preview-art').innerHTML}</div><div class="image-modal-title">点击任意位置关闭预览</div></div>`;
+  modal.addEventListener('click', () => modal.remove());
+  document.body.appendChild(modal);
+}
+
+function toggleDay(el) {
+  const card = el.closest('.day-card');
+  const expanded = !card.classList.contains('collapsed');
+  card.classList.toggle('collapsed');
+  el.setAttribute('aria-expanded', !expanded);
+}
+
+function renderHotels(hotels) {
+  document.getElementById('hotelGrid').innerHTML = hotels.map((h, i) => {
+    const tags = h.highlights.split(/[;；、,，]/).filter(Boolean).map(t => `<span class="hotel-tag">${t.trim()}</span>`).join('');
+    return `<div class="hotel-card">
+      ${i === 0 ? '<div class="hotel-badge">推荐</div>' : ''}
+      <div class="hotel-name">${h.name}</div>
+      <div class="hotel-area"><span class="icon icon-sm" style="color:var(--accent)">${SVG.mapPin}</span>${h.area}</div>
+      <div class="hotel-price-row"><span class="hotel-price">¥${h.pricePerNight}</span><span class="hotel-price-unit">/晚</span></div>
+      <div class="hotel-highlights">${tags}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderBudget(budget) {
+  // Chart bar
+  const cats = Object.entries(budget).filter(([k]) => !['total', 'perPerson'].includes(k));
+  const total = budget.total || cats.reduce((s, [, d]) => s + d.subtotal, 0);
+  document.getElementById('budgetChart').innerHTML = cats.map(([cat, data]) =>
+    `<div class="budget-chart-seg" style="width:${(data.subtotal / total * 100).toFixed(1)}%;background:${budgetColors[cat] || '#94A3B8'}"></div>`
+  ).join('');
+
+  // Table
+  const tbody = document.querySelector('#budgetTable tbody');
+  tbody.innerHTML = cats.map(([cat, data]) => {
+    const icon = budgetIcons[cat] || SVG.box;
+    const label = budgetLabels[cat] || cat;
+    let rows = `<tr class="cat-row"><td colspan="2"><span class="cat-icon"><span class="icon icon-sm" style="color:${budgetColors[cat]}">${icon}</span>${label}</span></td><td class="subtotal">¥${data.subtotal.toLocaleString()}</td></tr>`;
+    data.items.forEach(item => { rows += `<tr class="sub-row"><td></td><td>${item.name}</td><td>¥${item.cost.toLocaleString()}</td></tr>`; });
+    return rows;
+  }).join('');
+
+  // Total bar
+  const el = document.getElementById('budgetTotal');
+  el.querySelector('.budget-total-amount').textContent = `¥${total.toLocaleString()}`;
+  el.querySelector('.budget-total-per').textContent = `人均 ¥${(budget.perPerson || 0).toLocaleString()}`;
+}
+
+function renderTips(tips) {
+  document.getElementById('tipsList').innerHTML = tips.map(t =>
+    `<div class="tip-card"><div class="tip-icon"><span class="icon">${SVG.lightbulb}</span></div><span>${t}</span></div>`
+  ).join('');
+}
+
+if (tripData) {
+  document.getElementById('heroTitle').textContent = tripData.title;
+  if (tripData.dateRange) document.getElementById('heroDate').textContent = tripData.dateRange;
+  if (tripData.travelers) document.getElementById('heroTravelers').textContent = tripData.travelers;
+  if (tripData.budget) document.getElementById('heroBudget').textContent = `¥${(tripData.budget.total || 0).toLocaleString()}`;
+  renderWeather(tripData.weather, tripData.days);
+  renderDays(tripData.days);
+  renderHotels(tripData.hotels);
+  renderBudget(tripData.budget);
+  renderTips(tripData.tips);
+}
+</script>
+</body>
+</html>
