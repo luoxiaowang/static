@@ -776,6 +776,19 @@ const app = createApp({
     function shiftTodoDate(amount) { const [y, m, d] = selectedTodoDate.value.split('-').map(Number); selectedTodoDate.value = formatLocalDate(new Date(y, m - 1, d + amount)); }
     function goToday() { selectedTodoDate.value = formatLocalDate(); }
     function todoStatus(todo) { const status = getTodoStatus(todo, new Date(now.value)); return { completed: { label: '已完成', type: 'success' }, overdue: { label: '已过期', type: 'danger' }, 'due-soon': { label: '即将到期', type: 'warning' }, active: { label: '进行中', type: 'info' } }[status]; }
+    function todoNoteSegments(note) {
+      const segments = [];
+      const pattern = /https?:\/\/[^\s<>"')\]]+/g;
+      let cursor = 0;
+      for (const match of note.matchAll(pattern)) {
+        if (match.index > cursor) segments.push({ type: 'text', content: note.slice(cursor, match.index) });
+        segments.push({ type: 'link', url: match[0] });
+        cursor = match.index + match[0].length;
+      }
+      if (cursor < note.length) segments.push({ type: 'text', content: note.slice(cursor) });
+      return segments;
+    }
+    function openTodoLink(url) { window.open(url, '_blank', 'noopener,noreferrer'); }
     function openTodoDialog(todo) {
       Object.assign(todoForm, todo ? { ...todo, dueAt: todo.dueAt || '' } : { id: '', title: '', note: '', date: selectedTodoDate.value, dueAt: '', activated: false });
       todoDialogOpen.value = true;
@@ -999,7 +1012,7 @@ const app = createApp({
     onBeforeUnmount(() => { clearInterval(clockTimer); clearTimeout(deleteResetTimer); agentAbortController?.abort(); });
     watch(activeView, cancelDeleteConfirmation);
 
-    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, agentTaskLabel, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, dragTodoId, dragTargetId, dragOverTodoId, dragInsertBefore, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, openTodoDialog, saveTodo, toggleTodo, toggleActivated, onTodoDragStart, onTodoDragEnter, onTodoDrop, onTodoDragEnd, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, toggleFavoriteRead, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, downloadAgentImage, regenerateAgentImage, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
+    return { activeView, sidebarCollapsed, mobileMenuOpen, settingsOpen, theme, birthday, soundEnabled, todos, timers, ideas, thoughts, favorites, selectedTodoDate, showAllTodos, ideaFilter, ideaDraft, thoughtDraft, todoDialogOpen, timerDialogOpen, textDialogOpen, clearDialogOpen, favoriteDialogOpen, favoriteRecognizing, favoriteRecognitionError, clearPhrase, importInput, todoForm, timerForm, textForm, favoriteForm, agentMessages, agentDraft, agentLoading, agentError, agentTaskLabel, pomodoro, navItems, todayLabel, currentPage, visibleTodos, sortedTimers, sortedFavorites, ideaFilterOptions, filteredIdeas, ideaGroups, thoughtGroups, textDialogTitle, notificationPermission, notificationLabel, dataSummary, periodCountdowns, pomodoroRemainingMs, pomodoroRemainingLabel, dragTodoId, dragTargetId, dragOverTodoId, dragInsertBefore, selectView, selectMobileView, runPrimaryAction, shiftTodoDate, goToday, todoStatus, todoNoteSegments, openTodoLink, openTodoDialog, saveTodo, toggleTodo, toggleActivated, onTodoDragStart, onTodoDragEnter, onTodoDrop, onTodoDragEnd, openTimerDialog, saveTimer, timerExpired, timerRemaining, timerProgress, choosePomodoroDuration, beginPomodoro, pauseCurrentPomodoro, resumeCurrentPomodoro, resetCurrentPomodoro, addIdea, toggleIdea, addThought, openTextDialog, saveTextEdit, openFavoriteDialog, recognizeFavoriteUrl, saveFavorite, toggleFavoriteRead, visitFavorite, sendAgentMessage, retryAgentMessage, stopAgentRequest, clearAgentConversation, downloadAgentImage, regenerateAgentImage, formatDateTime, formatTime, isDeletePending, deleteButtonText, cancelDeleteConfirmation, requestDelete, saveTheme, saveBirthday, saveSound, disableFutureDate, requestNotification, exportData, chooseImport, handleImport, openClearDialog, clearEverything };
   },
 });
 

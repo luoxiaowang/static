@@ -21,6 +21,8 @@
 .task-content { min-width: 0; flex: 1; }
 .task-content h3 { margin: 1px 0 6px; font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
 .task-content > p { margin: 0 0 10px; color: var(--wb-text-regular); font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
+.todo-note .note-link { color: var(--wb-primary); text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.todo-note .note-link:hover { color: color-mix(in srgb, var(--wb-primary) 80%, black); }
 .record-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; color: var(--wb-text-muted); font-size: 12px; }
 .record-meta > span { display: inline-flex; align-items: center; gap: 4px; }
 .record-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 1px; }
