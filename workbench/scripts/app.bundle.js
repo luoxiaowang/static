@@ -610,7 +610,7 @@ const message = ElementPlus.ElMessage;
 
 const HourglassVisual = {
   name: 'HourglassVisual',
-  props: { ratio: { type: Number, default: 0 }, accent: { type: String, default: '#409eff' } },
+  props: { ratio: { type: Number, default: 0 }, accent: { type: String, default: '#1677ff' } },
   setup(props) {
     const uid = `hg-${Math.random().toString(36).slice(2, 9)}`;
     const safeRatio = computed(() => Math.min(1, Math.max(0, props.ratio)));
@@ -735,7 +735,7 @@ const app = createApp({
     const pomodoroRemainingLabel = computed(() => formatCountdown(pomodoroRemainingMs.value).replace(/^0天\s*/, ''));
 
     const periodCountdowns = computed(() => [
-      ['day', '本日倒计时', '#409eff'], ['week', '本周倒计时', '#67c23a'], ['month', '本月倒计时', '#e6a23c'], ['year', '本年倒计时', '#9b7ad8'], ['life', '人生倒计时', '#f56c6c'],
+      ['day', '本日倒计时', '#1677ff'], ['week', '本周倒计时', '#52c41a'], ['month', '本月倒计时', '#faad14'], ['year', '本年倒计时', '#722ed1'], ['life', '人生倒计时', '#cf1322'],
     ].map(([type, label, accent]) => {
       const range = getPeriodRange(type, new Date(now.value), birthday.value);
       if (!range) return { type, label, accent, ratio: 0, ready: false, remaining: '等待设置', percent: '0%' };

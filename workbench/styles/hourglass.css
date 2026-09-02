@@ -1,9 +1,9 @@
-.hourglass-grid { display: grid; grid-template-columns: repeat(5, minmax(205px, 1fr)); gap: 16px; }
-.hourglass-card { position: relative; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; }
-.hourglass-card::after { content: ""; position: absolute; right: -30px; bottom: -42px; width: 120px; height: 120px; background: radial-gradient(circle, color-mix(in srgb, var(--hourglass-accent, #409eff) 12%, transparent), transparent 70%); pointer-events: none; }
-.hourglass-card:hover { transform: translateY(-3px); box-shadow: var(--wb-shadow-hover) !important; }
-.hourglass-card .el-card__body { display: flex; align-items: center; gap: 15px; min-height: 154px; padding: 20px 17px; }
-.hourglass-visual { width: 86px; height: 129px; flex: 0 0 86px; overflow: visible; filter: drop-shadow(0 11px 10px rgba(31, 45, 61, .18)); }
+.hourglass-grid { display: grid; grid-template-columns: repeat(5, minmax(205px, 1fr)); gap: 14px; }
+.hourglass-card { position: relative; overflow: hidden; transition: border-color .2s ease, box-shadow .2s ease; }
+.hourglass-card::after { content: ""; position: absolute; right: -30px; bottom: -42px; width: 120px; height: 120px; background: radial-gradient(circle, color-mix(in srgb, var(--hourglass-accent, #1677ff) 10%, transparent), transparent 70%); pointer-events: none; }
+.hourglass-card:hover { box-shadow: var(--wb-shadow-hover) !important; }
+.hourglass-card .el-card__body { display: flex; align-items: center; gap: 15px; min-height: 150px; padding: 20px 17px; }
+.hourglass-visual { width: 86px; height: 129px; flex: 0 0 86px; overflow: visible; filter: drop-shadow(0 8px 8px rgba(0, 0, 0, .12)); }
 .glass-shell { stroke: rgba(102, 129, 148, .38); stroke-width: .7; }
 .glass-edge { fill: none; stroke-width: 1.7; opacity: .9; }
 .glass-rear-highlight { fill: none; stroke: rgba(110, 142, 161, .35); stroke-linecap: round; stroke-width: 2.2; opacity: .7; }
@@ -12,15 +12,15 @@
 .hourglass-frame { stroke: rgba(65, 43, 27, .38); stroke-width: 1.15; }
 .hourglass-post { stroke: rgba(68, 83, 101, .36); stroke-width: .65; }
 .frame-grain { fill: none; stroke: rgba(74, 42, 23, .28); stroke-linecap: round; stroke-width: .7; }
-.sand-stream, .sand-particle { fill: var(--sand-color, #e6a23c); }
-.sand-shadow { fill: color-mix(in srgb, var(--sand-color, #e6a23c) 62%, #4b2c00); opacity: .52; }
+.sand-stream, .sand-particle { fill: var(--sand-color, #faad14); }
+.sand-shadow { fill: color-mix(in srgb, var(--sand-color, #faad14) 62%, #614700); opacity: .52; }
 .sand-surface { transition: transform 1s linear; }
 .sand-pile { transition: transform 1s linear; }
 .sand-stream { filter: drop-shadow(0 0 1px color-mix(in srgb, var(--sand-color) 60%, white)); animation: sand-flow .7s ease-in-out infinite; transform-origin: center; }
 .sand-particle { animation: sand-particle 1.25s linear infinite; opacity: 0; }
 .sand-particle.is-second { animation-delay: .48s; }
 .hourglass-copy { min-width: 0; }
-.hourglass-copy > span { display: block; margin-bottom: 8px; color: var(--wb-text-regular); font-size: 13px; font-weight: 680; }
+.hourglass-copy > span { display: block; margin-bottom: 8px; color: var(--wb-text-regular); font-size: 13px; font-weight: 600; }
 .hourglass-copy strong { display: block; color: var(--hourglass-accent, var(--wb-primary)); font-size: clamp(15px, 1.35vw, 18px); font-variant-numeric: tabular-nums; line-height: 1.5; white-space: normal; }
 .hourglass-copy small { display: block; margin-top: 5px; color: var(--wb-text-muted); font-size: 11px; }
 @keyframes sand-flow { 50% { opacity: .5; transform: scaleY(.82); } }
