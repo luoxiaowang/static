@@ -27,3 +27,13 @@ export class AdaptiveQuality{
   if(next===this.level)return null;this.level=next;this.slow=0;this.fast=0;this.cooldown=8;return TIERS[next];
  }
 }
+
+// Mobile spends its budget on sharp pixels and nearby geometry, not post-processing.
+export function resolveQuality(tier,device,width,height){
+ const base=PROFILES[tier];if(!device.mobile)return {...base};
+ const ratios={flow:1.35,balanced:1.6,high:1.85};
+ const pixelBudget=Math.sqrt(2400000/Math.max(1,width*height));
+ return {...base,pixelRatio:Math.min(ratios[tier],device.pixelCap,pixelBudget),
+  near:Math.max(base.near,12),medium:Math.max(base.medium,28),
+  smallNear:Math.max(base.smallNear,7),smallMedium:Math.max(base.smallMedium,18)};
+}
