@@ -28,15 +28,15 @@ export function addDetails(a){
  pendant(15,-5.3,3.5);light(15,2.4,-5.3,22,9);pendant(-6,-13.6,3.4);light(-6,2.5,-14.5,25,9);pendant(-17,1,2.4);
  // Kitchen: cabinet reveals and brass handles, sink, curved mixer, induction stove,
  // oven, extractor, coffee machine, fridge handles and worktop objects.
- for(let x=-9.5;x<=-4.5;x+=.85){box(x,.46,-16.225,.025,.8,.015,dark);box(x+.25,.69,-16.2,.22,.025,.025,bronze);}
+ for(let x=-9.5;x<=-4.5;x+=.85){box(x,.46,-16.225,.025,.8,.015,dark);box(x+.25,.77,-16.2,.30,.018,.018,dark);}
  round(-8,.98,-16.9,1.05,.035,.65,steel,.045);round(-8,1.0,-16.9,.88,.022,.5,blackglass,.05);
  const faucet=new T.Mesh(new T.TorusGeometry(.17,.022,10,24,Math.PI),steel);faucet.position.set(-8,1.25,-17.14);architecture.add(faucet);cyl(-8.17,1.13,-17.14,.025,.26,steel);cyl(-7.83,1.2,-17.14,.023,.1,steel);
  round(-5.2,1,-16.9,1.35,.03,.75,blackglass,.035);for(let x of [-5.6,-4.8])for(let z of [-16.7,-17.1]){const ring=new T.Mesh(new T.TorusGeometry(.13,.006,6,24),steel);ring.rotation.x=Math.PI/2;ring.position.set(x,1.021,z);architecture.add(ring);}
  box(-5.2,.47,-16.19,1.05,.65,.07,blackglass);box(-5.2,.66,-16.12,.8,.035,.035,steel);box(-5.2,2.65,-16.9,1.6,.13,.9,steel);box(-5.2,2.96,-17,.45,.55,.45,steel);
- round(-9.1,1.23,-16.9,.42,.52,.42,blackglass,.035);box(-9.1,1.4,-16.65,.3,.12,.025,steel);vessel(-9.1,1.0,-16.57,.065,.12);
- for(let x of [-10.12,-9.5])box(x,1.2,-13.82,.025,.7,.035,steel);box(-9.8,1.05,-13.8,1.15,.02,.02,dark);
+ round(-6.85,1.23,-16.9,.42,.52,.42,blackglass,.035);box(-6.85,1.4,-16.65,.3,.12,.025,steel);vessel(-6.85,1.0,-16.57,.065,.12);
+
  vessel(-6,1,-13.6,.3,.16,wood);for(let i=0;i<5;i++)ell(-6+Math.sin(i)*.15,1.18,-13.6+Math.cos(i)*.15,.09,.09,.09,mat('水果',0xdca252));
- for(let x of [-7.3,-6,-4.7]){round(x,.6,-12.3,.48,.09,.48,wood,.07);for(let dx of [-.17,.17])for(let dz of [-.17,.17])box(x+dx,.3,-12.3+dz,.035,.6,.035,dark);obstacle(x,-12.3,.5,.5,0,.65);}
+ for(let x of [-7.3,-6,-4.7]){round(x,.6,-12.3,.48,.09,.48,dark,.07);for(let dx of [-.17,.17])for(let dz of [-.17,.17])box(x+dx,.3,-12.3+dz,.035,.6,.035,dark);obstacle(x,-12.3,.5,.5,0,.65);}
  // Office desk with screen, laptop, keyboard, task lamp and cup.
  round(-17,.85,1,2.2,.07,1.1,oak,.06);box(-17.25,1.27,.73,.86,.5,.045,dark);box(-17.25,1.28,.759,.8,.44,.015,mat('屏幕',0x455f61,{emissive:0x1a3538,emissiveIntensity:.15}));box(-17.25,1.0,.72,.06,.28,.06,dark);round(-17.25,.9,.78,.42,.025,.25,dark,.02);round(-17.25,.908,1.14,.65,.023,.22,dark,.02);
  for(let i=0;i<12;i++)for(let j=0;j<3;j++)box(-17.54+i*.05,.925,1.07+j*.05,.036,.008,.035,mat('键帽',0x86918a));

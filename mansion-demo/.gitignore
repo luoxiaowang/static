@@ -6,3 +6,6 @@ assets/downloaded/
 assets/scene-meshes.json
 
 .DS_Store
+
+# Generated standalone distribution; rebuild with npm run build
+offline.html

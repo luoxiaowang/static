@@ -1,0 +1,11 @@
+export function idleYield(){return new Promise(resolve=>{if(typeof requestIdleCallback==='function')requestIdleCallback(resolve,{timeout:400});else setTimeout(resolve,24);});}
+export class AssetQueue{
+ constructor({yieldWork=idleYield,onChange=()=>{}}={}){this.tasks=[];this.running=false;this.yieldWork=yieldWork;this.onChange=onChange;}
+ add(id,load,{when=()=>true,priority=10}={}){if(this.tasks.some(t=>t.id===id))throw Error('重复素材任务 '+id);this.tasks.push({id,load,when,priority,state:'pending'});}
+ async update(context){if(this.running)return;const next=this.tasks.filter(t=>t.state==='pending'&&t.when(context)).sort((a,b)=>a.priority-b.priority)[0];if(!next)return;this.running=true;next.state='loading';this.onChange(this.stats);try{await this.yieldWork();await next.load();next.state='done';}catch(error){next.state='error';next.error=String(error);console.warn('素材暂未载入:',next.id,error);}finally{this.running=false;this.onChange(this.stats);}}
+ retry(){for(const t of this.tasks)if(t.state==='error')t.state='pending';this.onChange(this.stats);}
+ get stats(){return{total:this.tasks.length,loaded:this.tasks.filter(t=>t.state==='done').length,failed:this.tasks.filter(t=>t.state==='error').length,active:this.tasks.find(t=>t.state==='loading')?.id||null};}
+}
+export async function assetBuffer(id){const asset=globalThis.MANSION_ASSETS?.[id];if(!asset)throw Error('缺少素材 '+id);if(asset.startsWith('assets/')){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);try{const response=await fetch(asset,{cache:'default',signal:controller.signal});if(!response.ok)throw Error(`${id}: HTTP ${response.status}`);return await response.arrayBuffer();}finally{clearTimeout(timer);}}const raw=atob(asset),out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out.buffer;}
+export function mobileSettings(width,coarse){const mobile=width<=700||(coarse&&width<=1200);return{mobile,fov:mobile?68:52,distance:mobile?7.5:5,pixelCap:mobile?1:Infinity};}
+export function geometryZone(x,y,z,large=false){if(large)return'global';if(y<-.3)return'basement';if(y>7)return'roof';if(y>3.3)return'upper';if(z<7&&x<-11)return'west';if(z<7&&x>11)return'east';if(z< -4&&Math.abs(x)<11)return'main';return'garden';}

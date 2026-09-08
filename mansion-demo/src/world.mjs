@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {kitchenMaterials,addKitchenArchitecture} from './kitchen.mjs';
+import {geometryZone} from './asset-queue.mjs';
 import {PLAN_SCALE} from './layout.mjs';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {obstacle,solids,STAIRS,ROOF_STAIRS,BASEMENT_STAIRS} from './navigation.mjs';
@@ -7,6 +9,7 @@ import {addDistrict} from './district.mjs';
 import {addDetails} from './details.mjs';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 export function createWorld(materials={}){
+ materials={...kitchenMaterials(),...materials};
  solids.length=0;const root=new T.Group(), architecture=new T.Group(), roofs=new T.Group();root.add(architecture,roofs);const trees=[],plantSpots=[],seats=[];let buildingRoof=false;
  const mats={};
  const mat=(n,c,extra={})=>mats[n]||(mats[n]=materials[n]||new T.MeshStandardMaterial({name:n,color:c,roughness:.8,...extra}));
@@ -112,8 +115,8 @@ export function createWorld(materials={}){
  rug(16,1,7,7);sofa(16,-1.5);sofa(19,1,-Math.PI/2);table(16,1,2.1,1);plant(12,5);plant(20,-6);
  table(15,-5.3,3.8,1.35);for(let x of [13.7,15,16.3]){chair(x,-4.2,Math.PI);chair(x,-6.5);}
  // Kitchen and family hall.
- box(-7, .45,-16.9,6,.9,1.3,wood,true);box(-7,.93,-16.9,6,.08,1.4,plaster);box(-9.8,1.2,-14.6,1.3,2.4,1.5,mat('冰箱',0xa6aaa3),true);
- box(-6,.45,-13.6,3.8,.9,1.3,wood,true);box(-6,.94,-13.6,4,.09,1.5,plaster);cyl(-5,.99,-13.6,.25,.07,dark);plant(-10,-5);
+ box(-7,.45,-16.9,6,.9,1.3,mat('厨房柜体'),true);box(-7,.93,-16.9,6,.08,1.4,mat('厨房石材'));addKitchenArchitecture({box,mat,dark,lightmat});
+ box(-6,.45,-13.6,4.4,.9,1.3,mat('厨房柜体'),true);box(-6,.94,-13.6,4.6,.09,1.5,mat('厨房石材'));for(const x of [-8.26,-3.74])box(x,.47,-13.6,.08,.94,1.5,mat('厨房石材'));for(let x=-7.5;x<-4;x+=.75)box(x,.46,-12.94,.015,.78,.012,dark);plant(-10,-5);
  rug(0,-11,5.5,5.5);sofa(0,-14.7);table(0,-12.5,2,1);books(-.3,-17.5,4);chair(-3.9,-10);table(-4,-9,1,1);
  // Upstairs bedroom, child room and reading corner.
  function bed(x,z,w=3,y=3.6){seats.push({x,z,y,rotation:0,type:'lie'});box(x,y+.3,z,w,.6,3.6,wood,true);box(x,y+.64,z,w,.18,3.5,linen);box(x,y+1,z-1.75,w,.9,.18,wood,true);box(x,y+.77,z+.45,w,.1,2.3,mat('床被',0x788b84));for(let s of [-1,1])box(x+s*w*.23,y+.8,z-1.13,w*.4,.2,.65,linen);}
@@ -146,8 +149,8 @@ export function createWorld(materials={}){
  addDistrict({box,ell,cyl,branch,mat,wood,oak,linen,dark,plaster,lightmat,glass,architecture,root,roofs,obstacle,seats,tree,plant,table,chair,sofa,books,rug});
  addDetails({box,ell,cyl,branch,mat,wood,oak,linen,dark,plaster,lightmat,glass,architecture,root,roofs,obstacle,seats});
  // Merge static geometry by material: hundreds of books and foliage become a few draw calls.
- architecture.updateMatrixWorld(true);const groups=new Map();architecture.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.clone().applyMatrix4(o.matrixWorld);if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));if(!geo.attributes.uv)geo.setAttribute('uv',new T.BufferAttribute(new Float32Array(geo.attributes.position.count*2),2));if(o.material.map){const p=geo.attributes.position,n=geo.attributes.normal,uv=geo.attributes.uv;for(let i=0;i<p.count;i++){const nx=Math.abs(n.getX(i)),ny=Math.abs(n.getY(i)),nz=Math.abs(n.getZ(i));const tile=o.material.name==='草地'?3:2;uv.setXY(i,(nx>ny&&nx>nz?p.getZ(i):p.getX(i))/tile,(ny>nx&&ny>nz?p.getZ(i):p.getY(i))/tile);}}const a=groups.get(o.material)||[];a.push(geo);groups.set(o.material,a);});
- root.remove(architecture);const merged=new T.Group();root.add(merged);for(const [m,geos]of groups){const g=mergeGeometries(geos,false);if(!g)throw Error('模型合并失败');const mesh=new T.Mesh(g,m);mesh.castShadow=m.name!=='玻璃';mesh.receiveShadow=true;mesh.name=m.name;merged.add(mesh);geos.forEach(g=>g.dispose());}
+ architecture.updateMatrixWorld(true);const groups=new Map();architecture.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.clone().applyMatrix4(o.matrixWorld);if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));if(!geo.attributes.uv)geo.setAttribute('uv',new T.BufferAttribute(new Float32Array(geo.attributes.position.count*2),2));if(o.material.map||o.material.userData.worldUV){const p=geo.attributes.position,n=geo.attributes.normal,uv=geo.attributes.uv;for(let i=0;i<p.count;i++){const nx=Math.abs(n.getX(i)),ny=Math.abs(n.getY(i)),nz=Math.abs(n.getZ(i));const tile=o.material.name==='草地'?3:2;uv.setXY(i,(nx>ny&&nx>nz?p.getZ(i):p.getX(i))/tile,(ny>nx&&ny>nz?p.getZ(i):p.getY(i))/tile);}}geo.computeBoundingSphere();const center=new T.Vector3().setFromMatrixPosition(o.matrixWorld),zone=geometryZone(center.x,center.y,center.z,geo.boundingSphere.radius>18);const key=o.material.uuid+':'+zone;const batch=groups.get(key)||{material:o.material,zone,geos:[]};batch.geos.push(geo);groups.set(key,batch);});
+ root.remove(architecture);const merged=new T.Group();root.add(merged);for(const {material:m,zone,geos}of groups.values()){const g=mergeGeometries(geos,false);if(!g)throw Error('模型合并失败');const mesh=new T.Mesh(g,m);mesh.castShadow=m.name!=='玻璃';mesh.receiveShadow=true;mesh.name=m.name;mesh.userData.zone=zone;mesh.frustumCulled=true;merged.add(mesh);geos.forEach(g=>g.dispose());}
  // Keep the hide-roof group, but batch its repeated slats/fascias by material.
  roofs.updateMatrixWorld(true);const roofBatches=new Map();roofs.traverse(o=>{if(!o.isMesh)return;const list=roofBatches.get(o.material)||[];const geo=o.geometry.clone().applyMatrix4(o.matrixWorld);if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));list.push(geo);roofBatches.set(o.material,list);});roofs.clear();for(const[m,geos]of roofBatches){const mesh=new T.Mesh(mergeGeometries(geos),m);mesh.castShadow=true;mesh.receiveShadow=true;mesh.name=m.name;roofs.add(mesh);geos.forEach(g=>g.dispose());}
  return{root,mats,pond,waterMat,plant,merged,roofs,trees,plantSpots,seats};

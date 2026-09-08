@@ -3,7 +3,7 @@ import{createWorld}from './world.mjs';
 import{STAIRS,solids,movePlayer,groundHeight,canMove,startJump,advanceJump}from './navigation.mjs';
 const world=createWorld();
 function walk(p,x,z){movePlayer(p,x-p.x,z-p.z);assert.ok(Math.abs(p.x-x)<.09&&Math.abs(p.z-z)<.09,`路线被挡：目标 ${x},${z}，实际 ${p.x},${p.z}`);}
-test('场景几何有效且按材质合并',()=>{assert.ok(world.merged.children.length<80);assert.ok(solids.length>50);world.merged.traverse(o=>{if(o.isMesh){assert.ok(o.geometry.attributes.position.count>0);assert.ok(Array.from(o.geometry.attributes.position.array).every(Number.isFinite));}});});
+test('场景几何有效且按材质合并',()=>{assert.ok(world.merged.children.length<260);assert.ok(solids.length>50);world.merged.traverse(o=>{if(o.isMesh){assert.ok(o.geometry.attributes.position.count>0);assert.ok(Array.from(o.geometry.attributes.position.array).every(Number.isFinite));}});});
 test('从庭院入口实际步行进入主宅、转向楼梯、上二楼卧室再下楼',()=>{const p={x:0,y:0,z:19};walk(p,0,-5);walk(p,9.75,-5);walk(p,9.75,-16);assert.equal(p.y,3.6);walk(p,6,-16);walk(p,6,-7);walk(p,-7,-7);assert.equal(p.y,3.6);walk(p,6,-7);walk(p,6,-16);walk(p,9.75,-16);walk(p,9.75,-5);assert.equal(p.y,0);walk(p,0,-5);walk(p,0,10);});
 test('左右房间前门及通往主宅的连廊均可通过',()=>{for(const x of[-16,16]){const p={x,y:0,z:9};walk(p,x,6);walk(p,x<0?-12:12,6);walk(p,x<0?-12:12,-6);walk(p,x<0?-12:12,-5);walk(p,x<0?-9:9,-5);}});
 test('楼板洞口严格对齐楼梯，头部净空足够',()=>{assert.equal(STAIRS.height,3.6);assert.ok(STAIRS.z2-STAIRS.z1>=8);for(let z=STAIRS.z2;z>=STAIRS.z1;z-=.1){const y=(STAIRS.z2-z)/(STAIRS.z2-STAIRS.z1)*3.6;assert.ok(y>=0&&y<=3.6);}});
