@@ -1,0 +1,7 @@
+import{PLAN_SCALE}from '../src/layout.mjs';
+import{createWorld}from '../src/world.mjs';import{writeFile}from 'node:fs/promises';import{human,dog,turtle,fish}from '../src/characters.mjs';
+const world=createWorld();const {root}=world;await writeFile(new URL('../assets/placements.json',import.meta.url),JSON.stringify({trees:world.trees.map(p=>({...p,x:p.x*PLAN_SCALE,z:p.z*PLAN_SCALE})),plants:world.plantSpots.map(p=>({...p,x:p.x*PLAN_SCALE,z:p.z*PLAN_SCALE}))}));
+for(const [name,x,z,options]of [['男主人',0,19,{}],['妻子',-6,-15.1,{female:true}],['孩子',0,16,{scale:.69}],['爷爷',-14,-3,{hair:0xc9c7b9}],['奶奶',12,16.9,{hair:0xbdbeb4,female:true}]]){let h=human(options);h.g.name=name;h.g.position.set(x,0,z);root.add(h.g);}
+for(let i=0;i<2;i++){let d=dog(i?0xe0ddd0:0xc79a63);d.g.name='小狗'+i;d.g.position.set(3+i,0,9);root.add(d.g);}
+const out=[];root.scale.set(PLAN_SCALE,1,PLAN_SCALE);root.updateMatrixWorld(true);root.traverse(o=>{if(!o.isMesh)return;const g=o.geometry.clone().applyMatrix4(o.matrixWorld);out.push({name:o.name||o.material.name||'庭院构件',positions:Array.from(g.attributes.position.array),uvs:g.attributes.uv?Array.from(g.attributes.uv.array):null,indices:g.index?Array.from(g.index.array):Array.from({length:g.attributes.position.count},(_,i)=>i),color:o.material.color.toArray(),roughness:o.material.roughness??.8,metalness:o.material.metalness??0,opacity:o.material.opacity??1});});
+await writeFile(new URL('../assets/scene-meshes.json',import.meta.url),JSON.stringify(out));console.log('已导出 '+out.length+' 组场景网格至 Blender 输入');

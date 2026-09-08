@@ -1,0 +1,115 @@
+{
+  "scope": "仅统计树木单次几何提交预算，尚未扣除视锥裁剪；不是实测 FPS 或整帧 GPU 耗时。",
+  "models": [
+    {
+      "id": "tree_small_02",
+      "near": 86086,
+      "medium": 16731,
+      "far": 4389
+    },
+    {
+      "id": "fern_02",
+      "near": 6232,
+      "medium": 6201,
+      "far": 3558
+    },
+    {
+      "id": "shrub_01",
+      "near": 14000,
+      "medium": 2580,
+      "far": 741
+    },
+    {
+      "id": "potted_plant_02",
+      "near": 29875,
+      "medium": 24879,
+      "far": 10694
+    }
+  ],
+  "scenarios": [
+    {
+      "view": "鸟瞰",
+      "quality": "flow",
+      "before": 3701698,
+      "after": 188727,
+      "reduction": "95%"
+    },
+    {
+      "view": "鸟瞰",
+      "quality": "balanced",
+      "before": 3701698,
+      "after": 188727,
+      "reduction": "95%"
+    },
+    {
+      "view": "鸟瞰",
+      "quality": "high",
+      "before": 3701698,
+      "after": 275121,
+      "reduction": "93%"
+    },
+    {
+      "view": "庭院",
+      "quality": "flow",
+      "before": 3701698,
+      "after": 307450,
+      "reduction": "92%"
+    },
+    {
+      "view": "庭院",
+      "quality": "balanced",
+      "before": 3701698,
+      "after": 455554,
+      "reduction": "88%"
+    },
+    {
+      "view": "庭院",
+      "quality": "high",
+      "before": 3701698,
+      "after": 787039,
+      "reduction": "79%"
+    },
+    {
+      "view": "书房",
+      "quality": "flow",
+      "before": 3701698,
+      "after": 238095,
+      "reduction": "94%"
+    },
+    {
+      "view": "书房",
+      "quality": "balanced",
+      "before": 3701698,
+      "after": 398541,
+      "reduction": "89%"
+    },
+    {
+      "view": "书房",
+      "quality": "high",
+      "before": 3701698,
+      "after": 824065,
+      "reduction": "78%"
+    },
+    {
+      "view": "二层卧室",
+      "quality": "flow",
+      "before": 3701698,
+      "after": 201069,
+      "reduction": "95%"
+    },
+    {
+      "view": "二层卧室",
+      "quality": "balanced",
+      "before": 3701698,
+      "after": 349173,
+      "reduction": "91%"
+    },
+    {
+      "view": "二层卧室",
+      "quality": "high",
+      "before": 3701698,
+      "after": 653026,
+      "reduction": "82%"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "grass": {
+    "source": "https://polyhaven.com/a/sparse_grass",
+    "license": "CC0",
+    "color": "/assets/pbr/grass-color.jpg",
+    "normal": "/assets/pbr/grass-normal.jpg",
+    "roughness": "/assets/pbr/grass-roughness.jpg"
+  },
+  "road": {
+    "source": "https://polyhaven.com/a/cobblestone_floor_08",
+    "license": "CC0",
+    "color": "/assets/pbr/road-color.jpg",
+    "normal": "/assets/pbr/road-normal.jpg",
+    "roughness": "/assets/pbr/road-roughness.jpg"
+  },
+  "wood": {
+    "source": "https://polyhaven.com/a/wood_planks_grey",
+    "license": "CC0",
+    "color": "/assets/pbr/wood-color.jpg",
+    "normal": "/assets/pbr/wood-normal.jpg",
+    "roughness": "/assets/pbr/wood-roughness.jpg"
+  },
+  "plaster": {
+    "source": "https://polyhaven.com/a/worn_plaster_wall",
+    "license": "CC0",
+    "color": "/assets/pbr/plaster-color.jpg",
+    "normal": "/assets/pbr/plaster-normal.jpg",
+    "roughness": "/assets/pbr/plaster-roughness.jpg"
+  },
+  "stone": {
+    "source": "https://polyhaven.com/a/rock_pitted_mossy",
+    "license": "CC0",
+    "color": "/assets/pbr/stone-color.jpg",
+    "normal": "/assets/pbr/stone-normal.jpg",
+    "roughness": "/assets/pbr/stone-roughness.jpg"
+  },
+  "roof": {
+    "source": "https://polyhaven.com/a/grey_roof_tiles",
+    "license": "CC0",
+    "color": "/assets/pbr/roof-color.jpg",
+    "normal": "/assets/pbr/roof-normal.jpg",
+    "roughness": "/assets/pbr/roof-roughness.jpg"
+  },
+  "bark": {
+    "source": "https://polyhaven.com/a/chinese_hackberry_bark",
+    "license": "CC0",
+    "color": "/assets/pbr/bark-color.jpg",
+    "normal": "/assets/pbr/bark-normal.jpg",
+    "roughness": "/assets/pbr/bark-roughness.jpg"
+  }
+}

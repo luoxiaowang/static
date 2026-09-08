@@ -1,0 +1,26 @@
+[
+  {
+    "id": "tree_small_02",
+    "near": 86086,
+    "medium": 16731,
+    "far": 4389
+  },
+  {
+    "id": "fern_02",
+    "near": 6232,
+    "medium": 6201,
+    "far": 3558
+  },
+  {
+    "id": "shrub_01",
+    "near": 14000,
+    "medium": 2580,
+    "far": 741
+  },
+  {
+    "id": "potted_plant_02",
+    "near": 29875,
+    "medium": 24879,
+    "far": 10694
+  }
+]

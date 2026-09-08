@@ -1,0 +1,8 @@
+node_modules/
+*.blend1
+
+# Download caches and reproducible intermediate geometry
+assets/downloaded/
+assets/scene-meshes.json
+
+.DS_Store
