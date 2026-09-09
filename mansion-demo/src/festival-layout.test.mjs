@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import{PLAN_SCALE,DEFAULT_VIEW,DEFAULT_QUALITY,excludeWildPlants}from './layout.mjs';import{DOORS,toggleDoor,doorBlocks}from './festival.mjs';import{placeShape}from './guide.mjs';
-test('默认庭院漫游、流畅模式，住宅和地下室平面面积倍增但层高不变',()=>{assert.equal(DEFAULT_VIEW,0);assert.equal(DEFAULT_QUALITY,'flow');assert.ok(Math.abs(PLAN_SCALE*PLAN_SCALE-2)<1e-12);});
+test('默认庭院漫游、流畅模式，住宅和地下室平面面积倍增但层高不变',()=>{assert.equal(DEFAULT_VIEW,0);assert.equal(DEFAULT_QUALITY,'flow');assert.ok(Math.abs(PLAN_SCALE*PLAN_SCALE-2*1.15**2)<1e-12);});
 test('大门与地下入口门关闭阻挡通行，打开允许通过，门口站人时禁止关门',()=>{for(const d of DOORS){try{d.open=true;d.angle=1;assert.equal(doorBlocks(d.x,d.z,d.y),false);assert.equal(toggleDoor(d.id,{x:d.x,z:d.z,y:d.y}),false);assert.equal(toggleDoor(d.id,{x:d.x+20,z:d.z+20,y:d.y}),true);d.angle=0;assert.equal(doorBlocks(d.x,d.z,d.y),true);assert.equal(toggleDoor(d.id,{x:d.x+20,z:d.z+20,y:d.y}),true);d.angle=1;assert.equal(doorBlocks(d.x,d.z,d.y),false);}finally{d.open=true;d.angle=1;}}});
 test('地下室和地库区域不生成野生花草',()=>{for(let x=-25;x<=-11;x++)for(let z=-19;z<=-7;z++)assert.ok(excludeWildPlants(x,z));assert.ok(excludeWildPlants(-17,20));assert.equal(excludeWildPlants(28,15),false);});
 test('立体地图采用房间、建筑、水面、园林和茶亭形状',()=>{assert.equal(new Set(['hall','garage','pond','orchard','rooftea'].map(placeShape)).size,5);});

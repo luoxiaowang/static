@@ -8,7 +8,7 @@ test('缓冲区不妨碍远距离及时使用简化模型',()=>{assert.equal(lod
 test('程序化水面法线启用 mipmap 和线性过滤，避免最近点采样跳变',()=>{const texture=new T.DataTexture(new Uint8Array(16*16*4),16,16);stableTexture(texture,4);assert.equal(texture.generateMipmaps,true);assert.equal(texture.minFilter,T.LinearMipmapLinearFilter);assert.equal(texture.magFilter,T.LinearFilter);assert.equal(texture.anisotropy,4);});
 
 test('三段楼梯真实网格开口有足够头部净空',()=>{
- for(const [x,z1,z2,base,reverse]of [[9.75,-14.5,-6,0,false],[7.75,-15,-6,3.6,true],[-23.5,-17,-7,-3.6,true]]){
+ for(const [x,z1,z2,base,reverse]of [[9.75,-14.5,-6,0,true],[7.75,-15,-6,3.6,false],[-23.5,-17,-7,-3.6,true]]){
   for(let z=z1+.15;z<z2-.1;z+=.25){const t=(z2-z)/(z2-z1),y=base+(reverse?1-t:t)*3.6;
    const hits=new T.Raycaster(new T.Vector3(x,y+.24,z),new T.Vector3(0,1,0),0,1.44).intersectObject(world.root,true);
    assert.equal(hits.length,0,`楼梯 ${x},${z} 高度 ${y} 存在头部遮挡：${hits[0]?.object.material.name}`);

@@ -2,7 +2,7 @@ import * as T from 'three';
 export function placeShape(id){if(['pond','pool','river'].includes(id))return 'water';if(['tea','rooftea'].includes(id))return 'pavilion';if(['orchard','flowers','roofgarden'].includes(id))return 'garden';if(['garage','market'].includes(id))return 'building';return 'room';}
 export const DESTINATIONS=[
  ['entry','庭院入口',0,0,27,'ground'],['hall','一楼客厅',0,0,-8,'ground'],['coffee','咖啡吧',5,0,-13.5,'ground'],['kitchen','厨房',-3.5,0,-14.8,'ground'],['library','书房',-17,0,2.8,'ground'],['annex','西翼会客厅',-19,0,-15,'ground'],['dining','客餐厅',12,0,3,'ground'],['tea','庭院茶席',8,0,14.1,'ground'],['pond','锦鲤池',-5,0,13.55,'ground'],['pool','泳池',15.3,0,7.8,'ground'],['flowers','庭院花圃',15,0,16.9,'ground'],['orchard','果园',-28,0,11,'ground'],['garage','越野车车库',-14.3,0,23,'ground'],['swing','庭院秋千',-9.5,0,23.4,'ground'],['market','街道集市',0,0,36,'ground'],['river','河畔步道',0,0,48,'ground'],
- ['master','二楼主卧',-7,3.6,-7,'upper'],['child','儿童房',0,3.6,-8.9,'upper'],['bath','二楼卫浴',6,3.6,-15.4,'upper'],
+ ['playterrace','儿童游乐阳台',13,3.6,-5,'upper'],['balcony','主卧屋顶阳台',-16,3.6,-10,'upper'],['master','二楼主卧',-7,3.6,-9,'upper'],['child','儿童房',0,3.6,-8.9,'upper'],['bath','二楼卫浴',6,3.6,-15.4,'upper'],
  ['rooftea','天台茶亭',-4,7.2,-7.8,'roof'],['roofgarden','天台花园',3,7.2,-10,'roof'],['roofswing','天台秋千',2,7.2,-5.5,'roof'],
  ['storage','地下储物间',-20,-3.6,-15,'basement'],['games','电竞房',-14,-3.6,-15,'basement'],['ktv','KTV',-20,-3.6,-11.7,'basement'],['cinema','地下影音客厅',-14,-3.6,-11.7,'basement']
 ].map(([id,name,x,y,z,level])=>({id,name,x,y,z,level}));
@@ -14,6 +14,7 @@ export function createGuide({dialog,host,list,tabs,onTeleport,onOpen,onClose}){
  function selectLevel(next){level=next;zoom=1;objects=[];labelItems=[];labels.replaceChildren();scene?.traverse(o=>{o.geometry?.dispose();if(o.material)o.material.dispose();});scene=new T.Scene();scene.background=new T.Color('#172d29');scene.add(new T.HemisphereLight(0xf1eee2,0x385249,2.5));const light=new T.DirectionalLight(0xffdec0,3);light.position.set(-20,40,20);scene.add(light);
   if(level==='ground'){target.set(0,0,13);box(0,-.7,12,68,1,78,0x52705a);box(0,1.8,-11,22,3.6,14,0xc6c2ac);box(-16,1.5,-6,10,3,26,0xbba989);box(16,1.5,-.5,10,3,15,0xbba989);box(-17,1.5,20,8,3,8,0x8c9e92);box(0,.02,40,10,.12,20,0x9b9584);box(0,.02,52,68,.12,6,0x528f9b);box(20.5,.05,11,7,.15,16,0x528f9b);box(-5,.05,10,8,.15,5,0x528f9b);}
   else {target.set(level==='basement'?-18:0,0,level==='basement'?-13:-11);box(target.x,-.3,target.z,level==='basement'?14:22,.5,level==='basement'?12:14,0x8e9d86);}
+  if(level==='upper'){box(-16,-.3,-6,10,.5,26,0xbba989);box(16,-.3,-.5,10,.5,15,0xb5cbb9);}
   list.replaceChildren();for(const dest of DESTINATIONS.filter(d=>d.level===level)){
    const shape=placeShape(dest.id),geometry=shape==='water'?new T.CylinderGeometry(1.5,1.5,.12,32):shape==='pavilion'?new T.ConeGeometry(1.5,1,32):shape==='garden'?new T.IcosahedronGeometry(1.1,1):new T.BoxGeometry(2.3,shape==='building'?1.4:.22,1.6);
    const marker=new T.Mesh(geometry,new T.MeshStandardMaterial({color:shape==='water'?0x69a9ba:shape==='garden'?0x87a865:0xefc78a,roughness:.8}));marker.position.set(dest.x,level==='ground'?4.1:.5,dest.z);if(shape==='water')marker.scale.z=.65;marker.userData.destination=dest;scene.add(marker);objects.push(marker);

@@ -57,7 +57,7 @@ export function addDetails(a){
  round(4.8,base+.24,-14.3,.48,.48,.65,ceramic,.14);round(4.8,base+.51,-14.3,.48,.06,.63,ceramic,.16);box(4.8,base+.68,-14.6,.48,.55,.15,ceramic);obstacle(4.8,-14.3,.5,.7,base,.95);
  // Master wardrobe, bedside tables and reading sconces.
  for(let z of [-16.8,-15.6,-14.4]){box(-10.55,4.9,z,.55,2.6,1.15,wood,true);box(-10.24,4.9,z,.03,.6,.025,bronze);}
- for(let x of [-9,-5]){round(x,3.91,-14.5,.65,.62,.62,oak,.05);vessel(x,4.23,-14.5,.09,.2,bronze);ell(x,4.52,-14.5,.18,.19,.18,linen);light(x,4.5,-14.5,3,4);}
+ for(let x of [-9.65,-6.35]){round(x,3.91,-16.2,.65,.62,.62,oak,.05);vessel(x,4.23,-16.2,.09,.2,bronze);ell(x,4.52,-16.2,.18,.19,.18,linen);light(x,4.5,-16.2,3,4);}
  // Pool sun loungers and low garden benches.
  for(let z of [10,12.8,15.6]){
   let g=new T.Group();architecture.add(g);g.position.set(15.1,0,z);g.rotation.y=-Math.PI/2;

@@ -35,7 +35,7 @@ export function addDistrict(a){
   for(let k=0;k<3;k++)cyl(x+.83,b+.25+k*.17,-17.28,.05,.02,lightmat).rotation.x=Math.PI/2;
  }
  sign('电竞房',-14,b+2.5,-18.65);
- sofa(-20.5,-9.2,Math.PI,b);table(-20.5,-10.8,1.8,.8,b);television(-20.3,-12.5,b,2.2);
+ // KTV furniture is supplied by the pastel room theme.
  for(const x of [-21.8,-18.8]){box(x,b+.55,-12.2,.32,1.1,.35,dark);for(const y of [.3,.7]){const speaker=cyl(x,b+y,-11.99,.1,.02,dark);speaker.rotation.x=Math.PI/2;}}
  cyl(-19.1,b+.85,-10.7,.025,1.7,dark);ell(-19.1,b+1.76,-10.7,.055,.11,.055,dark);sign('KTV · 轻唱时光',-20.2,b+2.5,-12.4);
  sofa(-14.3,-9.1,Math.PI,b);table(-14.3,-10.8,2,.9,b);television(-14,-12.5,b,2.5);sign('地下影音客厅',-14,b+2.5,-12.4);

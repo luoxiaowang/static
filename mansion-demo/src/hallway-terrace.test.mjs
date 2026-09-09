@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createWorld} from './world.mjs';import {movePlayer,canMove,groundHeight} from './navigation.mjs';import {DESTINATIONS} from './guide.mjs';
+const world=createWorld();function walk(p,x,z){movePlayer(p,x-p.x,z-p.z);assert.ok(Math.hypot(p.x-x,p.z-z)<.09,`目标 ${x},${z} 实际 ${p.x},${p.z}`);}
+test('从二楼楼梯平台直接进儿童阳台，绕设施到沙池再原路返回',()=>{const p={x:9.75,y:3.6,z:-5};walk(p,13,-5);walk(p,14,-5);walk(p,14,1.5);walk(p,12.9,1.5);walk(p,13,-5);walk(p,9.75,-5);assert.equal(p.y,3.6);});
+test('阳台护栏阻挡越界、滑梯结构有碰撞、地面不延伸到天台楼层',()=>{for(const [x,z]of [[21,-2],[16,7],[16,-8],[11,2],[17,-1]])assert.equal(canMove(x,z,3.6),false);assert.equal(groundHeight(14,0,3.6),3.6);assert.ok(Number.isNaN(groundHeight(14,0,7.2)));assert.ok(DESTINATIONS.some(d=>d.id==='playterrace'&&canMove(d.x,d.z,d.y)));});
+test('走道装饰保留卧室入口，阳台有陪护座椅与独立材质分区',()=>{for(const x of [-7,0])assert.ok(canMove(x,-8,3.6));for(const name of ['走廊几何墙纸','走廊摄影0','滑梯晴空蓝','儿童软垫'])assert.ok(world.merged.children.some(m=>m.material.name===name));assert.ok(world.seats.some(s=>s.x===12.1&&s.y===3.6));});
