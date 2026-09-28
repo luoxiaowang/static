@@ -45,9 +45,9 @@ export function addDistrict(a){
  for(const x of [-21,-15])for(const z of [-17,-9])box(x,-.45,z,2.4,.04,.08,lightmat);
  // Roof terrace: continuous walkable slab, railing, tea pergola and flowers.
  for(const z of [-18,-4]){box(0,7.75,z,22,1.1,.04,glass,true);box(0,8.32,z,22,.045,.055,dark);}
- for(const x of [-11,11]){box(x,7.75,-11,.04,1.1,14,glass,true);box(x,8.32,-11,.055,.045,14,dark);}
+ for(const x of [-11,11])for(const [z,d]of (x===-11?[[-15.2,5.6],[-7.5,7]]:[[-11,14]])){box(x,7.75,z,.04,1.1,d,glass,true);box(x,8.32,z,.055,.045,d,dark);}
  for(const x of [-8,-4,0,4])planter(x,-17,2.8,.9,7.2);
- for(const z of [-12,-8])planter(-10,z,.9,2.5,7.2);
+ for(const z of [-14,-8])planter(-10,z,.9,2.5,7.2);
  table(-4,-10,2.5,1.3,7.2);for(const x of [-4.8,-3.2]){chair(x,-8.8,Math.PI,7.2);seats.push({x,z:-8.8,y:7.2,rotation:Math.PI,type:'sit'});}chair(-4,-11.2,0,7.2);
  cyl(-4,8.14,-10,.18,.22,mat('青瓷',0x789787));for(const x of [-4.7,-3.3])cyl(x,8.07,-10,.075,.12,linen);
  for(let i=0;i<4;i++){const angle=Math.PI/4+i*Math.PI/2;box(-4+Math.cos(angle)*3.65,8.55,-10+Math.sin(angle)*3.65,.085,2.7,.085,dark,true);}

@@ -17,7 +17,7 @@ test('两段楼梯反向衔接，公共平台可继续去天台并返回',()=>{
  const p={x:8.7,y:0,z:-5};walk(p,8.7,-16);walk(p,9.75,-16);walk(p,9.75,-5);assert.equal(p.y,3.6);walk(p,7.75,-5);walk(p,7.75,-16);assert.equal(p.y,7.2);walk(p,6,-16);walk(p,6,-5);walk(p,0,-5);walk(p,0,-7.8);walk(p,-4,-7.8);walk(p,0,-7.8);walk(p,0,-5);walk(p,6,-5);walk(p,6,-16);walk(p,7.75,-16);walk(p,7.75,-5);assert.equal(p.y,3.6);walk(p,9.75,-5);walk(p,9.75,-16);assert.equal(p.y,0);
 });
 test('西侧庭院可下地下室并到达四个功能房间，原路返回地面',()=>{
- const p={x:-23.5,y:0,z:-5};walk(p,-23.5,-18);assert.equal(p.y,-3.6);walk(p,-22,-18);walk(p,-22,-15);walk(p,-20,-15);walk(p,-17.5,-15);walk(p,-14,-15);walk(p,-17.5,-15);walk(p,-17.5,-11.7);walk(p,-20,-11.7);walk(p,-17.5,-11.7);walk(p,-14,-11.7);walk(p,-17.5,-11.7);walk(p,-17.5,-15);walk(p,-22,-15);walk(p,-22,-18);walk(p,-23.5,-18);walk(p,-23.5,-5);assert.equal(p.y,0);
+ const p={x:-23.5,y:0,z:-5};walk(p,-23.5,-18);assert.equal(p.y,-3.6);walk(p,-22,-18);walk(p,-22,-15);walk(p,-20,-15);walk(p,-17.5,-15);walk(p,-14,-15);walk(p,-17.5,-15);walk(p,-16.6,-15);walk(p,-16.6,-10.4);walk(p,-19,-10.4);walk(p,-19,-11.7);walk(p,-20,-11.7);walk(p,-19,-11.7);walk(p,-19,-10.4);walk(p,-16.6,-10.4);walk(p,-16.6,-11.7);walk(p,-14,-11.7);walk(p,-16.6,-11.7);walk(p,-16.6,-15);walk(p,-17.5,-15);walk(p,-22,-15);walk(p,-22,-18);walk(p,-23.5,-18);walk(p,-23.5,-5);assert.equal(p.y,0);
 });
 test('扩大后的院门通往两侧集市及河岸，河水不可步入',()=>{const p={x:0,y:0,z:23};walk(p,0,31);walk(p,0,39);walk(p,6,39);walk(p,6,48);walk(p,0,48);movePlayer(p,0,10);assert.ok(p.z<=49);});
 test('西翼新增会客厅连通书房，一楼无卧床',()=>{const p={x:-16,y:0,z:-5};walk(p,-16,-8.8);walk(p,-19,-8.8);walk(p,-19,-15);assert.equal(p.y,0);assert.ok(!world.seats.some(s=>s.y===0&&s.type==='lie'&&!s.outdoor));});

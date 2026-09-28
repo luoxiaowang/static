@@ -1,6 +1,7 @@
 import * as T from 'three';
 export function placeShape(id){if(['pond','pool','river'].includes(id))return 'water';if(['tea','rooftea'].includes(id))return 'pavilion';if(['orchard','flowers','roofgarden'].includes(id))return 'garden';if(['garage','market'].includes(id))return 'building';return 'room';}
 export const DESTINATIONS=[
+ ...[['liftB','地下电梯厅',-3.6,'basement'],['liftG','一楼电梯厅',0,'ground'],['liftU','二楼电梯厅',3.6,'upper'],['liftR','天台电梯厅',7.2,'roof']].map(([id,name,y,level])=>[id,name,-16.6,y,-11.7,level]),
  ['entry','庭院入口',0,0,27,'ground'],['hall','一楼客厅',0,0,-8,'ground'],['coffee','咖啡吧',5,0,-13.5,'ground'],['kitchen','厨房',-3.5,0,-14.8,'ground'],['library','书房',-17,0,2.8,'ground'],['annex','西翼会客厅',-19,0,-15,'ground'],['dining','客餐厅',12,0,3,'ground'],['tea','庭院茶席',8,0,14.1,'ground'],['pond','锦鲤池',-5,0,13.55,'ground'],['pool','泳池',15.3,0,7.8,'ground'],['flowers','庭院花圃',15,0,16.9,'ground'],['orchard','果园',-28,0,11,'ground'],['garage','越野车车库',-14.3,0,23,'ground'],['swing','庭院秋千',-9.5,0,23.4,'ground'],['market','街道集市',0,0,36,'ground'],['river','河畔步道',0,0,48,'ground'],
  ['playterrace','儿童游乐阳台',13,3.6,-5,'upper'],['balcony','主卧屋顶阳台',-16,3.6,-10,'upper'],['master','二楼主卧',-7,3.6,-9,'upper'],['child','儿童房',0,3.6,-8.9,'upper'],['bath','二楼卫浴',6,3.6,-15.4,'upper'],
  ['rooftea','天台茶亭',-4,7.2,-7.8,'roof'],['roofgarden','天台花园',3,7.2,-10,'roof'],['roofswing','天台秋千',2,7.2,-5.5,'roof'],
