@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23c7df79%27/%3E%3Cpath d=%27M16 6L25 11V21L16 26L7 21V11Z%27 fill=%27none%27 stroke=%27%2334492d%27 stroke-width=%272%27/%3E%3C/svg%3E"><meta name="theme-color" content="#eaf0df"><meta name="description" content="丰巢武汉研发中心 1024 程序员节互动三维场景。与王金枝和伙伴们一起，发现柜机彩蛋，点亮节日烟花。">
+<title>丰巢武汉 · 一起，绽放 1024</title>
+<style>/*STYLE*/</style>
+</head>
+<body class="is-intro">
+<main class="experience" aria-label="丰巢武汉研发中心三维场景">
+ <canvas id="scene" class="scene" tabindex="0" aria-label="三维场景，用 WASD 或方向键移动，拖动鼠标转向，E 键交互"></canvas>
+ <div class="shade" aria-hidden="true"></div>
+ <div id="labels" class="labels" aria-hidden="true"></div>
+ <header class="masthead">
+  <div class="brand"><span class="brand__symbol" aria-hidden="true">⬡</span><div><strong>丰巢<span class="brand__divider">/</span>武汉研发中心</strong><span class="brand__caption">把热爱写进代码，把快乐留在此刻。</span></div></div>
+  <div class="masthead__actions"><span class="day-tag"><i></i> 十月二十四日 · 程序员节</span><button id="sound" class="icon-button" aria-pressed="false" title="开启音效">音效：关</button><span id="view" class="icon-button" hidden>第三人称</span></div>
+ </header>
+ <section id="intro" class="intro">
+  <span class="eyebrow"><span></span> 一份写给伙伴们的节日惊喜</span>
+  <h1>今天的快乐，<br>不止 <em>1024</em> 种。</h1>
+  <p>来到熟悉的公司门口。<br>和王金枝一起，发现一份小惊喜，<br>再与伙伴们点亮同一片天空。</p>
+  <button id="start" class="primary-button" disabled>正在布置广场… <span>↗</span></button>
+  <span class="intro__hint">自由漫步 · 柜机彩蛋 · 八人烟花派对</span>
+ </section>
+ <div id="intro-badge" class="intro-badge"><strong>相聚的每一刻<br>都值得闪光。</strong><span>武汉研发中心 · 伙伴限定</span></div>
+ <aside id="missions" class="missions" hidden aria-label="节日体验进度">
+  <span class="eyebrow">今日，一起完成</span>
+  <div id="mission-locker" class="mission"><span class="mission__dot"></span><div>发现柜机里的惊喜<small>左侧快递柜 · 点击任意服务</small></div><span class="mission__check"></span></div>
+  <div id="mission-firework" class="mission"><span class="mission__dot"></span><div>和伙伴点亮 1024<small>门前广场 · 点燃节日烟花</small></div><span class="mission__check"></span></div>
+ </aside>
+ <div id="crosshair" class="crosshair" hidden aria-hidden="true"></div>
+ <div id="interaction" class="interaction" hidden><span id="interaction-hint"></span><button id="interact"><kbd>E</kbd><span id="interaction-label">开始操作</span><span>↗</span></button></div>
+ <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+ <section id="festival-caption" class="festival-caption" hidden aria-live="polite"><span id="festival-kicker"></span><strong id="festival-title"></strong><p id="festival-description"></p></section>
+ <footer id="toolbar" class="toolbar" hidden>
+  <div class="player-card"><span class="player-card__avatar">王</span><div><strong>王金枝 <span>你</span></strong><small id="player-state">正在自由漫步</small></div></div>
+  <nav class="destinations" aria-label="步行导航"><button id="go-locker"><span aria-hidden="true">▤</span><div>走向快递柜<small>发现一份惊喜</small></div><span>↗</span></button><button id="go-firework"><span aria-hidden="true">✧</span><div>走向烟花<small>和伙伴一起庆祝</small></div><span>↗</span></button></nav>
+  <div class="control-hints"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动</span><span>拖动 转向 · <kbd>E</kbd> 交互</span></div>
+ </footer>
+ <div id="map" class="map" hidden><div><span>广场导览</span><span>北 ↑</span></div><canvas id="minimap" width="360" height="230" aria-label="实时显示伙伴位置的广场小地图"></canvas><small><i></i> 你的位置 <span>● 伙伴</span></small></div>
+ <div id="touch-controls" class="touch-controls" hidden><div id="joystick" class="joystick" aria-label="拖动圆盘移动"><span id="joystick-knob"></span></div><span class="touch-controls__hint">左手移动 · 右侧滑动转向</span></div>
+ <div id="loading" class="loading"><span class="loading__dot"></span><span>正在准备你的节日惊喜</span></div>
+ <div id="error" class="error-panel" hidden role="alert"><h2>三维场景暂时无法显示</h2><p id="error-message">请使用支持 WebGL 2 的现代浏览器，并开启硬件加速。</p><button onclick="location.reload()">重新加载</button></div>
+</main>
+<dialog id="terminal" class="terminal" aria-labelledby="terminal-title">
+ <div class="terminal__shell">
+  <div class="terminal__bar"><div><i></i><span id="terminal-title">丰巢智能快递柜</span></div><button id="exit-terminal">退出操作 <kbd>Esc</kbd></button></div>
+  <div class="terminal__display">
+   <section id="terminal-home" class="terminal__home">
+    <div class="terminal__header"><strong>⬡ 丰巢</strong><span>中国好快递 · 丰巢好服务</span><time>10月24日</time></div>
+    <div class="service-banner"><div><span>好服务，为生活加分</span><h2>空调清洗季</h2><p>清除灰尘污垢 · 高温杀菌消毒</p><button data-service="空调清洗">焕新好空气 →</button></div><svg viewBox="0 0 150 185" aria-label="身穿绿色工作服的服务人员" role="img"><ellipse cx="80" cy="180" rx="62" ry="5" fill="#cddcbd"/><path d="M25 182V125Q29 98 78 100Q124 98 132 128V182" fill="#273e3f"/><path d="M55 105V141H108V105M48 138H114L123 182H38Z" fill="#a8d133" stroke="#a8d133" stroke-width="8"/><rect x="66" y="88" width="24" height="25" rx="8" fill="#eac1a1"/><ellipse cx="78" cy="60" rx="36" ry="43" fill="#f1c8a9"/><path d="M42 57Q24 10 79 9Q126 12 114 55L96 33Q71 48 44 36Z" fill="#273c3e"/><circle cx="65" cy="62" r="3" fill="#233735"/><circle cx="92" cy="62" r="3" fill="#233735"/><path d="M69 82Q78 89 89 81" fill="none" stroke="#9d6654" stroke-width="3" stroke-linecap="round"/><path d="M20 124L12 81" stroke="#edbf9c" stroke-width="18" stroke-linecap="round"/><rect x="2" y="56" width="16" height="41" rx="3" fill="#334c4a" transform="rotate(-15 10 75)"/><rect x="9" y="43" width="3" height="20" fill="#334c4a"/><rect x="63" y="147" width="28" height="20" rx="3" fill="#e9f4c5"/></svg></div>
+    <div class="service-grid"><section class="service-panel"><h3>储物服务</h3><div class="service-panel__row"><button data-service="储物下单"><span>▣</span>储物下单</button><button data-service="存被开门"><span>▣</span>存被开门</button></div></section><section class="service-panel"><h3>生活服务 <small>让生活更简单</small></h3><button data-service="洗衣洗鞋" class="laundry"><span>♧</span><div>洗衣洗鞋<small>焕享洁净生活</small></div></button></section></div>
+    <section class="service-panel express"><h3>快递服务</h3><div class="express__row"><button data-service="取快递"><span class="parcel-icon">▰</span><strong>取快递</strong><small>每一份期待，都在这里</small></button><button data-service="寄快递"><span class="parcel-icon">➤</span><strong>寄快递</strong><small>把心意，送到远方</small></button></div></section>
+    <div class="service-extras"><button data-service="免费领"><span>♔</span><div>免费领<small>好礼等你来</small></div></button><button data-service="空调清洗"><span>▱</span><div>空调清洗<small>清新好空气</small></div></button><button data-service="新人有礼"><span>礼</span><div>新人有礼<small>打开新惊喜</small></div></button></div>
+    <button data-service="快递员登录" class="courier">快递员 / 配送员登录 ›</button>
+   </section>
+   <section id="terminal-surprise" class="terminal__surprise" hidden><canvas id="confetti" aria-hidden="true"></canvas><span class="surprise__eyebrow">这一次，为写代码的你派送快乐</span><strong class="surprise__number">1024</strong><h2>丰巢程序员<br>节日快乐</h2><p>每一行代码，都在让美好发生。<br>谢谢你，让千万份期待准时抵达。</p><span class="surprise__signature">丰巢 · 武汉研发中心</span><button id="back-services">返回服务首页 ↗</button></section>
+  </div>
+  <div class="terminal__foot">节日互动场景 · 点击任意服务，解锁 1024 彩蛋</div>
+ </div>
+</dialog>
+<script>/*SCRIPT*/</script>
+</body>
+</html>
