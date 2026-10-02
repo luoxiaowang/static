@@ -1,8 +1,8 @@
 {
-  "entryBytes": 21190,
-  "appBytes": 834036,
-  "initialBytes": 855226,
-  "offlineBytes": 53962074,
+  "entryBytes": 21263,
+  "appBytes": 844228,
+  "initialBytes": 865491,
+  "offlineBytes": 53972339,
   "deferredAssets": 23,
   "initialModelRequests": 0,
   "note": "静态构建体积，不是设备实测加载时间；基础几何进入后按需加载模型和贴图。"

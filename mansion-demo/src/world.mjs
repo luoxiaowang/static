@@ -1,3 +1,4 @@
+import {addOffice} from './office-building.mjs';
 import {cutLiftFloor,LIFT} from './house-mobility.mjs';
 import {addHallwayTerrace} from './hallway-terrace.mjs';
 import {addWallDecor} from './wall-decor.mjs';
@@ -36,7 +37,7 @@ export function createWorld(materials={}){
  box(-28.75,-.25,5,8.5,.4,50,grass);box(5.25,-.25,5,55.5,.4,50,grass);
  box(-23.5,-.25,-18.5,2,.4,3,grass);box(-23.5,-.25,11.5,2,.4,37,grass);
  const lake=box(0,-.13,-55,170,.08,48,mat('远湖',0x7eaaa2,{roughness:.17,metalness:.35}));
- for(let i=0;i<38;i++){const a=i/38*Math.PI*2;let x=Math.cos(a)*(33+rand()*13),z=Math.sin(a)*(31+rand()*13);if(!(z>29&&Math.abs(x)<14))tree(x,z,1.1+rand()*1.2);}
+ for(let i=0;i<38;i++){const a=i/38*Math.PI*2;let x=Math.cos(a)*(33+rand()*13),z=Math.sin(a)*(31+rand()*13);if(!(z>29&&Math.abs(x)<14)&&!(x>33&&z>0))tree(x,z,1.1+rand()*1.2);}
  // Courtyard stone and timber thresholds remain flush for accessible navigation.
  box(0,-.025,1.5,21.8,.05,11,paving);box(0,0,18,4,.045,14,paving);
  for(let x=-9;x<=9;x+=2)for(let z=-2;z<7;z+=2){box(x,.007,z,1.97,.035,1.97,paving);}
@@ -162,6 +163,7 @@ export function createWorld(materials={}){
  addWallDecor({box,mat});
  addHallwayTerrace({box,cyl,ell,branch,mat,wood,oak,dark,glass,linen,lightmat,plaster,seats,obstacle,plant});
  box(-14.3,7.1,-11.7,8.1,.2,1.4,paving);for(const z of [-12.4,-11])box(-14.3,7.85,z,8.1,1.3,.05,glass,true);
+ addOffice({box,mat,branch,root});
  // Merge static geometry by material: hundreds of books and foliage become a few draw calls.
  architecture.updateMatrixWorld(true);const groups=new Map();architecture.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.clone().applyMatrix4(o.matrixWorld);if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));if(!geo.attributes.uv)geo.setAttribute('uv',new T.BufferAttribute(new Float32Array(geo.attributes.position.count*2),2));if(o.material.userData.worldUV){const p=geo.attributes.position,n=geo.attributes.normal,uv=geo.attributes.uv;for(let i=0;i<p.count;i++){const nx=Math.abs(n.getX(i)),ny=Math.abs(n.getY(i)),nz=Math.abs(n.getZ(i));const tile=o.material.name==='草地'?3:2;uv.setXY(i,(nx>ny&&nx>nz?p.getZ(i):p.getX(i))/tile,(ny>nx&&ny>nz?p.getZ(i):p.getY(i))/tile);}}geo.computeBoundingSphere();const center=new T.Vector3().setFromMatrixPosition(o.matrixWorld),zone=geometryZone(center.x,center.y,center.z,geo.boundingSphere.radius>18);const key=o.material.uuid+':'+zone;const batch=groups.get(key)||{material:o.material,zone,geos:[]};batch.geos.push(geo);groups.set(key,batch);});
  root.remove(architecture);const merged=new T.Group();root.add(merged);for(const {material:m,zone,geos}of groups.values()){const g=mergeGeometries(geos,false);if(!g)throw Error('模型合并失败');const mesh=new T.Mesh(g,m);mesh.castShadow=m.name!=='玻璃';mesh.receiveShadow=true;mesh.name=m.name;mesh.userData.zone=zone;mesh.frustumCulled=true;merged.add(mesh);geos.forEach(g=>g.dispose());}

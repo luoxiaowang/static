@@ -9,8 +9,8 @@ export function cutLiftFloor(x,z,w,d){
  return out;
 }
 export class Elevator{
- constructor(){this.y=0;this.phase='idle';this.door=1;this.target=0;this.origin=0;this.passenger=false;this.boarding=0;this.exiting=0;}
- request(origin,target){if(this.phase!=='idle'||!FLOORS.some(f=>f.y===origin)||!FLOORS.some(f=>f.y===target)||origin===target)return false;this.origin=origin;this.target=target;this.boarding=this.exiting=0;this.phase=Math.abs(this.y-origin)<.001?(this.door===1?'board':'pickupOpen'):'recallClose';this.passenger=this.phase==='board';return true;}
+ constructor(floors=FLOORS){this.floors=floors;this.y=0;this.phase='idle';this.door=1;this.target=0;this.origin=0;this.passenger=false;this.boarding=0;this.exiting=0;}
+ request(origin,target){if(this.phase!=='idle'||!this.floors.some(f=>f.y===origin)||!this.floors.some(f=>f.y===target)||origin===target)return false;this.origin=origin;this.target=target;this.boarding=this.exiting=0;this.phase=Math.abs(this.y-origin)<.001?(this.door===1?'board':'pickupOpen'):'recallClose';this.passenger=this.phase==='board';return true;}
  update(dt){dt=Math.min(.1,Math.max(0,dt));const approach=(a,b,s)=>a+Math.sign(b-a)*Math.min(Math.abs(b-a),s);
  if(this.phase==='recallClose'||this.phase==='close'){this.door=approach(this.door,0,dt*2);if(!this.door)this.phase=this.phase==='close'?'travel':'recall';}
  else if(this.phase==='recall'||this.phase==='travel'){const goal=this.phase==='recall'?this.origin:this.target;this.y=approach(this.y,goal,dt*1.8);if(this.y===goal)this.phase=this.phase==='recall'?'pickupOpen':'open';}
