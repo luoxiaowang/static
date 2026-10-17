@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f3e8">
+<meta name="description" content="跟着一只鹈鹕，骑向海风。一个可以暂停、调速的海岸骑行小动画。">
+<title>鹈鹕慢骑 · A little coastal ride</title>
+<style>
+:root{color-scheme:light;--ink:#263f3b;--paper:#f7f3e8;--orange:#e57746}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}main{max-width:1400px;margin:auto;padding:30px 5vw 24px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #263f3b30;padding-bottom:20px;font-size:12px;letter-spacing:2px}.brand{display:flex;align-items:center;gap:10px;font-weight:750}.brand svg{width:30px;height:30px}.edition{font-size:10px;letter-spacing:1.8px}.intro{margin:46px 0 26px;display:flex;justify-content:space-between;align-items:flex-end}.eyebrow{font-size:10px;letter-spacing:3px;color:#71817a;margin:0 0 14px}h1{font-size:clamp(36px,5.2vw,70px);font-weight:650;letter-spacing:-2px;line-height:1.15;margin:0}h1 span{color:var(--orange)}.intro p:last-child{font-size:13px;line-height:1.9;color:#687a73;margin:0 0 3px}.postcard{position:relative;background:#e3eee4;border:1px solid #263f3b20;border-radius:22px;overflow:hidden}.scene{display:block;width:100%;height:auto}.stamp{position:absolute;top:24px;left:28px;font-size:10px;letter-spacing:2px;display:flex;align-items:center;gap:8px}.dot{width:6px;height:6px;background:#db8053;border-radius:50%}.caption{position:absolute;right:25px;top:24px;font-family:Georgia,serif;font-style:italic;font-size:14px;color:#687f70}.controls{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-top:22px;padding:18px 0;border-bottom:1px solid #263f3b30}.transport{display:flex;align-items:center;gap:15px}button{border:0;border-radius:50%;background:var(--ink);color:var(--paper);width:48px;height:48px;cursor:pointer;font-size:18px}button:hover{background:#42655c}button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:5px}.status{font-size:13px;font-weight:600}.sub{display:block;font-size:10px;letter-spacing:1px;color:#78877e;margin-top:6px}.speed{display:flex;align-items:center;gap:14px;font-size:12px}input{accent-color:var(--ink);width:140px;cursor:pointer}output{min-width:32px;font-variant-numeric:tabular-nums}.note{font-family:Georgia,serif;font-size:14px;font-style:italic;color:#7f8b7e}footer{display:flex;justify-content:space-between;padding-top:20px;font-size:10px;letter-spacing:1px;color:#78877e}.wheel{stroke:#29473e;stroke-width:3}.spokes{stroke:#6f8c7a;stroke-width:1.8}.bike{fill:none;stroke:#db6845;stroke-width:8;stroke-linejoin:round;stroke-linecap:round}@media(max-width:650px){main{padding:22px 6vw}.edition{font-size:8px}.intro{margin-top:32px;display:block}.intro p:last-child{margin-top:18px;font-size:12px}.postcard{border-radius:16px}.scene{height:390px;width:100%;object-fit:cover}.stamp{top:17px;left:18px;font-size:8px}.caption{display:none}.controls{gap:12px;flex-wrap:wrap}.note{display:none}.speed{gap:8px}input{width:90px}.status{font-size:12px}footer{font-size:8px;gap:12px}h1{letter-spacing:-1px}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor"/><path d="M8 21Q19 27 20 12Q23 12 27 15L20 16M13 22Q10 17 15 17" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>闲游俱乐部</div><span class="edition">THE SLOW DAYS CLUB / NO. 001</span></header>
+<section class="intro"><div><p class="eyebrow">A LITTLE COASTAL RIDE</p><h1>今天，<span>慢慢骑。</span></h1></div><p>海风刚好，目的地不重要。<br>和鹈鹕先生一起，绕远路回家。</p></section>
+<section class="postcard" aria-label="鹈鹕骑自行车的海岸动画"><div class="stamp"><span class="dot"></span>海岸公路 · 晴 · 24°C</div><span class="caption">Somewhere, by the sea.</span>
+<svg class="scene" viewBox="0 0 1200 530" role="img" aria-labelledby="scene-title scene-desc" preserveAspectRatio="xMidYMid slice">
+<title id="scene-title">一只鹈鹕骑着珊瑚红自行车，在海岸公路上悠闲前行</title><desc id="scene-desc">奶白色鹈鹕有一张长长的橙色大喙，戴绿色帽子和飘动的围巾，双脚踩踏，车轮转动，海浪、云朵和路边植物缓缓向后移动。</desc>
+<defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#e1ece2"/><stop offset="1" stop-color="#f5ecd2"/></linearGradient><pattern id="waves" width="180" height="32" patternUnits="userSpaceOnUse"><path d="M10 16h38m60 0h20" fill="none" stroke="#ecf1da" stroke-width="2" stroke-linecap="round"/></pattern><pattern id="road" width="180" height="80" patternUnits="userSpaceOnUse"><path d="M24 40h58" stroke="#faf3d9" stroke-width="4" stroke-linecap="round"/></pattern><g id="plant"><path d="M0 0q7-23 0-41M0-9q-20-4-17-20M2-18q17-5 16-20" fill="none" stroke="#718567" stroke-width="3" stroke-linecap="round"/><ellipse cx="-10" cy="-24" rx="5" ry="12" transform="rotate(-35 -10 -24)" fill="#718567"/><ellipse cx="12" cy="-29" rx="5" ry="12" transform="rotate(35 12 -29)" fill="#718567"/></g></defs>
+<path fill="url(#sky)" d="M0 0h1200v530H0z"/><circle cx="916" cy="121" r="48" fill="#f4c56f"/><circle cx="916" cy="121" r="62" fill="none" stroke="#f4c56f" opacity=".2"/>
+<g id="clouds" fill="#fffaf0" opacity=".8"><path d="M144 106q10-19 30-12q14-30 39-10q19-6 27 22z"/><path d="M620 81q12-18 28-10q8-24 32-12q17-6 26 22z"/><path d="M1090 158q12-18 28-10q8-24 32-12q17-6 26 22z"/></g>
+<path d="M0 263q122-54 232-20t173-16q104-39 200 32t220-5q167-74 375-10v115H0z" fill="#bacbb6"/><path d="M0 282q210-28 419 3t383-8t398 5v99H0z" fill="#88b4a8"/><path id="water" d="M0 291h1200v80H0z" fill="url(#waves)"/><path d="M0 349q230-20 400 8t370-1t430-4v178H0z" fill="#e6d8ad"/><path d="M0 405q330 7 620-1t580 1v72H0z" fill="#b5b69a"/><path id="roadMarks" d="M0 404h1200v72H0z" fill="url(#road)"/>
+<g id="scenery"><use href="#plant" x="140" y="395"/><use href="#plant" x="1010" y="391"/><path d="M1068 377v-78m-18 8h52l-9 24h-43z" stroke="#6e8067" stroke-width="3" fill="#f1e8ca"/><path d="M1061 319h18m-5-5 6 5-6 5" fill="none" stroke="#6e8067" stroke-width="2"/></g>
+<ellipse cx="594" cy="426" rx="184" ry="12" fill="#7c8868" opacity=".19"/>
+<g id="rider">
+<g transform="translate(470 355)"><circle r="65" fill="#e6dfba" class="wheel" stroke-width="7"/><circle r="57" fill="none" stroke="#f8f1da" stroke-width="3"/><g id="rearSpokes" class="spokes"><path d="M-55 0H55M0-55V55M-39-39 39 39M-39 39 39-39"/></g><circle r="6" fill="#29473e"/></g>
+<g transform="translate(713 355)"><circle r="65" fill="#e6dfba" class="wheel" stroke-width="7"/><circle r="57" fill="none" stroke="#f8f1da" stroke-width="3"/><g id="frontSpokes" class="spokes"><path d="M-55 0H55M0-55V55M-39-39 39 39M-39 39 39-39"/></g><circle r="6" fill="#29473e"/></g>
+<path id="farLeg" d="" fill="none" stroke="#bb783f" stroke-width="9" stroke-linecap="round"/>
+<path class="bike" d="M470 355 539 263 575 355 470 355M539 263 678 263 575 355M713 355 671 239"/><path d="M539 264 532 244M670 241l-5-24q0-10 16-10h24" stroke="#29473e" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M512 241h43" stroke="#29473e" stroke-width="10" stroke-linecap="round"/>
+<path d="M470 355 575 343q18 0 18 13t-18 13z" fill="#e8b77e" stroke="#ae6a49" stroke-width="2"/><circle cx="575" cy="355" r="16" fill="#f7e6bd" stroke="#29473e" stroke-width="3"/>
+<g id="crank" stroke="#29473e" stroke-width="5"><path d="M-27 0H27"/></g>
+<!-- Long neck, generous throat pouch and webbed feet make a pelican. -->
+<path d="M505 232q-32 5-51-21l29 1q-21-15-25-30l45 20" fill="#e9e8d9" stroke="#526c5d" stroke-width="2.5"/>
+<path d="M489 200q25-27 69-19q16-12 17-52q-4-36 26-41q35-6 40 26q3 24-23 39q-14 8-7 40q0 42-43 52q-55 14-79-20z" fill="#fff9e8" stroke="#526c5d" stroke-width="2.5"/>
+<path d="M611 130 758 134q-25 44-87 39q-36-5-60-43" fill="#e9a657" stroke="#a46c40" stroke-width="2"/><path d="M618 122q65 1 144 12l-4 6-145-4z" fill="#efbd67" stroke="#a46c40" stroke-width="2"/><path d="M625 140q38 25 93 12" stroke="#f8d38c" stroke-width="3" fill="none"/>
+<circle cx="611" cy="113" r="5" fill="#283f37"/><circle cx="613" cy="111" r="1.6" fill="white"/><path d="M600 102q7-4 13-1" fill="none" stroke="#526c5d" stroke-width="2" stroke-linecap="round"/>
+<path d="M580 91q-3-27 24-25q25 1 26 25" fill="#527665"/><path d="M574 92q32-6 64 1" stroke="#314f43" stroke-width="6" stroke-linecap="round"/><path d="M589 77q10-9 21-4" fill="none" stroke="#87a18b" stroke-width="3"/>
+<path id="scarf" d="M588 167q-38 3-60-15l4 20-20 9q44 8 78-4" fill="#d6784b"/><path d="M583 159q11 7 27 2l3 12q-21 7-32-2z" fill="#e58a54"/>
+<path d="M514 198q38-16 74 23q32 1 79-13" fill="#e6e7d5" stroke="#526c5d" stroke-width="2.5" stroke-linecap="round"/><path d="M521 207q23-3 38 8m-30 1 23 9" fill="none" stroke="#bbc4ae" stroke-width="2"/>
+<path id="nearLeg" d="" fill="none" stroke="#e8a252" stroke-width="10" stroke-linecap="round"/><path id="nearFoot" d="" fill="#efa950" stroke="#a46c40" stroke-width="1.8"/><path id="farFoot" d="" fill="#ca8a45" stroke="#a46c40" stroke-width="1.8"/>
+</g>
+<g id="foreground" fill="#899371"><use href="#plant" x="310" y="518"/><use href="#plant" x="1160" y="525"/><path d="M45 498h15m780 6h26m-14-9h10" stroke="#a9a681" stroke-width="3" stroke-linecap="round"/></g>
+<g fill="none" stroke="#71877a" stroke-width="2" stroke-linecap="round"><path d="m817 99 7-3 7 3m-43 37 6-3 6 3"/></g>
+</svg></section>
+<div class="controls"><div class="transport"><button id="toggle" type="button" aria-label="暂停骑行" aria-pressed="false">Ⅱ</button><div><span class="status" id="status" aria-live="polite">正在兜风</span><span class="sub">JUST ENJOY THE RIDE</span></div></div><div class="note">Less hurry. More happy.</div><label class="speed" for="speed">骑行速度 <input id="speed" type="range" min="0.5" max="2" step="0.25" value="1"><output id="speedValue" for="speed">1×</output></label></div>
+<footer><span>不赶时间，只追海风。</span><span>MADE FOR A SMALL MOMENT OF JOY ↗</span></footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let paused = motion.matches, speed = 1, time = 0, last = null, frame = null;
+function render(){
+ const a=time*2.7, deg=a*180/Math.PI;
+ $('rearSpokes').setAttribute('transform',`rotate(${deg})`);
+ $('frontSpokes').setAttribute('transform',`rotate(${deg})`);
+ $('crank').setAttribute('transform',`translate(575 355) rotate(${deg})`);
+ for(const [name,phase] of [['near',0],['far',Math.PI]]){
+  const x=575+27*Math.cos(a+phase), y=355+27*Math.sin(a+phase);
+  $(''+name+'Leg').setAttribute('d',`M552 238 Q${518+12*Math.cos(a+phase)} 290 ${x} ${y}`);
+  $(name+'Foot').setAttribute('d',`M${x-7} ${y-3}l20 3 8 7h-30z`);
+ }
+ $('rider').setAttribute('transform',`translate(0 ${Math.sin(a*2)*1.3})`);
+ $('waves').setAttribute('patternTransform',`translate(${-time*15%180} 0)`);
+ $('road').setAttribute('patternTransform',`translate(${-time*175.5%180} 0)`);
+ $('clouds').setAttribute('transform',`translate(${-time*5%1250} 0)`);
+ $('scenery').setAttribute('transform',`translate(${-time*65%1350} 0)`);
+ $('foreground').setAttribute('transform',`translate(${-time*175.5%1350} 0)`);
+ $('scarf').setAttribute('transform',`rotate(${Math.sin(a*2)*3} 588 168)`);
+}
+// Repeated scenery makes an endless coast without external assets.
+for(const id of ['scenery','foreground','clouds']){
+ const group=$(id), copy=group.cloneNode(true); copy.removeAttribute('id');
+ copy.setAttribute('transform',`translate(${id==='clouds'?1250:1350} 0)`); group.append(copy);
+}
+function tick(now){frame=null;if(paused||document.hidden){last=null;return;}if(last!==null)time+=Math.min((now-last)/1000,.05)*speed;last=now;render();frame=requestAnimationFrame(tick);}
+function sync(){
+ $('toggle').textContent=paused?'▶':'Ⅱ';$('toggle').setAttribute('aria-label',paused?'继续骑行':'暂停骑行');$('toggle').setAttribute('aria-pressed',String(paused));
+ $('status').textContent=paused?'歇一会儿，看海':'正在兜风';
+ if(frame!==null)cancelAnimationFrame(frame);frame=null;last=null;
+ if(!paused&&!document.hidden)frame=requestAnimationFrame(tick);
+}
+$('toggle').addEventListener('click',()=>{paused=!paused;sync();});
+$('speed').addEventListener('input',event=>{speed=Number(event.target.value);$('speedValue').value=`${speed}×`;});
+motion.addEventListener('change',event=>{paused=event.matches;sync();});
+document.addEventListener('visibilitychange',sync);
+render();sync();
+</script>
+</body>
+</html>
