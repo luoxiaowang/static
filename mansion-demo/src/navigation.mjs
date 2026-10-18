@@ -1,3 +1,4 @@
+import {inSchool,schoolGround,schoolBlocked} from './school-layout.mjs';
 import {inOffice,inOfficeDistrict,officeGround} from './office-layout.mjs';
 import {shaftContains,LIFT} from './house-mobility.mjs';
 import {doorBlocks} from './festival.mjs';
@@ -15,6 +16,7 @@ export function inBalcony(x,z){return x>-20.8&&x< -10.7&&z>-18.8&&z<6.8||x>10.7&
 export function inUpper(x,z){return x>-10.8&&x<10.8&&z>-17.8&&z<-4.15;}
 export function inBasement(x,z){return x>-24.8&&x<-11.2&&z>-18.8&&z<-7.15;}
 export function groundHeight(x,z,previous=0){
+ if(inSchool(x,z))return schoolGround(x,z,previous);
  if(inOfficeDistrict(x,z))return officeGround(x,z,previous);
  if(shaftContains(x,z,.15)&&cabinOpen(previous))return liftAccess.y;
  for(const s of [STAIRS,ROOF_STAIRS,BASEMENT_STAIRS]){
@@ -33,15 +35,16 @@ export function groundHeight(x,z,previous=0){
 export function canMove(x,z,y,oldY=y){
  if(shaftContains(x,z,.12))return cabinOpen(y)&&x>LIFT.x1+.14&&z>LIFT.z1+.14&&z<LIFT.z2-.14;
  if(doorBlocks(x,z,y))return false;
- if((Math.abs(x)>34||z>49||z< -24)&&!inOfficeDistrict(x,z))return false;
+ if((Math.abs(x)>34||z>49||z< -24)&&!inOfficeDistrict(x,z)&&!inSchool(x,z))return false;
  if(Math.abs(y)<.25&&(((x+5)/4.35)**2+((z-10)/2.85)**2<1||x>17.1&&x<23.9&&z>3.1&&z<18.9))return false;
  const nextY=groundHeight(x,z,oldY);
  if(!Number.isFinite(nextY)||Math.abs(nextY-oldY)>.22)return false;
- if(!inOffice(x,z)&&oldY>6.95&&!inUpper(x,z)&&!inLiftBridge(x,z))return false;
- if(!inOffice(x,z)&&oldY>3.35&&oldY<3.85&&!inUpper(x,z)&&!inBalcony(x,z))return false;
+ if(!inOffice(x,z)&&!inSchool(x,z)&&oldY>6.95&&!inUpper(x,z)&&!inLiftBridge(x,z))return false;
+ if(!inOffice(x,z)&&!inSchool(x,z)&&oldY>3.35&&oldY<3.85&&!inUpper(x,z)&&!inBalcony(x,z))return false;
  if(oldY< -3.35&&!inBasement(x,z))return false;
  // The basement opening is a real void; crossing its sides cannot stand on air.
  if(Math.abs(y)<.001&&x>BASEMENT_STAIRS.x1&&x<BASEMENT_STAIRS.x2&&z>BASEMENT_STAIRS.z1&&z<BASEMENT_STAIRS.z2-.1)return false;
+ if(inSchool(x,z)&&schoolBlocked(x,z,y))return false;
  const r=.20/PLAN_SCALE;
  return !solids.some(s=>y+1.68>s.y+.08&&y<s.y+s.h-.12&&x>s.x1-r&&x<s.x2+r&&z>s.z1-r&&z<s.z2+r);
 }

@@ -6,6 +6,8 @@ export function addOffice(a){
  const stone=mat('公司浅色石材',0xd8d4c7),trim=mat('公司立面线脚',0xe8e4d9),frame=mat('公司窗框',0x65737a),glass=mat('公司玻璃',0x96bdce,{transparent:true,opacity:.28,depthWrite:false,roughness:.22,metalness:.2});
  const floor=mat('公司办公地毯',0x929b98),wood=mat('公司办公桌',0xd6c6a8),dark=mat('公司办公椅',0x334a48),screen=mat('公司电脑屏幕',0x7dbeb5,{emissive:0x315d65,emissiveIntensity:.65}),light=mat('公司顶灯',0xe7f1e7,{emissive:0xd6ecdf,emissiveIntensity:.8});
  const labels=root.userData.officeLabels=[];
+ box(69,-.04,28,14,.08,3.6,stone);
+ labels.push({text:'向阳小学 → 南门直达',x:62,y:2.6,z:25.7,rotation:Math.PI,w:3,h:.5});
  box(39,-.035,18,8,.07,34,mat('公司马路',0x606967));
  box(21.5,-.025,32,43,.05,2,stone);box(44.5,-.025,18,3,.05,34,stone);
  for(let z=3;z<35;z+=4)box(39,.005,z,.12,.012,1.8,trim);
@@ -15,7 +17,7 @@ export function addOffice(a){
  for(const f of OFFICE_FLOORS){
   for(const p of officeFloorPanels())box((p.x1+p.x2)/2,f.y-.1,(p.z1+p.z2)/2,p.x2-p.x1,.2,p.z2-p.z1,f.y===18?stone:floor);
   if(f.y===18)continue;
-  for(const z of [4,26]){box(58,f.y+1.8,z,24,3.6,.18,glass,true);box(58,f.y+.4,z,24,.8,.24,stone,true);}
+  for(const z of [4,26]){const panels=f.y===0&&z===26?[[53.3,14.6],[66.7,6.6]]:[[58,24]];for(const [x,w] of panels){box(x,f.y+1.8,z,w,3.6,.18,glass,true);box(x,f.y+.4,z,w,.8,.24,stone,true);}if(f.y===0&&z===26)box(62,3.1,z,2.8,1,.24,stone,true);}
   box(70,f.y+1.8,15,.2,3.6,22,stone,true);
   for(const [z,d]of [[9,10],[23,6]]){box(46,f.y+1.8,z,.12,3.6,d,glass,true);box(46,f.y+.4,z,.35,.8,d,stone,true);}
   if(f.y>0)box(46,f.y+1.8,17,.12,3.6,6,glass,true);
