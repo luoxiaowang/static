@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="写给前端工程师的 Java 核心语法学习手册：21 章中文讲解、代码示例、练习答案与完整命令行项目，从基础走向进阶应用开发。">
+<meta name="theme-color" content="#075d4b"><title>Java 核心语法：从入门到进阶 · 全站研发学习实践</title>
+<link rel="stylesheet" href="../assets/guide.css"><script src="../assets/guide.js" defer></script>
+</head><body id="top"><a class="skip-link" href="#main">跳到学习内容</a>
+<header class="topbar"><div class="shell"><a class="brand" href="../"><span class="brand-icon">F.</span><span>全站研发学习实践<small>FULLSTACK LEARNING LAB</small></span></a><nav class="toplinks" aria-label="站点导航"><span class="edition">VOL. 01 / JAVA</span><a href="../">全部主题</a><a class="repo-link" href="https://github.com/luoxiaowang/static/tree/main/fullstack-learning">GitHub ↗</a></nav></div><div class="reading-bar" aria-hidden="true"></div></header>
+<div class="shell"><section class="hero" aria-labelledby="guide-title"><div class="hero-grid"><div><p class="eyebrow">THE JAVA FIELD GUIDE / FOR FRONTEND DEVELOPERS</p><h1 id="guide-title">从前端出发，读懂 Java。</h1><p class="lead">不急着进入框架。先把语法、类型和对象讲明白，再用可运行的例子，把后端开发的第一块地基打稳。</p><div class="pills"><span class="pill">21 个章节</span><span class="pill">Java 21 · 无预览语法</span><span class="pill">示例 + 解释 + 练习</span></div><div class="hero-actions"><a class="primary" href="#java-model">开始第一章 ↓</a><a class="secondary" href="#practice-project">直接看实战项目 ↗</a></div></div><div class="terminal" aria-label="Java 入门代码预览"><div class="terminal-head"><span class="dots"><i></i><i></i><i></i></span><span>HelloJava.java</span></div><pre><code><span class="faint">// 一个新的开发起点</span>
+<span class="accent">public class</span> HelloJava {
+    <span class="accent">public static void</span> main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
+}</code></pre><div class="terminal-output">$ java HelloJava.java<br><br>→ Hello, Java!</div></div></div></section>
+<div class="pathline"><a href="../">学习实践</a><span>/</span><span>Java 核心语法与应用开发</span></div>
+<div class="layout"><aside class="sidebar" aria-label="手册目录"><details id="contents" class="contents" open><summary>学习目录 · 21 章</summary><div class="progress-card js-only"><span id="progress-count">0 / 21 章已完成</span><div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div><span>理解后标记，按自己的节奏前进。</span></div><nav id="toc" aria-label="章节导航"><p class="toc-group">01 / 从前端切换到 Java</p><a href="#java-model"><span class="num">01</span><span>理解 Java 的运行模型</span></a><a href="#first-program"><span class="num">02</span><span>写出第一个完整程序</span></a><a href="#types"><span class="num">03</span><span>类型、变量与精度</span></a><a href="#operators"><span class="num">04</span><span>运算符与判断陷阱</span></a><a href="#control-flow"><span class="num">05</span><span>分支、循环与控制流</span></a><a href="#methods"><span class="num">06</span><span>方法、重载与参数传递</span></a><a href="#strings-arrays"><span class="num">07</span><span>字符串、数组与列表</span></a><p class="toc-group">02 / 建立语言核心能力</p><a href="#classes"><span class="num">08</span><span>类、对象与封装</span></a><a href="#inheritance"><span class="num">09</span><span>继承、接口与多态</span></a><a href="#modern-modeling"><span class="num">10</span><span>enum、record 与 sealed</span></a><a href="#generics"><span class="num">11</span><span>泛型、边界与通配符</span></a><a href="#collections"><span class="num">12</span><span>集合、相等性与排序</span></a><a href="#exceptions"><span class="num">13</span><span>异常、资源与错误边界</span></a><a href="#lambdas-streams"><span class="num">14</span><span>Lambda、Stream 与 Optional</span></a><p class="toc-group">03 / 走向应用开发</p><a href="#standard-library"><span class="num">15</span><span>标准库：时间、文件与网络</span></a><a href="#concurrency"><span class="num">16</span><span>并发：线程、任务与共享状态</span></a><a href="#reflection"><span class="num">17</span><span>注解、反射与 JVM 心智模型</span></a><a href="#application-workflow"><span class="num">18</span><span>开发一个能构建、测试、运行的应用</span></a><a href="#quality"><span class="num">19</span><span>写出可维护的 Java</span></a><a href="#learning-roadmap"><span class="num">20</span><span>学习路线与综合项目</span></a><p class="toc-group">04 / 综合实践</p><a href="#practice-project"><span class="num">21</span><span>综合实战：学习任务命令行应用</span></a></nav></details></aside>
+<main class="reader" id="main"><div class="reader-tools js-only"><div class="search-box"><label for="search">搜索</label><input id="search" type="search" placeholder="类型、泛型、Stream…" autocomplete="off" aria-describedby="search-status"></div><button type="button" id="clear-search">清除</button><button type="button" id="print-guide">打印 / PDF</button><span id="search-status" role="status" aria-live="polite"></span></div>
+<div class="intro-note"><p><strong>给前端工程师的一份路线图</strong></p><p>建议按顺序读第一遍，再把这页作为日常速查。每个代码块都标注完整文件或片段及放置位置；不要把分散片段直接拼成一个程序。</p><p>本手册覆盖入门到进阶的学习路径，不把读完等同于“精通”。真正的掌握来自编译、调试、练习和项目反馈。Java 21 是统一练习基线，版本差异在后文单独说明。</p><div class="stage-grid"><div class="stage"><strong>01–07 · 写得出来</strong><span>环境、类型、流程与方法</span></div><div class="stage"><strong>08–14 · 组织得清楚</strong><span>对象、集合与函数式表达</span></div><div class="stage"><strong>15–21 · 做得成应用</strong><span>标准库、并发、构建与实战</span></div></div></div>
+<p id="no-results" class="empty-state" hidden>没有找到匹配章节。试试“集合”“异常”或点击清除。</p><section class="chapter" id="java-model" aria-labelledby="heading-java-model"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">01</span> 01 · 从浏览器走向 JVM</div><h2 id="heading-java-model">理解 Java 的运行模型</h2><p class="chapter-description">先建立源代码、编译器、字节码与运行环境之间的关系。</p></header><h3>Java 不只是另一种语法</h3><p>前端常见流程是编写 TypeScript，再由工具转换成浏览器可执行的 JavaScript。Java 的基本流程是：编写 .java 源文件，用 javac 编译成 .class 字节码，再让 JVM 执行字节码。编译阶段会检查类型、方法调用和语法，但不能证明程序业务正确，也不能消除空指针、越界等运行时问题。先把“编译失败”和“运行失败”分开判断，排错效率会高很多。</p><p>JDK 是开发工具包，包含 javac、java、标准库和运行所需组件。JVM 是 Java 虚拟机，负责加载类、执行字节码、管理内存；运行中可以通过 JIT 把热点代码编译为机器码。“一次编译，到处运行”依赖目标机器有兼容 JVM，并不意味着文件路径、原生库和操作系统差异会自动消失。</p><h3>先确认工具来自同一个 JDK</h3><p>终端命令，不写进 Java 文件：</p><pre><code>java --version
+javac --version</code></pre><p>本指南使用 Java 21，不启用预览特性。版本应当是 21 或兼容环境。系统安装多个 JDK 时，java 与 javac 可能指向不同目录，出现“编译成功却无法运行”。新版编译器默认生成的字节码，不一定能由旧 JVM 执行；需要兼容 Java 21 时可以显式指定 --release 21。</p><h3>最小构建流水线</h3><p>完整可运行文件：Lifecycle.java</p><pre><code>public class Lifecycle {
+    public static void main(String[] args) {
+        System.out.println(&quot;source → bytecode → JVM&quot;);
+    }
+}</code></pre><p>在 Lifecycle.java 所在目录执行的终端命令：</p><pre><code>javac --release 21 Lifecycle.java
+java Lifecycle</code></pre><p>第一条命令生成 Lifecycle.class，第二条给的是类名，不是 Lifecycle.class 文件名。类加载器根据类路径寻找字节码；在当前目录执行这个例子时，默认类路径通常足够。源文件运行模式 java Lifecycle.java 也受支持，但它会隐藏编译这一步，初学阶段建议先手动编译一次。</p><h3>项目变大以后会增加什么</h3><p>Maven 或 Gradle 负责管理依赖、编译、测试和打包，它们不是 Java 语法，也不替代 JVM。JAR 是归档格式；只有设置了正确入口等信息的可执行 JAR，才适合用 java -jar 直接启动。后端框架如 Spring Boot 则提供应用组织方式和基础能力，仍然建立在类、方法、异常和集合这些语言基础上。</p><div class="warning"><p>不要把 JVM 的垃圾回收理解为“所有资源都自动释放”。对象占用的堆内存可以被回收，但文件、网络连接、数据库连接等资源仍需要明确的生命周期管理。</p></div><div class="exercise"><h3>动手练习</h3><p>已经修改源代码，但运行结果还是旧的，最先检查什么？</p><details><summary>参考答案</summary><p>检查是否重新运行 javac、编译是否成功，以及 java 是否从正确目录或类路径加载了刚生成的 .class。修改 .java 并不会同步改写旧字节码。</p></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#first-program">下一章：写出第一个完整程序 →</a></div></section><section class="chapter" id="first-program" aria-labelledby="heading-first-program"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">02</span> 02 · 文件、类与入口</div><h2 id="heading-first-program">写出第一个完整程序</h2><p class="chapter-description">能自己编译、运行并读懂每一个符号，才算真正开始。</p></header><h3>先写全，不依赖框架模板</h3><p>新建名为 HelloJava.java 的 UTF-8 文本文件。Java 区分大小写，HelloJava、helloJava 与 hellojava 是不同名字。下面是完整的 Java 21 程序，复制到文件后可以直接编译运行，不需要额外依赖。</p><p>完整可运行文件：HelloJava.java</p><pre><code>public class HelloJava {
+    public static void main(String[] args) {
+        String name = args.length &gt; 0 ? args[0] : &quot;Java&quot;;
+        System.out.println(&quot;你好，&quot; + name + &quot;！&quot;);
+    }
+}</code></pre><h3>把入口声明逐个拆开</h3><ul><li>public class HelloJava 声明一个公开类。使用 javac 时，公开顶层类名称必须与源文件名一致，包括大小写。</li><li>public 表示入口可被外部访问；static 表示调用时不需要先创建 HelloJava 对象。</li><li>void 表示方法不返回结果。main 是启动器识别的入口名称，不是随便取的名字。</li><li>String[] args 是命令行参数数组，数组元素是字符串。args[0] 是第一个用户参数，不是程序名。</li><li>花括号组成代码块；普通声明和表达式语句通常以分号结尾。if、方法或类的代码块后一般不加分号。</li><li>System.out.println 调用标准输出对象的方法，打印后换行。字符串用双引号；单引号表示单个 char 字面量。</li></ul><p>在文件所在目录执行的终端命令：</p><pre><code>javac -encoding UTF-8 HelloJava.java
+java HelloJava
+java HelloJava Alice
+java HelloJava &quot;Frontend Engineer&quot;</code></pre><p>最后一个命令的引号由终端解释，用于把含空格的内容作为一个参数。没有参数时 args.length 等于 0，程序使用默认名称；直接读取 args[0] 则会数组越界。这里的条件表达式只会求值被选中的分支，因此空数组时不会访问 args[0]。</p><h3>先学会区分三种错误</h3><p>漏掉分号、把 println 拼错或类型不匹配，会让 javac 编译失败。数组越界通常在运行时出现异常。输出结果与需求不符却没有报错，则是逻辑错误。面对报错，优先看第一条有效错误和它对应的源文件行号，不要只盯着最后一行。</p><p>Java 没有要求所有东西都必须写 public。一个源文件可以包含非公开的顶层类，但入门阶段保持“一份文件一个同名公开类”最直观。后续引入 package 时，类有包名构成的完整名称，目录与启动方式也需要对应调整，不要随意将不同教程的片段混到一个文件里。</p><div class="callout"><p>注释有 // 单行注释和 /* 多行注释 */。注释适合解释意图，而不是把每行代码再翻译一遍。变量、方法通常使用 lowerCamelCase，类使用 UpperCamelCase。</p></div><div class="exercise"><h3>动手练习</h3><p>让程序在有第二个参数时打印它，否则打印“没有第二个参数”。下面片段应该放在哪里？</p><details><summary>参考答案</summary><p>片段：放在 HelloJava.main 方法体内。</p><pre><code>if (args.length &gt;= 2) {
+    System.out.println(args[1]);
+} else {
+    System.out.println(&quot;没有第二个参数&quot;);
+}</code></pre></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#types">下一章：类型、变量与精度 →</a></div></section><section class="chapter" id="types" aria-labelledby="heading-types"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">03</span> 03 · 不再只有 number</div><h2 id="heading-types">类型、变量与精度</h2><p class="chapter-description">理解基本类型、引用、类型转换与金额计算的边界。</p></header><h3>八种基本类型必须分清</h3><p>Java 的类型在编译时确定。byte、short、int、long 是有符号整数，分别占 8、16、32、64 位；float、double 是 32、64 位浮点类型；char 是 16 位 UTF-16 代码单元；boolean 表示 true 或 false，Java 语言不规定其统一存储大小。常规整数优先 int，可能超出范围时使用 long；普通浮点运算常用 double。</p><p>片段：放在任意 main 方法体内，无额外 import。</p><pre><code>byte level = 10;
+short year = 2026;
+int count = 100_000;
+long population = 8_000_000_000L;
+float ratio = 0.5F;
+double score = 98.6;
+char grade = &#x27;A&#x27;;
+boolean passed = true;</code></pre><p>整数大字面量加 L，float 字面量加 F，否则通常分别按 int 和 double 处理。局部变量读取前必须明确赋值，不能依赖默认值；实例字段、静态字段和数组元素有默认值，例如数字 0、boolean 的 false、引用的 null。这个区别经常让从 JavaScript 转来的开发者意外。</p><h3>引用与 null 不是“任意类型”</h3><p>String、数组和自定义类都是引用类型。变量保存引用，null 表示没有指向对象；int 不能是 null，包装类型 Integer 可以。Java 没有 JavaScript 的 undefined，也不会把空字符串、0、null 隐式当作 false。访问 null 引用的方法会抛出 NullPointerException。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>Integer boxed = 42;      // 自动装箱：int → Integer
+int unboxed = boxed;    // 自动拆箱：Integer → int
+Integer missing = null;
+// int broken = missing; // 编译通过，运行时拆箱抛出空指针异常
+long widened = 123;
+double approximate = 9_007_199_254_740_993L; // 可能丢精度
+int truncated = (int) 3.9; // 向零截断，得到 3
+byte wrapped = (byte) 130; // 得到 -126，不是范围校验</code></pre><h3>转换、推断与不可重新赋值</h3><p>小范围数值常可自动转换为更宽类型，但“更宽”不总意味着精度无损，例如 long 转 double。窄化转换通常需要强制类型转换，而且可能截断或溢出；它不是合法性验证。byte、short、char 参与常规算术时通常先提升为 int。</p><p>var 是局部变量类型推断，不是动态类型：var name = "Lin" 推断为 String，之后不能赋值整数。var 不能用于字段、方法返回类型或以 null 作为唯一初始化信息。final 禁止变量再次赋值，但引用所指对象仍可能可变，因此它更像限制绑定，而不是深度冻结。</p><p>片段：放在 main 方法体内；文件顶部添加 import java.math.BigDecimal;</p><pre><code>var name = &quot;Lin&quot;;
+final int[] values = {1, 2};
+values[0] = 9; // 合法：修改数组，不是重新给 values 赋值
+BigDecimal price = new BigDecimal(&quot;0.1&quot;);
+BigDecimal total = price.add(new BigDecimal(&quot;0.2&quot;));
+System.out.println(total); // 0.3</code></pre><div class="warning"><p>二进制浮点数无法精确表示所有十进制小数。金额常用 BigDecimal 或按最小货币单位表示的整数。优先从十进制字符串构造 BigDecimal，避免 new BigDecimal(0.1) 把已有浮点误差带进去；除法还应明确舍入规则。</p></div><div class="exercise"><h3>动手练习</h3><p>为什么 final StringBuilder text = new StringBuilder(); 后面仍能调用 text.append("A")？</p><details><summary>参考答案</summary><p>final 限制 text 这个变量不能再指向另一个对象，不限制 StringBuilder 内部内容变化。要获得不可变值，应选择不可变类型，例如 String，并注意其引用本身是否需要 final。</p></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#operators">下一章：运算符与判断陷阱 →</a></div></section><section class="chapter" id="operators" aria-labelledby="heading-operators"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">04</span> 04 · 编译成功不等于算对</div><h2 id="heading-operators">运算符与判断陷阱</h2><p class="chapter-description">避免整数除法、溢出、引用比较和短路求值中的隐蔽错误。</p></header><h3>先看操作数，再看结果变量</h3><p>表达式使用什么运算，取决于操作数的类型，不取决于最终赋值变量。两个 int 相除得到 int，向零截断；先发生截断再赋值给 double，丢掉的小数不会恢复。需要小数时，应在除法之前把一个操作数变成浮点数。整数除以零会抛出 ArithmeticException；浮点除以零则可能得到 Infinity 或 NaN，因此不能把它们混为一谈。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>double a = 5 / 2;         // 2.0
+double b = 5 / 2.0;       // 2.5
+double c = (double) 5 / 2; // 2.5
+System.out.println(-5 / 2); // -2，向零截断
+System.out.println(-5 % 2); // -1，余数符号跟随被除数</code></pre><h3>溢出不会自动升级为大整数</h3><p>普通 int 和 long 运算溢出时会按固定位宽回绕，不会自动变成 BigInteger，也不一定抛异常。尤其要注意先算后转：long size = 100_000 * 100_000 仍然先用 int 乘法。需要检测溢出时，使用 Math.addExact、multiplyExact 等方法；需要任意精度整数时再考虑 BigInteger。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>int max = Integer.MAX_VALUE;
+System.out.println(max + 1); // -2147483648
+long safe = 100_000L * 100_000; // 10000000000
+// Math.addExact(max, 1); // 会抛 ArithmeticException
+int n = 1;
+int old = n++; // old 为 1，n 为 2
+int now = ++n; // now 为 3，n 为 3</code></pre><p>++ 和 -- 同时有取值与修改副作用。前置先修改，后置先取旧值。不要在一条复杂表达式里反复改变同一变量，拆成多行更容易审查。+ 同时支持加法和字符串拼接，"sum=" + 1 + 2 得到 sum=12；要先算数，应写 "sum=" + (1 + 2)。</p><h3>相同对象与相同内容</h3><p>基本类型的 == 比较值；引用类型的 == 比较是否指向同一对象。比较字符串内容通常使用 equals。不要因为字符串字面量驻留，或者 Integer 对象缓存，让几个 == 示例“碰巧成功”，就把它推广成内容比较。equals 的语义由类定义，数组甚至不会默认按元素比较。</p><p>片段：放在 main 方法体内；文件顶部添加 import java.util.Objects;</p><pre><code>String a = new String(&quot;java&quot;);
+String b = new String(&quot;java&quot;);
+System.out.println(a == b);      // false
+System.out.println(a.equals(b)); // true
+String nullable = null;
+System.out.println(Objects.equals(nullable, &quot;java&quot;)); // false
+boolean usable = nullable != null &amp;&amp; !nullable.isEmpty();</code></pre><h3>条件必须是 boolean</h3><p>&amp;&amp; 和 || 采用短路求值：左边足以决定结果时，右边不执行。因此上面的非空检查可以保护后续方法调用。&amp; 和 | 也可用于 boolean，但会计算两侧，不应随手替代。数值类型上的 &amp;、|、^ 和移位则是位运算。if (count) 在 Java 中不合法，应明确写 count != 0。</p><div class="warning"><p>浮点 NaN 与自己也不相等，需要用 Double.isNaN 判断。金融或统计比较不能机械套用浮点 ==；应根据业务误差要求选择容差或精确十进制类型。</p></div><div class="exercise"><h3>动手练习</h3><p>int total = 7, count = 2; 怎样得到正确的平均值 3.5？</p><details><summary>参考答案</summary><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>int total = 7;
+int count = 2;
+if (count == 0) {
+    throw new IllegalArgumentException(&quot;count 不能为 0&quot;);
+}
+double average = (double) total / count;
+System.out.println(average);</code></pre></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#control-flow">下一章：分支、循环与控制流 →</a></div></section><section class="chapter" id="control-flow" aria-labelledby="heading-control-flow"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">05</span> 05 · 让程序按规则执行</div><h2 id="heading-control-flow">分支、循环与控制流</h2><p class="chapter-description">用清晰的分支表达业务规则，用合适的循环遍历数据。</p></header><h3>if 的条件不会隐式转换</h3><p>if、while 和 for 的条件必须是 boolean。Java 不会把数字和字符串转换成真假值，也没有用 a || b 直接获取默认字符串的写法。if / else if 按顺序检查条件，命中第一个后不再执行后续分支；多个独立 if 则会分别判断。即使只有一行，也建议保留花括号，避免新增语句后产生歧义。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>int score = 82;
+String label;
+if (score &gt;= 90) {
+    label = &quot;优秀&quot;;
+} else if (score &gt;= 60) {
+    label = &quot;通过&quot;;
+} else {
+    label = &quot;继续练习&quot;;
+}
+System.out.println(label);</code></pre><h3>switch 可以返回一个值</h3><p>传统 switch 语句使用 case 冒号时，要留意忘写 break 造成的贯穿执行。Java 21 中可以优先学习箭头形式：每个分支不会自动落入下一分支。switch 表达式整体产生结果，适合“根据一个状态映射为另一个值”的任务，必须覆盖所有可能情况；普通 int 或 String 通常需要 default。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>String role = &quot;editor&quot;;
+int permission = switch (role) {
+    case &quot;admin&quot; -&gt; 3;
+    case &quot;editor&quot;, &quot;author&quot; -&gt; {
+        System.out.println(&quot;允许编辑&quot;);
+        yield 2;
+    }
+    case &quot;viewer&quot; -&gt; 1;
+    default -&gt; 0;
+};
+System.out.println(permission);</code></pre><p>单表达式分支直接写结果；多语句代码块使用 yield 给出当前 switch 表达式的结果。yield 不等于 return：return 退出整个方法。上面最后的分号属于变量声明。此例没有 case null，因此 role 为 null 会抛出空指针异常；真实输入要先校验，或在 Java 21 中明确设计 null 分支。</p><h3>根据任务选择循环</h3><p>计数循环通常用 for；次数未知、满足条件继续的任务用 while；需要至少执行一次时使用 do / while。增强 for 适合只关心每个元素、不需要索引的遍历。数组从 0 开始，合法索引为 0 到 length - 1，循环边界通常写 i &lt; array.length，而不是小于等于。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>int[] numbers = {2, 4, 6};
+int sum = 0;
+for (int value : numbers) {
+    sum += value;
+}
+for (int i = 0; i &lt; numbers.length; i++) {
+    System.out.println(i + &quot;:&quot; + numbers[i]);
+}
+int remaining = 2;
+while (remaining &gt; 0) {
+    remaining--;
+}
+int attempts = 0;
+do {
+    attempts++;
+} while (attempts &lt; 1);</code></pre><h3>break、continue 与作用域</h3><p>break 结束最近一层循环或相应 switch；continue 跳过本轮剩余部分，进入下一轮。它们不会默认退出整个方法。嵌套循环中要特别确认控制的是哪一层。花括号内部声明的局部变量只在对应作用域有效，不能在块外继续读取。</p><div class="warning"><p>增强 for 中给循环变量重新赋值，不会替换数组中的元素。例如 for (int n : values) { n = 0; } 不会把数组清零；需要修改数组时使用索引赋值。</p></div><div class="exercise"><h3>动手练习</h3><p>累加 1 到 10 中的奇数，使用 continue 跳过偶数。</p><details><summary>参考答案</summary><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>int sum = 0;
+for (int i = 1; i &lt;= 10; i++) {
+    if (i % 2 == 0) {
+        continue;
+    }
+    sum += i;
+}
+System.out.println(sum); // 25</code></pre></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#methods">下一章：方法、重载与参数传递 →</a></div></section><section class="chapter" id="methods" aria-labelledby="heading-methods"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">06</span> 06 · 拆分可复用的行为</div><h2 id="heading-methods">方法、重载与参数传递</h2><p class="chapter-description">理解签名、返回值和按值传递，避免把引用误读成指针参数。</p></header><h3>方法不是随处声明的函数</h3><p>Java 的普通方法定义在类中，不能把一个命名方法再声明在另一个方法体里。一个声明通常包括访问修饰符、可选 static、返回类型、方法名、参数列表和方法体。调用普通实例方法需要对象；static 方法属于类，适合不依赖某个对象状态的操作，但不要为了方便把所有业务状态都设成 static。</p><p>完整可运行文件：MethodDemo.java</p><pre><code>public class MethodDemo {
+    static int add(int a, int b) {
+        return a + b;
+    }
+
+    static double add(double a, double b) {
+        return a + b;
+    }
+
+    static int sum(int... values) {
+        int result = 0;
+        for (int value : values) {
+            result += value;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(add(2, 3));     // int 版本：5
+        System.out.println(add(2.0, 3.0)); // double 版本：5.0
+        System.out.println(sum(1, 2, 3)); // 6
+        System.out.println(sum());        // 0
+    }
+}</code></pre><h3>重载由参数列表区分</h3><p>同名方法可以有不同数量或类型的参数，这叫重载。仅改变返回类型不能构成合法重载。编译器根据调用点的参数类型选择可匹配的方法，不是运行时看到值“像整数”就临时改变签名。自动转换、装箱和可变参数会影响候选方法，初学阶段避免设计多个非常相近的重载，否则 null 等实参可能导致调用歧义。</p><p>int... values 是可变参数，方法内部把它当作 int[] 使用。可变参数只能有一个，并且必须放在参数列表最后；调用者可以传零个或多个整数，也可以传已有 int[]。Java 没有 JavaScript 那样直接在参数声明里写默认值的常规语法，通常用重载提供默认行为。</p><h3>return 终止当前方法</h3><p>非 void 方法正常完成时必须返回兼容类型的值；所有正常路径都要有返回结果。void 方法可以用 return; 提前结束，但不能返回一个普通值。return 不只是“交出结果”，它也意味着该方法后面的代码不再执行，因此经常用于参数检查后的提前退出。</p><h3>Java 始终按值传递</h3><p>基本类型参数接收数值的副本；引用类型参数接收引用值的副本。两份引用可以指向同一个对象，所以方法能够修改对象内部状态；但是把形参重新指向另一个对象，不会改写调用方变量。这与 JavaScript 中对象参数的常见表现很相似，不应称为“对象按引用传递”。</p><p>完整可运行文件：ValueDemo.java</p><pre><code>public class ValueDemo {
+    static void change(int number, int[] items) {
+        number = 99;          // 只改变形参的副本
+        items[0] = 99;        // 修改双方指向的数组
+        items = new int[]{7}; // 只改变形参引用
+    }
+
+    public static void main(String[] args) {
+        int n = 1;
+        int[] values = {1};
+        change(n, values);
+        System.out.println(n);         // 1
+        System.out.println(values[0]); // 99
+    }
+}</code></pre><div class="callout"><p>方法参数命名应表达含义，避免大量 a、b、data。把校验、计算与输出拆开，可以让核心逻辑更容易测试。也要留意方法是否修改传入集合，避免调用方误认为它只是计算。</p></div><div class="exercise"><h3>动手练习</h3><p>写一个 isAdult(int age) 方法，负数抛出非法参数异常，18 岁及以上返回 true。</p><details><summary>参考答案</summary><p>片段：放在类体中、main 方法外；无额外 import。</p><pre><code>static boolean isAdult(int age) {
+    if (age &lt; 0) {
+        throw new IllegalArgumentException(&quot;age 不能为负数&quot;);
+    }
+    return age &gt;= 18;
+}</code></pre></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#strings-arrays">下一章：字符串、数组与列表 →</a></div></section><section class="chapter" id="strings-arrays" aria-labelledby="heading-strings-arrays"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">07</span> 07 · 从文本到一组数据</div><h2 id="heading-strings-arrays">字符串、数组与列表</h2><p class="chapter-description">掌握不可变文本、Unicode 边界和固定长度容器。</p></header><h3>String 不可变，变量可以重新绑定</h3><p>String 对象创建后内容不可变。trim、replace、toUpperCase 等方法返回处理后的字符串，不会原地修改旧对象。s += "!" 本质上得到新字符串并更新变量绑定。字符串内容比较用 equals；空值可能存在时，可以使用常量.equals(value) 或 Objects.equals。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>String raw = &quot;  Java  &quot;;
+raw.trim();
+System.out.println(raw.length()); // 8，原字符串没变
+String clean = raw.trim();
+System.out.println(clean); // Java
+String message = &quot;&quot;&quot;
+        你好，Java
+        这是一段多行文本。
+        &quot;&quot;&quot;;
+System.out.print(message);</code></pre><p>文本块使用三个双引号，开头分隔符之后需要换行。它会处理公共缩进，示例末尾还包含换行，不应把源码里的缩进直接当作全部结果。文本块仍然是 String，也仍然支持转义，不是模板字符串：Java 21 的非预览语法不能把 ${name} 当成插值。</p><h3>char 不一定等于一个用户看到的字</h3><p>String.length 返回 UTF-16 代码单元数量，charAt 返回一个 char。部分字符如许多 emoji 需要代理对，因此一个 Unicode 码点可能占两个 char；组合字符序列又可能由多个码点构成一个视觉字符。按“显示出来的字”截断不能简单用 length 或 substring，按码点遍历也仍不等于按字素簇遍历。</p><p>片段：放在 main 方法体内，无额外 import。</p><pre><code>String emoji = &quot;😀&quot;;
+System.out.println(emoji.length()); // 2 个 UTF-16 代码单元
+System.out.println(emoji.codePointCount(0, emoji.length())); // 1 个码点
+emoji.codePoints().forEach(System.out::println); // 128512
+StringBuilder builder = new StringBuilder();
+for (int i = 1; i &lt;= 3; i++) {
+    builder.append(i).append(&quot;,&quot;);
+}
+String result = builder.toString(); // 1,2,3,</code></pre><p>大量循环拼接时，StringBuilder 可以减少中间字符串，最终再用 toString 得到不可变文本。普通少量拼接用 + 更直观，不必机械替换所有加号。StringBuilder 本身可变，也不提供通用线程安全保证。</p><h3>数组固定长度，但元素可以改变</h3><p>int[] values = new int[3] 创建长度为 3 的数组，元素初始为 0；String[] 默认元素为 null。数组通过 length 字段获取长度，字符串用 length() 方法，集合用 size() 方法。数组索引越界会抛异常，不像 JavaScript 越界读取通常得到 undefined。</p><p>片段：放在 main 方法体内；文件顶部添加 import java.util.Arrays; 和 import java.util.ArrayList;</p><pre><code>int[] scores = {80, 90, 100};
+scores[0] = 85;
+int[] alias = scores;       // 没有复制数组
+alias[1] = 95;              // scores[1] 也变成 95
+int[] copy = Arrays.copyOf(scores, scores.length);
+System.out.println(Arrays.toString(scores));
+System.out.println(Arrays.equals(scores, copy)); // true
+ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();
+names.add(&quot;Lin&quot;);
+names.add(&quot;Chen&quot;);
+names.set(0, &quot;Luo&quot;);
+System.out.println(names.get(0));
+System.out.println(names.size()); // 2</code></pre><h3>ArrayList 不是另一种数组语法</h3><p>ArrayList 可以动态增减元素，通过 add、get、set、remove 操作，而不是方括号。泛型参数必须是引用类型，因此整数列表写 ArrayList&lt;Integer&gt;，不能写 ArrayList&lt;int&gt;。引用数组的浅复制只复制引用，内部对象仍可能共享；同样，给另一个变量赋值不会复制数组或列表。</p><div class="warning"><p>数组直接 println 往往显示类型与标识信息，不会按元素列出；用 Arrays.toString，嵌套数组可用 Arrays.deepToString。ArrayList&lt;Integer&gt; 的 remove(1) 删除索引 1，remove(Integer.valueOf(1)) 才是删除值 1。</p></div><div class="exercise"><h3>动手练习</h3><p>创建整数列表 [10, 20, 30]，删除数值 20，再把首项改为 99。</p><details><summary>参考答案</summary><p>片段：放在 main 方法体内；文件顶部添加 import java.util.ArrayList;</p><pre><code>ArrayList&lt;Integer&gt; values = new ArrayList&lt;&gt;();
+values.add(10);
+values.add(20);
+values.add(30);
+values.remove(Integer.valueOf(20));
+values.set(0, 99);
+System.out.println(values); // [99, 30]</code></pre></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#classes">下一章：类、对象与封装 →</a></div></section><section class="chapter" id="classes" aria-labelledby="heading-classes"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">08</span> 建立对象模型</div><h2 id="heading-classes">类、对象与封装</h2><p class="chapter-description">从 TypeScript 的 class 出发，理解 Java 对象的创建、状态与访问边界。</p></header><h3>类定义结构，对象保存状态</h3><p>Java 的类既是类型，也是对象的构造蓝图。变量保存对象引用，而不是对象本身；把一个引用赋给另一个变量，不会复制对象。与 TypeScript 不同，Java 的字段类型在运行前受到编译器约束，且对象结构不能在运行时随手增加属性。字段有默认值：整数为 0、boolean 为 false、引用为 null；方法内的局部变量则必须先明确赋值才能读取。</p><p>构造器与类同名且没有返回类型，负责建立合法的初始状态。一旦声明任何构造器，编译器就不再提供无参构造器。this 表示当前对象，常用于区分同名参数和字段；this(...) 可以调用本类另一构造器，在 Java 21 中必须放在构造器第一条语句。</p><p class="code-label">完整文件：Account.java；无须 import。</p><pre><code>public class Account {
+    private final String owner;
+    private int balance;
+    public Account(String owner) { this(owner, 0); }
+    public Account(String owner, int balance) {
+        if (owner == null || balance &lt; 0) {
+            throw new IllegalArgumentException(&quot;invalid account&quot;);
+        }
+        this.owner = owner;
+        this.balance = balance;
+    }
+    public void deposit(int amount) {
+        if (amount &lt;= 0) throw new IllegalArgumentException(&quot;amount&quot;);
+        balance = Math.addExact(balance, amount); // 溢出时拒绝更新
+    }
+    public int balance() { return balance; }
+    public static void main(String[] args) {
+        Account a = new Account(&quot;Lin&quot;);
+        Account b = a;
+        b.deposit(20);
+        System.out.println(a.balance()); // 20：指向同一个对象
+    }
+}</code></pre><h3>让对象负责维护规则</h3><p>private 字段不是“多写 getter/setter”的仪式。它允许对象统一执行校验，避免调用者直接把余额改成负数。不要机械地为每个字段生成 setter。public 是对外契约；private 只在所属顶层类及其嵌套类型范围内访问；不写修饰符表示包可见；protected 允许同包访问，并向跨包子类开放受限制的继承访问，它不等于“全项目可见”。</p><p>package 是命名空间和访问边界，不是 JavaScript 的 export。通常文件路径与包名对应；import 仅让源码能使用短名称，不会复制代码、创建对象或导入某个包下的子包。public 顶层类的文件名应与类名一致。</p><p class="code-label">完整类型文件：demo/Counter.java。它没有 main，供其他类创建实例；在其上级目录执行 javac -d out demo/Counter.java 仅编译，不直接启动。</p><pre><code>package demo;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Counter {
+    private static final AtomicInteger TOTAL = new AtomicInteger();
+    public Counter() { TOTAL.incrementAndGet(); }
+    public static int total() { return TOTAL.get(); }
+}</code></pre><h3>static 与 final 是不同维度</h3><p>实例字段属于每个对象；static 字段属于类，所有实例共享。static 方法没有 this，不能直接读取某个实例的字段。常量通常写作 public static final，并用大写下划线命名。final 字段只能初始化一次，但当它保存对象引用时，不保证对象内容不变。上例 TOTAL 不能重新指向别的对象，却可以递增内部计数。</p><div class="warning"><p>共享 static 可变字段在后端会遇到并发访问；不要把请求用户、订单等请求级数据放进去。演示中的 AtomicInteger 只解决计数更新的原子性，不意味着任意复杂业务操作都自动线程安全。</p></div><div class="exercise"><h3>练习：只读引用等于只读对象吗？</h3><p>判断以下语句哪些能编译，并解释为什么。</p><p class="code-label">代码片段：放入任意 main 方法；补充 import java.util.ArrayList;。</p><pre><code>final ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();
+names.add(&quot;Ada&quot;);
+// names = new ArrayList&lt;&gt;();</code></pre><details><summary>参考答案</summary><p>add 可以编译并修改列表。取消最后一行注释会编译失败，因为 final 禁止重新赋值引用。若需要禁止通过这个引用修改列表，可以使用 List.of 或 List.copyOf；元素自身仍可能是可变对象。</p></details></div><h3>从源码到实例的顺序</h3><p>创建实例时，先为实例字段建立默认值，再沿构造链完成父类初始化，随后执行本类实例字段初始化器及初始化块，最后执行本类构造器剩余语句。静态初始化属于类初始化过程，不会在每次 new 时重复执行。初学阶段最好把关键业务校验集中到构造器或明确的工厂方法，避免大量初始化块让对象建立过程难以追踪。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#inheritance">下一章：继承、接口与多态 →</a></div></section><section class="chapter" id="inheritance" aria-labelledby="heading-inheritance"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">09</span> 组织可替换的行为</div><h2 id="heading-inheritance">继承、接口与多态</h2><p class="chapter-description">理解 Java 的单继承、多接口、动态分派，以及何时应优先组合。</p></header><h3>继承表达“是一种”</h3><p>extends 建立子类型关系：Dog 是 Animal，因此 Animal 引用可以指向 Dog 对象。类只能直接继承一个类，但可以实现多个接口。构造器不会被继承，子类通过 super(...) 初始化父类部分；Java 21 中它必须位于构造器第一条语句。省略时编译器会尝试插入 super()，如果父类没有可访问的无参构造器就会报错。</p><p>实例方法调用根据实际对象选择实现，这叫动态分派。引用声明类型决定“编译时能调用哪些成员”，实际对象类型决定“运行时执行哪个重写方法”。@Override 让编译器检查重写关系，拼错方法名或参数时能及时报错。重写不能缩小可见性，也不能增加更宽的受检异常；返回类型可以协变。</p><p class="code-label">完整文件：PolymorphismDemo.java；无须 import。</p><pre><code>abstract class Animal {
+    protected final String name;
+    Animal(String name) { this.name = name; }
+    abstract String sound();
+}
+class Dog extends Animal {
+    Dog(String name) { super(name); }
+    @Override String sound() { return name + &quot;: woof&quot;; }
+}
+public class PolymorphismDemo {
+    public static void main(String[] args) {
+        Animal animal = new Dog(&quot;Milo&quot;);
+        System.out.println(animal.sound()); // Milo: woof
+    }
+}</code></pre><h3>抽象类共享基础，接口规定能力</h3><p>abstract 类不能直接 new，可以保存实例字段、提供构造器和普通方法，也可以声明没有方法体的抽象方法。接口适合描述跨类的能力契约，接口普通抽象方法默认 public abstract，实现时必须 public。接口字段默认 public static final，不适合保存每个对象的状态。default 方法可以提供默认实现，但不是给每个实现类自动注入实例字段。</p><p class="code-label">完整文件：InterfaceDemo.java；无须 import。</p><pre><code>interface Named {
+    String name();
+    default String label() { return &quot;Hello &quot; + name(); }
+}
+interface Tagged {
+    default String label() { return &quot;tag&quot;; }
+}
+class User implements Named, Tagged {
+    @Override public String name() { return &quot;Ada&quot;; }
+    @Override public String label() {
+        return Named.super.label(); // 明确解决两个默认实现的冲突
+    }
+}
+public class InterfaceDemo {
+    public static void main(String[] args) {
+        System.out.println(new User().label());
+    }
+}</code></pre><p>两个互不相关的接口提供同签名 default 方法时，类必须明确消除冲突。已有父类的具体实例方法通常优先于接口默认方法。接口还可以声明 static 和 private 辅助方法；接口的 static 方法通过接口名调用，不作为实例方法继承。</p><h3>不要混淆重写与重载</h3><p>重载是同名但参数列表不同，编译时根据参数的声明类型选择；仅返回类型不同不构成重载。字段不参与动态分派，static 方法是隐藏而不是重写，private 方法不被子类重写，final 方法禁止重写，final 类禁止继承。尽量避免在构造器中调用可被重写的方法，因为子类字段此时可能尚未初始化。</p><h3>多数业务扩展先考虑组合</h3><p>组合表达“有一个”：订单服务持有一个通知器，而不是继承通知器。这样业务逻辑与发送渠道可以独立变化，也便于测试时替换为内存实现。继承并不只是复用代码的快捷键；只有调用者确实能把子类当成父类使用、契约仍然成立时，子类型关系才可靠。</p><div class="exercise"><h3>练习：把发送能力注入服务</h3><p>设计 Notifier 接口，并让 OrderService 通过构造器接收它。完成订单时发送固定提示。</p><details><summary>参考答案</summary><p class="code-label">代码片段：可作为三个包可见顶层类型，放入同一个 .java 文件；无须 import。</p><pre><code>interface Notifier { void send(String text); }
+class ConsoleNotifier implements Notifier {
+    @Override public void send(String text) { System.out.println(text); }
+}
+class OrderService {
+    private final Notifier notifier;
+    OrderService(Notifier notifier) { this.notifier = notifier; }
+    void complete() { notifier.send(&quot;Order completed&quot;); }
+}</code></pre><p>OrderService 依赖能力而非具体渠道。创建时传入 new ConsoleNotifier()，以后可替换为邮件实现，而无需更改完成订单的方法。</p></details></div><p>从前端思维迁移时，尤其要区分结构兼容与显式实现。一个类即使恰好拥有 send 方法，也不会自动成为 Notifier；它必须声明 implements Notifier。接口不仅给编辑器提供提示，也让编译器验证实现契约，并为后端服务、测试替身和不同存储实现建立统一边界。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#modern-modeling">下一章：enum、record 与 sealed →</a></div></section><section class="chapter" id="modern-modeling" aria-labelledby="heading-modern-modeling"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">10</span> Java 21 现代建模</div><h2 id="heading-modern-modeling">enum、record 与 sealed</h2><p class="chapter-description">用有限取值、数据载体和封闭类型层级表达业务状态。</p></header><h3>enum：用类型限制合法状态</h3><p>不要让订单状态一直是自由字符串。enum 定义有限的命名实例，拼写错误会成为编译错误，switch 也能检查是否覆盖所有情况。枚举常量是对象，可以有字段和方法；构造器不能由外部直接调用。比较枚举可以使用 ==。不要把 ordinal() 当作持久化业务编号：插入或调整枚举顺序会改变它，应定义稳定的显式代码。</p><p class="code-label">完整文件：StatusDemo.java；无须 import。</p><pre><code>enum Status {
+    NEW(&quot;N&quot;), PAID(&quot;P&quot;), CANCELLED(&quot;C&quot;);
+    private final String code;
+    Status(String code) { this.code = code; }
+    String code() { return code; }
+}
+public class StatusDemo {
+    public static void main(String[] args) {
+        Status status = Status.PAID;
+        String text = switch (status) {
+            case NEW -&gt; &quot;待支付&quot;;
+            case PAID -&gt; &quot;已支付&quot;;
+            case CANCELLED -&gt; &quot;已取消&quot;;
+        };
+        System.out.println(text + status.code());
+    }
+}</code></pre><h3>record：简洁的数据载体</h3><p>record 根据组件生成 private final 字段、同名访问器、构造器以及基于组件的 equals、hashCode、toString。访问器写 user.name()，不是 getName()。record 隐式 final，不能继承其他类，但可以实现接口。它适合请求参数、查询结果等数据载体，不意味着所有领域实体都应该改成 record。</p><p>紧凑构造器省略参数列表，可以检查或规范化参数；执行体结束后由编译器为组件字段赋值。record 只提供浅层不可变性：列表字段的引用不能换，但外部可能继续修改列表内容。可以复制集合隔离容器修改；集合中的元素若仍可变，就依然不是深层不可变。</p><p class="code-label">完整文件：Team.java；包含所需 import。</p><pre><code>import java.util.List;
+public record Team(String name, List&lt;String&gt; members) {
+    public Team {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException(&quot;name&quot;);
+        }
+        members = List.copyOf(members); // 拷贝且不可修改，拒绝 null 元素
+    }
+}</code></pre><h3>sealed：封闭但不止一个实现</h3><p>sealed 接口或类限制直接子类型，permits 列出许可类型。直接实现类必须是 final、sealed 或 non-sealed；record 隐式 final，恰好适合承载每种结果的数据。同一命名模块内可跨包，未命名模块中许可子类型必须在同包。它与 TypeScript 的可辨识联合类型相近，但通过真实的子类型建立变体。</p><p class="code-label">完整文件：ResultDemo.java；Java 21，无须预览特性或 import。</p><pre><code>sealed interface Result permits Success, Failure {}
+record Success(String value) implements Result {}
+record Failure(String message) implements Result {}
+public class ResultDemo {
+    static String render(Result result) {
+        return switch (result) {
+            case null -&gt; &quot;无结果&quot;;
+            case Success s when s.value().isBlank() -&gt; &quot;空内容&quot;;
+            case Success s -&gt; s.value();
+            case Failure f -&gt; &quot;失败：&quot; + f.message();
+        };
+    }
+    public static void main(String[] args) {
+        Object value = new Success(&quot;ok&quot;);
+        if (value instanceof Success s) {
+            System.out.println(s.value());
+        }
+        System.out.println(render(new Failure(&quot;timeout&quot;)));
+    }
+}</code></pre><p>instanceof 模式把检查和局部变量绑定合在一起，变量只在编译器能证明匹配成功的范围内可用；null instanceof Success 为 false。switch 模式按从上到下匹配，宽泛模式放在窄模式前可能导致后者不可达。when 是守卫条件，带条件的分支通常不能替代无条件分支完成穷尽性检查。</p><div class="warning"><p>switch 表达式必须穷尽所有可能情况；Java 21 的增强 switch 语句也有穷尽要求。这里 sealed 层级已覆盖 Success 和 Failure，因此不需要 default。null 是独立问题：没有 case null 时，选择器为 null 会抛 NullPointerException，default 并不会自动接住它。</p></div><div class="exercise"><h3>练习：新增等待状态</h3><p>新增 record Pending(int retryAfterSeconds) implements Result 后，上面的代码要改哪里？</p><details><summary>参考答案</summary><p>将 Pending 加入 permits 列表，并为 switch 增加 case Pending p -> "请在 " + p.retryAfterSeconds() + " 秒后重试";。遗漏分支会使这个 switch 表达式不能编译，这是封闭层级帮助定位变更影响的价值。</p></details></div><p>数据建模时可以先问三个问题：只有几个固定值且不携带各自的数据吗？使用枚举。只需要一组命名数据并希望按内容比较吗？考虑 record。不同状态携带不同字段，并希望新增状态时编译器提醒所有处理点吗？考虑 sealed 配合多个 record。不要为了展示新语法把简单的两三个字段拆成复杂层级；模型应该减少非法状态，而不是增加阅读负担。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#generics">下一章：泛型、边界与通配符 →</a></div></section><section class="chapter" id="generics" aria-labelledby="heading-generics"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">11</span> 让容器保持类型安全</div><h2 id="heading-generics">泛型、边界与通配符</h2><p class="chapter-description">理解泛型不变性、PECS 与类型擦除，而不是背诵尖括号。</p></header><h3>泛型把类型关系写进契约</h3><p>List&lt;String&gt; 表示列表元素是 String，读取不再需要手动强转，错误插入会被编译器阻止。泛型参数只能使用引用类型，整数要写 Integer 而不是 int，装箱由编译器协助完成。类可以声明类型参数，方法也能声明自己的类型参数；泛型方法的 &lt;T&gt; 位于返回类型之前。</p><p class="code-label">完整文件：Box.java；无须 import。</p><pre><code>public class Box&lt;T&gt; {
+    private final T value;
+    public Box(T value) { this.value = value; }
+    public T get() { return value; }
+    public static &lt;T&gt; T first(T left, T right) { return left; }
+    public static void main(String[] args) {
+        Box&lt;String&gt; box = new Box&lt;&gt;(&quot;hello&quot;);
+        String result = box.get();
+        System.out.println(result);
+    }
+}</code></pre><h3>为什么 List&lt;Integer&gt; 不是 List&lt;Number&gt;？</h3><p>Integer 是 Number 的子类型，但 List&lt;Integer&gt; 不是 List&lt;Number&gt; 的子类型，这叫不变性。如果允许赋值，就能通过 Number 列表引用插入 Double，破坏原列表“只有 Integer”的承诺。不要将它与 Java 数组的协变混淆；数组可能在运行时抛 ArrayStoreException，而泛型更早阻止这类错误。</p><p>当算法只需要数值能力，可以通过有界参数 &lt;T extends Number&gt; 限制 T，或使用通配符 List&lt;? extends Number&gt; 接受未知的 Number 子类型。这里 extends 表达上界，即使边界是接口也使用 extends。多重边界写作 &lt;T extends Base &amp; Comparable&lt;T&gt;&gt;，若包含类，类边界必须放在最前。</p><p class="code-label">完整文件：BoundsDemo.java；包含所需 import。</p><pre><code>import java.util.List;
+public class BoundsDemo {
+    static &lt;T extends Number&gt; double twice(T value) {
+        return value.doubleValue() * 2;
+    }
+    static double sum(List&lt;? extends Number&gt; values) {
+        double total = 0;
+        for (Number n : values) total += n.doubleValue();
+        return total;
+    }
+    public static void main(String[] args) {
+        System.out.println(sum(List.of(1, 2, 3))); // 6.0
+        System.out.println(twice(2.5)); // 5.0
+    }
+}</code></pre><h3>PECS：生产者 extends，消费者 super</h3><p>从容器读取 T，它是生产者，使用 ? extends T；向容器写入 T，它是消费者，使用 ? super T。List&lt;? extends Number&gt; 的实际类型可能是 List&lt;Integer&gt;，所以不能随便加入 Double 或 Integer，除了 null 无法安全加入具体值。它并非不可变集合：clear 等操作仍可能允许，取决于具体实现。</p><p>List&lt;? super Integer&gt; 的实际类型可以是 Integer、Number 或 Object 的列表，因此可以写入 Integer；但读取只能保证得到 Object。List&lt;?&gt; 表示未知元素类型，通常用于只需观察容器而不关心元素类型的代码。它与原始类型 List 不同：原始类型绕开泛型检查，应避免使用。</p><p class="code-label">代码片段：放入任意类中；补充 import java.util.List;。</p><pre><code>static &lt;T&gt; void copy(List&lt;? extends T&gt; source,
+                     List&lt;? super T&gt; target) {
+    for (T item : source) target.add(item);
+}
+// main 中可调用：
+// List&lt;Integer&gt; source = List.of(1, 2);
+// List&lt;Number&gt; target = new java.util.ArrayList&lt;&gt;();
+// copy(source, target);</code></pre><h3>类型擦除带来的边界</h3><p>泛型主要由编译器检查。擦除后，未限定的类型参数通常变为 Object，有界参数变为首个边界，编译器会插入必要的转换。运行时不能直接检查 instanceof List&lt;String&gt;，但可以检查 instanceof List&lt;?&gt;。也不能直接 new T() 或 new T[10]；需要工厂、Class 对象或其他明确创建方式。泛型签名可能保留在元数据中供反射读取，因此“擦除”不等于一切类型信息都消失。</p><div class="exercise"><h3>练习：为什么这两个重载不合法？</h3><p>同一个类中声明 void show(List&lt;String&gt; x) 与 void show(List&lt;Integer&gt; x)。</p><details><summary>参考答案</summary><p>两个签名擦除后都是 show(List)，产生冲突。应使用不同的方法名、不同的可区分参数，或将真正通用的逻辑写为一个泛型方法；不能仅依赖泛型实参区分重载。</p></details></div><p>设计方法签名时，不必见到集合就添加通配符。如果方法既要读取又要写入同一种类型，直接 List&lt;T&gt; 往往更准确。如果两个参数之间有类型关系，用命名的类型参数 T 将它们连接起来；如果仅有一个未知类型且不需要关联其他参数，通配符常常更简洁。通配符不是让编译器放弃检查，恰恰是明确哪些操作安全、哪些必须禁止。遇到错误时，先判断数据流向，再决定上下界。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#collections">下一章：集合、相等性与排序 →</a></div></section><section class="chapter" id="collections" aria-labelledby="heading-collections"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">12</span> 操作业务数据</div><h2 id="heading-collections">集合、相等性与排序</h2><p class="chapter-description">掌握 List、Set、Map 的选择、可变性边界和安全遍历。</p></header><h3>先选语义，再选实现</h3><p>List 是有顺序、允许重复、支持索引的序列，常用 ArrayList；Set 表达元素唯一，HashSet 不保证遍历顺序，LinkedHashSet 保持插入顺序；Map 保存键值映射，键唯一且不是 Collection 的子接口，HashMap 不保证迭代顺序。需要键排序时考虑 TreeMap；需要按插入顺序展示时用 LinkedHashMap。后端接口不应依赖 HashMap 当前偶然出现的顺序。</p><p>优先用接口声明变量，例如 List&lt;String&gt; names = new ArrayList&lt;&gt;()，让调用者依赖能力而不是实现。ArrayList 随机访问快，中间插入可能移动元素；不要因为 LinkedList 支持链表就认为它在业务场景一定更快。先关注语义与代码清晰度，再基于测量优化。</p><p class="code-label">完整文件：CollectionsDemo.java；包含所需 import。</p><pre><code>import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+public class CollectionsDemo {
+    public static void main(String[] args) {
+        List&lt;String&gt; words = new ArrayList&lt;&gt;(List.of(&quot;java&quot;, &quot;web&quot;, &quot;java&quot;));
+        Map&lt;String, Integer&gt; counts = new HashMap&lt;&gt;();
+        for (String word : words) counts.merge(word, 1, Integer::sum);
+        for (Map.Entry&lt;String, Integer&gt; e : counts.entrySet()) {
+            System.out.println(e.getKey() + &quot;=&quot; + e.getValue());
+        }
+        words.removeIf(word -&gt; word.length() &lt; 4);
+        System.out.println(words); // [java, java]
+    }
+}</code></pre><h3>相等性决定去重与查找</h3><p>对象的 == 比较引用身份，equals 比较类型定义的逻辑相等。Object 默认 equals 也是身份比较，因此普通业务类若要按内容去重，需要正确重写 equals 和 hashCode；record 已生成基于组件的实现。相等对象必须拥有相同 hashCode，不相等对象可以哈希冲突。仅重写其中一个，会导致 HashSet 或 HashMap 的表现违反预期。</p><div class="warning"><p>用作哈希键或集合元素的对象，其参与 equals/hashCode 的字段在存储期间不要改变。否则对象还在桶里，contains 或 remove 却可能找不到它。TreeSet 与 TreeMap 按比较结果是否为 0 判断重复，比较器最好与 equals 保持一致。</p></div><p class="code-label">代码片段：放入 main 方法；补充 import java.util.HashSet; 与 import java.util.Set;。</p><pre><code>record UserId(long value) {}
+Set&lt;UserId&gt; ids = new HashSet&lt;&gt;();
+ids.add(new UserId(7));
+ids.add(new UserId(7));
+System.out.println(ids.size()); // 1，record 按组件相等</code></pre><h3>可修改、定长、不可修改不是一回事</h3><p>new ArrayList&lt;&gt;() 可以增加、删除和替换元素。Arrays.asList 得到与原数组关联的定长列表，能 set 但不能 add/remove。List.of、Set.of、Map.of 提供不可修改的集合，修改操作会抛 UnsupportedOperationException；它们不接受 null 元素、键或值。Set.of 拒绝重复元素，Map.of 拒绝重复键，而 List.of 允许重复。</p><p>Collections.unmodifiableList 返回只读视图：原列表变更仍可从视图看到。List.copyOf 形成不可修改的元素快照，但不深拷贝元素。HashMap 允许一个 null 键和 null 值，这与 Map.of 不同；get 返回 null 无法区分缺失键和存在但值为 null，可用 containsKey 确认。一般业务代码尽量用清晰的非 null 契约。</p><p class="code-label">代码片段：放入 main 方法；补充 import java.util.ArrayList;、java.util.List;、java.util.Comparator;。</p><pre><code>record User(String name, int age) {}
+List&lt;User&gt; users = new ArrayList&lt;&gt;(List.of(
+    new User(&quot;Bo&quot;, 21), new User(&quot;Ada&quot;, 21), new User(&quot;Chen&quot;, 18)));
+users.sort(Comparator.comparingInt(User::age).thenComparing(User::name));
+System.out.println(users); // Chen, Ada, Bo 的顺序</code></pre><p>Comparator 描述外部排序规则，Comparable 描述类型的自然顺序。不要用 a.age() - b.age() 代替比较器，极端值可能溢出。增强 for 循环中直接调用集合 remove 通常会触发并发修改检查，即使单线程也可能发生；使用 removeIf、Iterator.remove 或新建结果集合。fail-fast 检查不是线程安全保证。</p><div class="exercise"><h3>练习：删除整数 1</h3><p>对于 ArrayList&lt;Integer&gt;，list.remove(1) 删除什么？</p><details><summary>参考答案</summary><p>它调用 remove(int index)，删除索引 1 的第二个元素。要删除值为 1 的第一个元素，使用 list.remove(Integer.valueOf(1))，让重载选择 remove(Object)。不存在时返回 false。</p></details></div><p>遍历 Map 时，如果同时需要键和值，优先使用 entrySet，避免遍历 keySet 后再逐个 get。集合的 size 是方法而非属性；数组则使用 length 字段。集合没有 JavaScript 对象那种隐式字符串键转换，整数键与字符串键是不同对象。还要注意普通集合通常不是线程安全的；把一个 ArrayList 放进多个请求共享的字段，并不会因为接口类型是 List 就获得同步保护。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#exceptions">下一章：异常、资源与错误边界 →</a></div></section><section class="chapter" id="exceptions" aria-labelledby="heading-exceptions"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">13</span> 设计失败路径</div><h2 id="heading-exceptions">异常、资源与错误边界</h2><p class="chapter-description">区分受检异常和运行时异常，让错误信息与资源管理可靠可控。</p></header><h3>异常是控制流，不是普通返回值</h3><p>throw 抛出一个异常对象并立即离开当前执行路径；throws 写在方法签名中声明可能抛出的异常类型，它本身不执行抛出操作。调用栈逐层寻找匹配的 catch，没有找到则当前线程异常终止。不要把 Java 的受检异常理解成 JavaScript Promise rejection：它是编译器对调用者施加的处理义务，与异步无关。</p><p>Throwable 下主要分为 Error 和 Exception。Error 通常表示虚拟机或环境严重问题，不应一般性捕获后假装继续成功。Exception 中除 RuntimeException 及其子类外，通常是受检异常：调用者必须 catch 或通过 throws 继续声明。运行时异常如 IllegalArgumentException、NullPointerException 不强制声明，但仍然应在合适的业务边界处理或避免。</p><p class="code-label">完整文件：ReadDemo.java；包含所需 import。</p><pre><code>import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+public class ReadDemo {
+    static String readConfig(Path path) throws IOException {
+        return Files.readString(path);
+    }
+    public static void main(String[] args) {
+        try {
+            System.out.println(readConfig(Path.of(&quot;config.txt&quot;)));
+        } catch (IOException e) {
+            System.err.println(&quot;读取配置失败：&quot; + e.getMessage());
+        }
+    }
+}</code></pre><h3>catch 越具体越好，原因链不要丢</h3><p>catch 从上到下匹配，子类异常应写在父类异常前面，否则后面的分支不可达。多个没有继承关系的异常可以用 catch (A | B e) 合并。捕获后要恢复、转换或向上抛出，不要留空 catch；仅打印日志然后返回“成功”通常会让数据状态变得难以判断。</p><p>自定义异常应表达调用者能理解的失败语义。如果要转换底层异常，构造时传入 cause，保留完整原因链。选择 checked 还是 unchecked 取决于接口契约及调用者恢复策略，而不是“所有业务异常都必须继承某一种”的机械规则。不要将数据库密码、令牌或完整内部堆栈直接返回给前端。</p><p class="code-label">完整文件：ValidationDemo.java；无须 import。</p><pre><code>class InvalidAgeException extends RuntimeException {
+    InvalidAgeException(String message) { super(message); }
+    InvalidAgeException(String message, Throwable cause) { super(message, cause); }
+}
+public class ValidationDemo {
+    static int parseAge(String text) {
+        final int age;
+        try { age = Integer.parseInt(text); }
+        catch (NumberFormatException e) {
+            throw new InvalidAgeException(&quot;年龄必须为整数&quot;, e);
+        }
+        if (age &lt; 0) throw new InvalidAgeException(&quot;年龄不能为负数&quot;);
+        return age;
+    }
+}</code></pre><h3>finally 与自动资源关闭</h3><p>finally 一般在 try/catch 离开前执行，包括 return 或异常退出；但进程被终止、JVM 崩溃等情况下不能保证执行。不要在 finally 中 return 或抛新的异常，它可能覆盖原本的返回值或异常，让真正故障被掩盖。释放文件、数据库连接等资源优先使用 try-with-resources，而不是手动在 finally 中逐个关闭。</p><p class="code-label">完整文件：LinesDemo.java；包含所需 import。</p><pre><code>import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+public class LinesDemo {
+    static String firstLine(Path path) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            return reader.readLine(); // 空文件返回 null
+        } // 正常返回或抛异常时都自动 close
+    }
+}</code></pre><p>资源必须实现 AutoCloseable，可在括号内声明多个，关闭顺序与声明顺序相反。若 try 主体和 close 同时抛异常，主体异常是主要异常，关闭异常作为 suppressed exception 保留，可以通过 getSuppressed() 查看。不要将这种机制与 cause 原因链混为一谈。</p><div class="exercise"><h3>练习：谁负责处理受检异常？</h3><p>删除 ReadDemo.main 中的 try/catch 后，直接调用 readConfig，编译会怎样？有哪些合理选择？</p><details><summary>参考答案</summary><p>没有声明时会编译失败。可以在 main 声明 throws IOException，把失败交给运行环境；也可以在当前层捕获并提供明确失败提示。真实服务通常在靠近请求入口的统一边界把内部异常转换为合适响应，而不是每一层都捕获、记录再原样抛出，造成重复日志。</p></details></div><p>把异常策略作为接口设计的一部分：无记录可以是正常的 Optional.empty，而输入格式错误可以抛出校验异常，基础设施不可用则是另一类失败。不要将所有不同情形都转换成 null，否则调用者无法判断是正常缺失还是系统故障。相反，也不应把每一次正常的分支选择都写成抛出并捕获异常。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#lambdas-streams">下一章：Lambda、Stream 与 Optional →</a></div></section><section class="chapter" id="lambdas-streams" aria-labelledby="heading-lambdas-streams"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">14</span> 表达数据转换</div><h2 id="heading-lambdas-streams">Lambda、Stream 与 Optional</h2><p class="chapter-description">把前端熟悉的函数式写法迁移到 Java，同时理解类型和执行时机。</p></header><h3>Lambda 必须有目标接口类型</h3><p>Java Lambda 不是独立的任意函数对象，而是函数式接口的实现。函数式接口只有一个抽象方法，可以另有 default 或 static 方法；@FunctionalInterface 让编译器验证这一点。常见接口包括 Predicate&lt;T&gt; 判断条件、Function&lt;T,R&gt; 转换、Consumer&lt;T&gt; 消费和 Supplier&lt;T&gt; 生产值。</p><p class="code-label">完整文件：LambdaDemo.java；包含所需 import。</p><pre><code>import java.util.function.Function;
+import java.util.function.Predicate;
+public class LambdaDemo {
+    public static void main(String[] args) {
+        int minimum = 3;
+        Predicate&lt;String&gt; longEnough = s -&gt; s.length() &gt;= minimum;
+        Function&lt;String, Integer&gt; length = String::length;
+        System.out.println(longEnough.test(&quot;Java&quot;)); // true
+        System.out.println(length.apply(&quot;Java&quot;)); // 4
+        // minimum++; // 取消注释后不再是 effectively final，捕获失败
+    }
+}</code></pre><p>Lambda 捕获的局部变量必须是 final 或 effectively final，也就是赋值后没有再次改变。限制的是变量引用，不是对象内容；可以捕获一个列表后修改它，但在并发或 Stream 中这样做经常引入隐蔽副作用。Lambda 中的 this 指向外围实例，不像匿名内部类那样引入新的 this。方法引用是满足相同签名时的简写：String::length 引用实例方法，Integer::parseInt 引用静态方法，ArrayList::new 引用构造器。</p><h3>Stream 是一次性、惰性的处理管道</h3><p>集合保存数据，Stream 描述如何处理数据。filter、map、flatMap 等中间操作通常惰性执行，直到终端操作触发。filter 保留满足条件的元素；map 一对一转换；flatMap 将每个元素产生的流展开。流只能消费一次，终端操作后不能重复使用。它与 JavaScript Array.map 最大的直觉差别之一就是执行时机。</p><p class="code-label">完整文件：StreamDemo.java；包含所需 import。</p><pre><code>import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+public class StreamDemo {
+    public static void main(String[] args) {
+        List&lt;List&lt;String&gt;&gt; groups = List.of(List.of(&quot;java&quot;, &quot;js&quot;), List.of(&quot;java&quot;, &quot;sql&quot;));
+        List&lt;String&gt; names = groups.stream()
+            .flatMap(List::stream)
+            .filter(s -&gt; s.length() &gt; 2)
+            .map(String::toUpperCase)
+            .distinct()
+            .toList();
+        System.out.println(names); // [JAVA, SQL]
+        int total = List.of(1, 2, 3).stream().reduce(0, Integer::sum);
+        Map&lt;Integer, List&lt;String&gt;&gt; byLength = names.stream()
+            .collect(Collectors.groupingBy(String::length));
+        System.out.println(total); // 6
+        System.out.println(byLength);
+    }
+}</code></pre><h3>终端操作与副作用边界</h3><p>reduce 将元素合并为一个值，累加操作应满足结合律，初始值应是运算的单位元；求和的 0 合理，求积应使用 1。collect 适合构建可变结果容器、分组和计数。数值计算可用 mapToInt(...).sum() 避免反复装箱。Stream.toList() 返回不可修改的列表，但元素仍可能可变；Collectors.toList() 不承诺具体类型或可修改性。明确需要可变列表时使用 Collectors.toCollection(ArrayList::new)。</p><p>不要依赖 peek 或 map 中的打印、计数等副作用完成业务，因为短路操作或优化可能跳过部分遍历。anyMatch、findFirst 等可以提前结束；parallelStream 并非自动加速按钮，遇到共享可变状态、阻塞 I/O 或顺序依赖时尤其要谨慎。简单循环更清楚时，直接用循环。</p><h3>Optional 表达“结果可能缺失”</h3><p>Optional 适合作为可能无结果的方法返回类型，不要习惯性给每个字段和参数都包一层。of 不接受 null，ofNullable 接受，empty 表示缺失。不要无条件 get；优先 map、flatMap、orElseGet、orElseThrow。orElse 的参数会先求值，即使有结果也执行；orElseGet 的 Supplier 只在缺失时调用。</p><div class="exercise"><h3>练习：只在没有名称时生成默认值</h3><p>把可能为 null 或空白的输入规范化，必要时调用默认值生成函数。</p><details><summary>参考答案</summary><p class="code-label">代码片段：两个方法放入任意类；补充 import java.util.Optional;。</p><pre><code>static String defaultName() { return &quot;Guest&quot;; }
+static String normalize(String input) {
+    return Optional.ofNullable(input)
+        .map(String::trim)
+        .filter(s -&gt; !s.isEmpty())
+        .orElseGet(() -&gt; defaultName());
+}</code></pre><p>map 对存在的值进行转换，filter 把不满足条件的值变成 empty。这里也可写 orElseGet(类名::defaultName)。若 map 中的方法本身返回 Optional，应考虑 flatMap，避免嵌套 Optional。</p></details></div><p>函数式接口的方法签名也决定异常边界。例如 Function.apply 没有声明 IOException，所以在 map 的 Lambda 中直接调用抛出该受检异常的方法会编译失败。可以在适当层级处理或转换异常，也可以选择显式循环以保持错误逻辑清晰。不要仅为凑成一条链就吞掉异常；可读的失败路径比语法上的简短更重要。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#standard-library">下一章：标准库：时间、文件与网络 →</a></div></section><section class="chapter" id="standard-library" aria-labelledby="heading-standard-library"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">15</span> 把语法连接到真实世界</div><h2 id="heading-standard-library">标准库：时间、文件与网络</h2><p class="chapter-description">掌握后端最常遇到的日期、文本文件、HTTP 与数据库接口。</p></header><h3>1. 时间不是一个类型就够了</h3><p><code>LocalDate</code> 表示不含时区的日历日期，适合生日、账单日期；<code>Instant</code> 表示时间线上的瞬间，适合事件时间戳；<code>ZonedDateTime</code> 同时携带地区时区，适合展示某地时间。不要把没有时区的日期时间直接当成全球唯一时间。夏令时可能让当地某些时间不存在或出现两次。</p><p>完整示例，保存为 <code>TimeDemo.java</code>。执行 <code>javac TimeDemo.java</code> 和 <code>java TimeDemo</code>。</p><pre><code>import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class TimeDemo {
+    public static void main(String[] args) {
+        LocalDate due = LocalDate.parse("2026-11-09").plusDays(7);
+        Instant now = Instant.now();
+        ZonedDateTime shanghai = now.atZone(ZoneId.of("Asia/Shanghai"));
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm XXX");
+        System.out.println(due);
+        System.out.println(fmt.format(shanghai));
+    }
+}</code></pre><p>这些主要时间类型不可变，<code>plusDays</code> 返回新对象。<code>DateTimeFormatter</code> 也可安全共享。常规公历年份优先用 <code>uuuu</code>；不要把周基准年份 <code>YYYY</code> 当作普通年份。衡量代码耗时用 <code>System.nanoTime()</code> 的差值，而不是墙上时钟。</p><h3>2. 用 Path 与 Files 操作文本</h3><p>以下是方法体片段，需要导入 <code>java.nio.file.Path</code>、<code>java.nio.file.Files</code>、<code>java.nio.charset.StandardCharsets</code>，所在方法声明 <code>throws java.io.IOException</code>。Java 11 新增了这里的 <code>writeString/readString</code>。</p><pre><code>Path path = Path.of("data", "notes.txt");
+Files.createDirectories(path.getParent());
+Files.writeString(path, "学习 Java\n", StandardCharsets.UTF_8);
+String content = Files.readString(path, StandardCharsets.UTF_8);
+System.out.println(content);</code></pre><div class="warning"><p><code>writeString</code> 默认会覆盖原文件。大文件不要一次全部读入内存，可用 <code>Files.lines</code> 并通过 try-with-resources 关闭流。相对路径以进程工作目录为准，不一定是源码目录；处理用户提供的路径时还要校验允许访问的目录。</p></div><h3>3. HTTP 不是 fetch 的逐字翻译</h3><p>完整 Java 21 示例，保存为 <code>HttpDemo.java</code>。标准 <code>HttpClient</code> 自 Java 11 提供；连接超时与请求超时分别约束不同阶段。真实服务通常复用客户端。</p><pre><code>import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.io.IOException;
+
+public class HttpDemo {
+    public static void main(String[] args) {
+        try (HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(5)).build()) {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://dev.java/"))
+                .timeout(Duration.ofSeconds(10)).GET().build();
+            HttpResponse&lt;String&gt; response = client.send(
+                request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() / 100 != 2) {
+                throw new IOException("HTTP 状态 " + response.statusCode());
+            }
+            System.out.println(response.body().length());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("请求已中断");
+        } catch (IOException e) {
+            System.err.println("请求失败：" + e.getMessage());
+        }
+    }
+}</code></pre><p>HTTP 404/500 不会自动变成 Java 异常，必须检查状态码。示例只打印长度，避免把响应里的私人数据直接记入日志。</p><h3>4. JDBC：参数绑定而不是字符串拼接</h3><p>JDBC 是数据库访问标准接口，还需要数据库驱动和连接配置。以下为方法体片段，假设已有 <code>java.sql.Connection connection</code> 与 <code>long id</code>，方法处理或声明 <code>SQLException</code>。</p><pre><code>try (var stmt = connection.prepareStatement(
+        "SELECT name FROM users WHERE id = ?")) {
+    stmt.setLong(1, id);
+    try (var result = stmt.executeQuery()) {
+        while (result.next()) System.out.println(result.getString("name"));
+    }
+}</code></pre><p><code>?</code> 绑定值，不能绑定表名；动态表名必须由允许列表决定。连接通常来自连接池，真实业务还要学习事务、回滚和资源归还。</p><div class="exercise"><h3>练习：为日志选时间类型</h3><p>生日、服务事件发生时刻、上海当地展示时间分别选什么？为什么查询用户不能拼接输入？</p><details><summary>参考答案</summary><p>依次选 LocalDate、Instant、ZonedDateTime。绑定查询参数让数据库把输入当作数据处理，避免把输入解释成 SQL 结构；同时仍需做好权限与输入校验。</p></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#concurrency">下一章：并发：线程、任务与共享状态 →</a></div></section><section class="chapter" id="concurrency" aria-labelledby="heading-concurrency"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">16</span> Java 不是单一事件循环</div><h2 id="heading-concurrency">并发：线程、任务与共享状态</h2><p class="chapter-description">先学任务生命周期，再学如何避免竞争条件。</p></header><h3>1. 线程与异步不是同一回事</h3><p>浏览器里的 JavaScript 常以事件循环组织工作；Java 后端通常会同时运行多个线程。并发表示多个任务交错推进，并行表示它们在同一时刻执行。创建一个线程并不保证加速，线程调度、等待、同步都会有成本。</p><p>方法体片段，无需导入。<code>start()</code> 启动新线程；直接调用 <code>run()</code> 只是当前线程上的普通方法调用。<code>join()</code> 等待结束，所在方法需处理或声明 <code>InterruptedException</code>。</p><pre><code>Thread thread = new Thread(() -&gt; System.out.println("后台任务"));
+thread.start();
+thread.join();</code></pre><h3>2. 把任务交给 ExecutorService</h3><p>完整示例，保存为 <code>TaskDemo.java</code>。使用 Java 21 的 ExecutorService 自动关闭支持，退出 try 时会等待任务完成，不能把它当成“立即停止所有任务”。</p><pre><code>import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+public class TaskDemo {
+    public static void main(String[] args) {
+        try (ExecutorService pool = Executors.newFixedThreadPool(2)) {
+            Future&lt;Integer&gt; result = pool.submit(() -&gt; 21 * 2);
+            try {
+                System.out.println(result.get(2, TimeUnit.SECONDS));
+            } catch (TimeoutException e) {
+                result.cancel(true);
+                System.err.println("等待超时");
+            } catch (InterruptedException e) {
+                result.cancel(true);
+                Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
+                System.err.println("任务失败：" + e.getCause());
+            }
+        }
+    }
+}</code></pre><p><code>Future.get()</code> 会阻塞调用线程，异常包装在 <code>ExecutionException</code> 里。超时只限制等待，不会自动终止任务；<code>cancel(true)</code> 请求中断，也不能强杀不响应中断的代码。示例任务立即完成，因此只是展示超时处理结构。</p><h3>3. Java 21 的正式特性：虚拟线程</h3><p>将示例中的执行器改为 <code>Executors.newVirtualThreadPerTaskExecutor()</code>，便会为每个任务创建虚拟线程。它们适合大量等待网络或数据库的阻塞式任务，并不会让 CPU 密集计算凭空变快。不要为复用虚拟线程而建立传统线程池；要用连接池、信号量等限制真正稀缺的资源。</p><div class="warning"><p>Java 21 中，虚拟线程在某些 synchronized 区域或本地调用中阻塞可能固定住承载线程。先测量再优化，不要把其他 JDK 版本的改进默认套用到 Java 21。结构化并发在 Java 21 不是正式特性，本指南不依赖它。</p></div><h3>4. volatile 不会让 count++ 变安全</h3><p><code>count++</code> 是读取、计算、写回三个动作，两个线程可能覆盖彼此结果。<code>volatile</code> 提供可见性与相关排序保证，但不把复合操作变成原子操作。<code>synchronized</code> 通过同一把锁提供互斥及可见性，<code>AtomicInteger</code> 则提供适合单个计数值的原子操作。</p><p>类成员片段，需要导入 <code>java.util.concurrent.atomic.AtomicInteger</code>，放入自己的类中。</p><pre><code>private final AtomicInteger count = new AtomicInteger();
+void recordVisit() { count.incrementAndGet(); }
+int visits() { return count.get(); }
+
+private int balance;
+synchronized void deposit(int amount) { balance = Math.addExact(balance, amount); // 溢出时拒绝更新 }
+synchronized int balance() { return balance; }</code></pre><p>对余额示例，读写必须都遵守同一锁。两个独立原子变量并不能自动保证“库存扣减且订单创建”的跨变量业务规则。优先使用不可变数据、线程隔离和并发集合，减少共享可变状态；普通 ArrayList、HashMap 不适合无保护的并发修改。</p><h3>5. 停止也是设计的一部分</h3><p><code>shutdown()</code> 不再接收新任务，但允许已提交任务继续执行；<code>shutdownNow()</code> 尝试中断正在执行的任务。任务应在适当位置检查中断；捕获 InterruptedException 后可向上抛出，或恢复中断标记并结束当前工作。不要捕获后无条件继续循环。</p><div class="exercise"><h3>练习：修复计数器</h3><p>十个线程各执行一千次 <code>volatile int count</code> 的自增，为什么最终可能少于一万？如何验证修复？</p><details><summary>参考答案</summary><p>volatile 不保证自增原子性，更新可能丢失。改用 AtomicInteger.incrementAndGet，等待所有 Future 完成后断言结果为一万。一次测试通过不证明原代码安全，应从并发语义判断。</p></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#reflection">下一章：注解、反射与 JVM 心智模型 →</a></div></section><section class="chapter" id="reflection" aria-labelledby="heading-reflection"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">17</span> 认识框架背后的机制</div><h2 id="heading-reflection">注解、反射与 JVM 心智模型</h2><p class="chapter-description">理解元数据、运行时类型与 Java 程序真正运行的位置。</p></header><h3>1. 注解是元数据，不是魔法</h3><p><code>@Override</code> 帮编译器检查方法覆盖；它不会在运行时自动调用方法。框架里的注解之所以有效，是因为编译器、注解处理器或运行时框架读取了它们并执行约定逻辑。看到注解时，问“谁在什么时候读取它？”比死记名称更重要。</p><p>保留策略有三种：SOURCE 只在源码阶段存在；CLASS 写入 class 文件但通常不能通过运行时反射读取，也是默认策略；RUNTIME 可以在运行时读取。<code>@Target</code> 限定注解放在类型、方法、字段等什么位置。</p><p>完整示例，保存为 <code>ReflectionDemo.java</code>。一个文件可包含多个顶层类型，但这里只有文件同名的类是 public。</p><pre><code>import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
+import java.lang.reflect.Method;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@interface Label {
+    String value();
+}
+
+public class ReflectionDemo {
+    @Label("问候方法")
+    public String greet(String name) {
+        return "你好，" + name;
+    }
+
+    public static void main(String[] args) throws ReflectiveOperationException {
+        Method method = ReflectionDemo.class.getMethod("greet", String.class);
+        Label label = method.getAnnotation(Label.class);
+        System.out.println(label.value());
+        Object value = method.invoke(new ReflectionDemo(), "Java");
+        System.out.println(value);
+    }
+}</code></pre><p>这个异常声明适合教学入口，不代表真实服务应把所有反射错误直接抛到用户界面。方法名或参数写错会在运行时失败，失去普通方法调用的一部分编译期保障；目标方法抛出的异常会被包装为 InvocationTargetException。</p><h3>2. 反射能看到什么，不能推断什么</h3><p><code>Class&lt;?&gt;</code> 描述运行时类；Field、Method、Constructor 分别描述字段、方法和构造器。反射适用于框架、序列化工具等基础设施，普通业务代码优先使用接口与直接调用，不要为“灵活”到处写字符串方法名。</p><p>Java 泛型主要通过类型擦除实现：运行时的 ArrayList&lt;String&gt; 与 ArrayList&lt;Integer&gt; 通常具有相同的 Class。声明在字段或方法上的部分泛型签名元数据可以通过反射读取，但这不等于每个集合实例都携带可恢复的元素类型，也不能用 <code>instanceof List&lt;String&gt;</code> 检查集合元素。</p><div class="warning"><p>反射不应被视为绕过访问控制的工具。模块的导出和开放边界会限制访问；遇到不可访问错误，应使用公开 API 或审查合法模块配置，不要默认添加广泛的开放参数来掩盖问题。</p></div><h3>3. 从源码到运行中的进程</h3><p><code>javac</code> 将 .java 编译为 .class 字节码，<code>java</code> 启动 JVM 加载类并执行入口。JVM 可解释执行并对热点代码即时编译；因此一次很短的计时常受预热等因素影响，不能轻率宣布某种写法更快。</p><ul><li>classpath：寻找传统类和 JAR 的路径，常见于初学者 Maven 应用。</li><li>module-path：寻找 Java 9 引入的命名模块；module-info.java 声明依赖与导出等边界，不等同于包名。</li><li>栈：每个线程的方法调用帧，包含局部变量和执行状态等；过深递归可能触发 StackOverflowError。</li><li>堆：对象实例主要存储的共享区域。局部引用与它指向的对象不是同一个东西，不要把“变量在栈里”理解成对象必然也在那里。</li></ul><h3>4. GC 不等于资源管理</h3><p>垃圾收集器回收不再可达对象占用的内存，但回收时机不是业务逻辑能依赖的承诺。可达的无用对象仍会占用内存，例如不断增长的静态缓存。文件、数据库连接和锁需要明确释放，不能等 GC 替你关闭。先定位泄漏来源，再讨论堆大小和收集器参数。</p><div class="exercise"><h3>练习：为什么取不到注解？</h3><p>删除上例的 @Retention 后，getAnnotation 返回什么？能否靠强制 GC 确保文件立刻关闭？</p><details><summary>参考答案</summary><p>默认 CLASS 保留策略不提供运行时注解访问，因此返回 null，继续调用 value 会空指针。不能依赖 GC 关闭文件；应使用 try-with-resources 管理 AutoCloseable 资源。</p></details></div><p>继续阅读：<a href="https://dev.java/learn/">dev.java 官方学习入口</a>，以及 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/">Java 21 API 文档</a>。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#application-workflow">下一章：开发一个能构建、测试、运行的应用 →</a></div></section><section class="chapter" id="application-workflow" aria-labelledby="heading-application-workflow"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">18</span> 从单文件到 Maven 项目</div><h2 id="heading-application-workflow">开发一个能构建、测试、运行的应用</h2><p class="chapter-description">理解目录、依赖、测试与 JAR，避免只会在 IDE 点运行。</p></header><h3>1. Maven 负责什么</h3><p>Maven 用 pom.xml 描述项目、依赖与构建规则。它不是 Java 语言的一部分，也不是运行应用必需的服务器。先安装 JDK 21 和 Maven，用 <code>java -version</code>、<code>javac -version</code>、<code>mvn -version</code> 确认三者使用预期 JDK。下面建立一个无需运行时第三方依赖的 CLI 项目。</p><pre><code>java-notes/
+  pom.xml
+  src/main/java/com/example/notes/App.java
+  src/test/java/com/example/notes/AppTest.java</code></pre><p>完整 <code>pom.xml</code>，这里固定的是可用于示例的版本，并非声称它们是最新版。</p><pre><code>&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  &lt;artifactId&gt;java-notes&lt;/artifactId&gt;
+  &lt;version&gt;1.0.0&lt;/version&gt;
+  &lt;properties&gt;
+    &lt;maven.compiler.release&gt;21&lt;/maven.compiler.release&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+  &lt;/properties&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+      &lt;artifactId&gt;junit-jupiter&lt;/artifactId&gt;
+      &lt;version&gt;5.11.4&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.13.0&lt;/version&gt;
+      &lt;/plugin&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.5.2&lt;/version&gt;
+      &lt;/plugin&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.4.2&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;archive&gt;
+            &lt;manifest&gt;
+              &lt;mainClass&gt;com.example.notes.App&lt;/mainClass&gt;
+            &lt;/manifest&gt;
+          &lt;/archive&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;</code></pre><h3>2. 写入口与第一个测试</h3><p>完整文件 <code>src/main/java/com/example/notes/App.java</code>：</p><pre><code>package com.example.notes;
+
+public class App {
+    public static String greeting(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("名字不能为空");
+        }
+        return "你好，" + name;
+    }
+    public static void main(String[] args) {
+        String name = args.length == 0 ? "Java" : args[0];
+        System.out.println(greeting(name));
+    }
+}</code></pre><p>完整文件 <code>src/test/java/com/example/notes/AppTest.java</code>：</p><pre><code>package com.example.notes;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class AppTest {
+    @Test
+    void greetsByName() {
+        assertEquals("你好，小林", App.greeting("小林"));
+    }
+    @Test
+    void rejectsBlankName() {
+        assertThrows(IllegalArgumentException.class,
+                () -&gt; App.greeting(" "));
+    }
+}</code></pre><h3>3. 在项目根目录执行</h3><pre><code>mvn compile
+mvn test
+mvn package
+java -jar target/java-notes-1.0.0.jar 小林</code></pre><p><code>compile</code> 编译主源码；<code>test</code> 还会编译并运行测试；<code>package</code> 经过前面的生命周期阶段后打包。<code>mvn clean package</code> 先清除旧产物再构建。检查命令退出码、测试数量与失败信息，而不是只看到 JAR 就认为所有测试都执行了。</p><h3>4. JAR 与依赖的边界</h3><p>manifest 中的 Main-Class 指明 <code>java -jar</code> 的入口。普通 maven-jar-plugin 不会自动把运行时依赖全部打进 JAR。本例只有 JDK 运行时依赖，JUnit 是测试依赖，所以可直接运行；以后加入外部库，要选择明确的分发方式，例如配置 classpath、带依赖的发行目录，或专用打包插件，而不是假设任何 JAR 都是 fat JAR。</p><p>默认 compile scope 用于编译与运行；test 仅用于测试；runtime 供运行及测试使用，不用于主源码编译；provided 表示编译需要但运行环境提供。依赖有传递关系，可用 <code>mvn dependency:tree</code> 检查来源与冲突。</p><div class="exercise"><h3>练习：构建与运行排错</h3><p>遇到 “no main manifest attribute” 或 NoClassDefFoundError，各先检查什么？</p><details><summary>参考答案</summary><p>前者检查 JAR manifest 的入口配置及是否重新打包。后者检查缺失类来自哪个依赖，以及运行时 classpath 或打包方案。它也可能源于类初始化失败，应查看完整堆栈及 caused by，不能只靠增加依赖碰运气。</p></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#quality">下一章：写出可维护的 Java →</a></div></section><section class="chapter" id="quality" aria-labelledby="heading-quality"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">19</span> 质量来自可检查的习惯</div><h2 id="heading-quality">写出可维护的 Java</h2><p class="chapter-description">命名、错误处理、日志、配置和调试，比背 API 更能帮助你进入团队。</p></header><h3>1. 命名让意图可读</h3><p>包名一般小写，例如 <code>com.example.notes</code>；类和接口用 UpperCamelCase，如 NoteRepository；方法与变量用 lowerCamelCase，如 findById；常量用 UPPER_SNAKE_CASE，如 MAX_NOTE_LENGTH。布尔方法常用 is、has、can 开头。一个方法尽量表达一个清楚的操作，不要把参数校验、数据库查询、格式化与网络发送全塞进 main。</p><p>比起 <code>process(data, true)</code>，清楚的方法名或枚举参数更容易审查。避免为了套用设计模式而过度拆分；先做到依赖方向清楚、核心逻辑可测试，再根据真实变化提取抽象。</p><h3>2. 错误不是返回任意默认值</h3><p>输入不合法可抛 IllegalArgumentException；找不到可选结果可用 Optional；磁盘、网络和数据库故障必须明确处理或传播。把所有异常捕获后返回 null，通常会让真正原因变成后面的 NullPointerException。捕获异常时应能说明自己采取了恢复、转换、重试或退出中的哪一种策略。</p><p>完整示例，保存为 <code>ConfigDemo.java</code>，演示无需额外依赖的 System.Logger（Java 9 起提供）。日志 API 的具体输出由运行环境决定。</p><pre><code>public class ConfigDemo {
+    private static final System.Logger LOG =
+            System.getLogger(ConfigDemo.class.getName());
+
+    static int readPort(String value) {
+        int port = value == null ? 8080 : Integer.parseInt(value);
+        if (port &lt; 1 || port &gt; 65535) {
+            throw new IllegalArgumentException("端口超出范围");
+        }
+        return port;
+    }
+
+    public static void main(String[] args) {
+        try {
+            int port = readPort(System.getenv("APP_PORT"));
+            LOG.log(System.Logger.Level.INFO, "配置端口：{0}", port);
+        } catch (IllegalArgumentException e) {
+            LOG.log(System.Logger.Level.ERROR,
+                    "APP_PORT 配置无效，请使用 1 至 65535 的整数");
+            System.exit(1);
+        }
+    }
+}</code></pre><p>NumberFormatException 是 IllegalArgumentException 的子类，因此这一 catch 也覆盖格式错误。示例只在 CLI 入口退出；可复用的业务方法不应突然 System.exit。服务中的错误应转换成合适的响应，并保留内部诊断信息。</p><h3>3. 日志与秘密要分开</h3><p>日志记录“发生了什么”和定位线索，如操作名、错误类别、请求关联 ID；不要记录密码、令牌、完整个人资料、认证请求头或数据库连接秘密。异常消息和堆栈也可能包含敏感值，打印前要考虑来源。不要在每一层重复记录同一个异常，导致一次失败产生多条几乎相同的告警。</p><p>配置与源码分离。普通环境差异可通过环境变量或外置配置提供；秘密应通过合适的秘密管理方案注入，环境变量也不天然安全。不要把真实密钥写进示例、仓库、截图或 shell 历史。提交示例配置时只放说明和占位值。</p><h3>4. 看懂堆栈，而不是只看最后一行</h3><p>先阅读异常类型与消息，找到最接近问题的业务代码帧，再沿 <code>Caused by</code> 检查根因。行号必须对应实际运行的构建版本。NoSuchMethodError 可能是依赖版本不匹配，不一定是源码真的少写了方法。</p><p>下面是示意堆栈，不是需要粘贴运行的代码：</p><pre><code>java.lang.NumberFormatException: For input string: "abc"
+    at java.base/java.lang.Integer.parseInt(...)
+    at com.example.notes.Config.readPort(Config.java:12)
+    at com.example.notes.App.main(App.java:8)</code></pre><p>先检查 Config.java 第 12 行收到的输入。使用 IDE 断点暂停、查看变量、单步进入与跳过，比反复增加 println 更系统。断点可能改变并发执行时序，因此并发问题还需要日志、线程转储和可重复测试辅助定位。</p><h3>5. 每次修改都能验证</h3><ul><li>为正常输入、边界值、非法输入分别写测试。测试名描述行为，避免只叫 test1。</li><li>把时钟、随机数、网络等不稳定因素隔离，必要时注入 Clock 或小接口。</li><li>固定重要依赖与构建插件版本，定期检查安全更新；不要随意复制不明来源的依赖坐标。</li><li>格式化、静态检查和代码审查是辅助工具，不替代行为测试。不要为消除警告而盲目压制所有警告。</li></ul><div class="exercise"><h3>练习：补充端口测试</h3><p>为 readPort 列出至少五个测试，并决定错误日志是否应该原样输出环境变量。</p><details><summary>参考答案</summary><p>null 返回 8080；"1"、"65535" 是有效边界；"0"、"65536"、"abc" 和空字符串应失败。不必原样记录环境输入，避免意外泄露；错误提示指出配置项和修正规则即可。</p></details></div><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#learning-roadmap">下一章：学习路线与综合项目 →</a></div></section><section class="chapter" id="learning-roadmap" aria-labelledby="heading-learning-roadmap"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">20</span> 从会写语法到独立交付</div><h2 id="heading-learning-roadmap">学习路线与综合项目</h2><p class="chapter-description">按可验收的成果前进，不把“看完”误认为“学会”。</p></header><h3>第一周：能在终端解释每一行</h3><p>安装 JDK 21，熟练完成 javac/java 的编译与运行。练习基本类型、表达式、分支、循环、方法、数组和 String。把前端里的 truthy/falsy、对象引用与异步直觉逐一和 Java 对照。每天写一个不超过百行的小程序，例如单位换算、字符串统计、命令行计算器。</p><p>验收：不打开 IDE 也能编译运行；能解释 int 除法、字符串 equals、数组越界、null 与参数传递；能给非法输入写出清楚的报错。</p><h3>第二周：对象、集合与错误边界</h3><p>学习封装、构造器、接口、组合、继承、枚举、record、泛型、List/Set/Map 和异常。把“笔记”建模成对象，把存储行为放到接口后面。先用内存集合实现，不急着接数据库。</p><p>验收：实现 add、list、remove 三个命令；笔记有稳定 ID、标题和创建时间；重复标题的规则由你明确决定。能解释为何不能用列表下标作为删除后仍稳定的业务 ID。</p><h3>第三周：构建、测试与文件持久化</h3><p>迁移到 Maven 的 main/test 目录，添加 JUnit 5 测试。使用 Path/Files 保存 UTF-8 文本，程序重启后仍能读取。设计简单格式时要明确换行、分隔符如何处理；真实复杂结构可以选择成熟序列化库，但不要为了“零依赖”自己草率实现完整 JSON 解析器。</p><p>验收：<code>mvn clean package</code> 成功，测试覆盖空标题、删除不存在 ID、空文件与损坏文件；交付说明包含 JDK 版本、运行命令、数据目录以及备份方式。</p><h3>第四周：网络、数据库与并发基础</h3><p>用 HttpClient 请求公开测试接口或自己搭建的服务，区分连接失败、超时、非 2xx 状态与格式错误。学习 SQL 的增删改查、主键与事务，再通过 JDBC 使用参数化查询。并发练习单独进行：提交多个任务，等待结果，取消超时任务，正确处理关闭与中断。</p><p>验收：你能说明连接池限制的资源是什么；不会把虚拟线程数量当成数据库允许的连接数量；能写出不丢失更新的计数器，并解释为何它不自动解决跨表事务。</p><h3>综合项目：命令行笔记本</h3><p>以下是目标命令示意，不是本指南已实现的应用：</p><pre><code>java -jar notes.jar add "学习泛型"
+java -jar notes.jar list
+java -jar notes.jar remove 3
+java -jar notes.jar export notes.txt</code></pre><p>建议按四个里程碑演进：① 内存 CRUD；② UTF-8 持久化与重启恢复；③ Maven 构建和自动化测试；④ JDBC 存储与可靠错误处理。每个里程碑都保留可运行版本，先让纵向完整流程工作，再扩展功能。</p><div class="exercise"><h3>练习：设计一条删除流程</h3><p>输入 remove abc 时，哪些层应该负责什么？文件写入失败时能否告诉用户“删除成功”？</p><details><summary>参考答案</summary><p>命令行解析层检查命令与 ID 格式；业务层决定不存在 ID 的行为；存储层完成持久化并暴露失败。持久化失败不能虚报成功，还应设计内存与磁盘状态的一致性策略，例如先生成新状态、持久化成功后替换当前状态。真实事务数据库可以提供更明确的事务边界。</p></details></div><h3>进入 Spring 前的准备</h3><p>你不需要先精通 JVM 调优，但应理解接口与构造器注入、异常传播、泛型集合、注解与反射的作用、HTTP 方法与状态码、JSON、SQL、事务和 Maven。随后再学习 Spring Boot 配置、控制器、校验、服务层、数据访问和集成测试。框架自动配置不是免学基础，遇到问题仍要能沿调用链定位。</p><h3>版本速查：不要混用教程语法</h3><ul><li>Java 8：lambda、Stream、Optional、java.time。Stream 不是可重复消费的集合。</li><li>Java 11：标准 HttpClient、String.isBlank、Files.readString/writeString，以及直接启动单个源码文件等。</li><li>Java 17：可使用已经正式发布的 record（16）、instanceof 模式匹配（16）、文本块（15）、switch 表达式（14）；sealed 类在 17 正式发布。不要把这些全部说成“17 新增”。</li><li>Java 21：虚拟线程、record patterns 和 switch 模式匹配正式发布。本指南以 21 为基线，不依赖预览特性。</li><li>Java 25：紧凑源文件与实例 main 方法通过 JEP 512 正式发布，允许更简洁的入门入口；不要把这种写法直接放进 Java 21 项目。本指南仍采用传统 public static void main。</li></ul><p>学习路线可按每周可用时间伸缩，不承诺四周“精通”。继续深入性能分析、并发设计、安全和分布式系统应建立在可运行、可测试的应用经验之上。权威入口：<a href="https://dev.java/learn/">dev.java 学习指南</a>、<a href="https://docs.oracle.com/en/java/javase/21/">Java 21 文档</a>、<a href="https://openjdk.org/jeps/512">JEP 512</a>。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#practice-project">下一章：综合实战：学习任务命令行应用 →</a></div></section><section class="chapter" id="practice-project" aria-labelledby="heading-practice-project"><header class="chapter-header"><div class="chapter-meta"><span class="chapter-number">21</span> BUILD SOMETHING REAL</div><h2 id="heading-practice-project">综合实战：学习任务命令行应用</h2><p class="chapter-description">用一个可编译、可测试、可持久化的小项目，把语言知识接成开发能力。</p></header><h3>做一个真正能重复运行的小应用</h3><p>学习任务 CLI 支持添加任务、查看列表、标记完成，并把数据保存为 UTF-8 文件。它没有框架和第三方依赖，刻意让类、record、枚举、集合、Stream、异常、文件操作各司其职。不是把二十个知识点堆进一个“Hello World”，而是观察它们怎样解决同一件事。</p><div class="callout"><p><strong>先下载两个完整源文件：</strong><a href="examples/StudyTasks.java" download>StudyTasks.java</a> 与 <a href="examples/StudyTasksTest.java" download>StudyTasksTest.java</a>。把它们放在同一目录，再打开终端。使用 JDK 21 或以上，不需要 Maven。</p></div><h3>第一步：编译、运行与验证</h3><p>以下命令在两个源文件所在目录执行。Windows、macOS 和 Linux 都可以使用；命令中的引号能把带空格的标题作为一个参数传入。</p><pre><code>javac --release 21 -encoding UTF-8 -d out StudyTasks.java StudyTasksTest.java
+java -cp out StudyTasks tasks.tsv add "学习 Java 泛型"
+java -cp out StudyTasks tasks.tsv add "练习 Stream"
+java -cp out StudyTasks tasks.tsv list
+java -cp out StudyTasks tasks.tsv done 1
+java -cp out StudyTasks tasks.tsv list
+java -cp out StudyTasksTest</code></pre><p>第二次列表输出如下；编号用于稳定定位任务，而不是依赖列表显示位置。测试成功时最后一行是 <code>PASS: 29 checks</code>，覆盖成功路径与输入错误、损坏文件等边界。</p><pre><code>#1 [DONE] 学习 Java 泛型
+#2 [TODO] 练习 Stream</code></pre><p>也可以只运行 <code>java StudyTasks.java tasks.tsv list</code>，使用源码启动模式体验。正式练习建议保留“编译 → 测试 → 运行”的完整步骤。这里的任务文件是你指定的本地路径，不会发送到服务器。</p><h3>第二步：按职责阅读代码</h3><ol><li><code>Task</code> record 表达一条任务，构造时校验不变量。完成任务通过创建新值实现，避免修改 record 字段。</li><li><code>run</code> 是应用入口逻辑，先校验命令与参数数量，再加载数据。返回 0 表示成功，1 表示文件错误，2 表示输入错误。</li><li><code>load</code> 把三列文本解析成类型明确的对象。遇到坏行或重复 ID 会报告行号，不静默丢弃用户数据。</li><li><code>save</code> 先写同目录临时文件，再替换目标文件。若文件系统不支持原子移动，会回退普通替换。这降低写入中断风险，但不是数据库事务或断电持久性保证。</li><li><code>main</code> 只把参数与输出交给 <code>run</code>，然后设置退出码。测试可以直接调用 <code>run</code>，不必启动新 JVM，也不会被 <code>System.exit</code> 中断。</li></ol><h3>完整应用：StudyTasks.java</h3><p>下面是可直接保存、编译的完整文件，不需要补充导入。建议先从 <code>main</code>、<code>run</code> 的 switch 分支读起，再看文件处理。</p><pre><code>import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+
+/** Java 21, standard library only. A single-user learning task CLI. */
+public final class StudyTasks {
+    enum Status { TODO, DONE }
+
+    record Task(int id, String title, Status status) {
+        Task {
+            if (id &lt;= 0) throw new IllegalArgumentException(&quot;ID 必须为正整数&quot;);
+            title = normalizeTitle(title);
+            Objects.requireNonNull(status, &quot;status&quot;);
+        }
+        Task complete() { return new Task(id, title, Status.DONE); }
+    }
+
+    public static void main(String[] args) {
+        System.exit(run(args, System.out));
+    }
+
+    static int run(String[] args, PrintStream output) {
+        if (args.length &lt; 2) {
+            usage(output);
+            return 2;
+        }
+        try {
+            Path file = Path.of(args[0]);
+            String command = args[1];
+            if (!(command.equals(&quot;list&quot;) &amp;&amp; args.length == 2)
+                    &amp;&amp; !((command.equals(&quot;add&quot;) || command.equals(&quot;done&quot;)) &amp;&amp; args.length == 3)) {
+                usage(output);
+                return 2;
+            }
+            List&lt;Task&gt; tasks = load(file);
+            switch (command) {
+                case &quot;list&quot; -&gt; {
+                    if (tasks.isEmpty()) output.println(&quot;暂无任务，先用 add 添加一项。&quot;);
+                    tasks.forEach(task -&gt; output.printf(&quot;#%d [%s] %s%n&quot;, task.id(), task.status(), task.title()));
+                }
+                case &quot;add&quot; -&gt; {
+                    int maxId = tasks.stream().mapToInt(Task::id).max().orElse(0);
+                    int nextId = Math.addExact(maxId, 1);
+                    Task task = new Task(nextId, args[2], Status.TODO);
+                    tasks.add(task);
+                    save(file, tasks);
+                    output.printf(&quot;已添加 #%d：%s%n&quot;, task.id(), task.title());
+                }
+                case &quot;done&quot; -&gt; {
+                    int id = Integer.parseInt(args[2]);
+                    int index = -1;
+                    for (int i = 0; i &lt; tasks.size(); i++) {
+                        if (tasks.get(i).id() == id) { index = i; break; }
+                    }
+                    if (index &lt; 0) throw new IllegalArgumentException(&quot;找不到任务 #&quot; + id);
+                    tasks.set(index, tasks.get(index).complete());
+                    save(file, tasks);
+                    output.println(&quot;已完成 #&quot; + id);
+                }
+                default -&gt; throw new IllegalStateException(&quot;已校验的命令不应到达此处&quot;);
+            }
+            return 0;
+        } catch (IllegalArgumentException | ArithmeticException e) {
+            output.println(&quot;错误：&quot; + e.getMessage());
+            return 2;
+        } catch (IOException e) {
+            output.println(&quot;错误：无法读写任务文件。&quot; + e.getMessage());
+            return 1;
+        }
+    }
+
+    private static String normalizeTitle(String title) {
+        if (title == null || title.isBlank()) throw new IllegalArgumentException(&quot;标题不能为空&quot;);
+        if (title.indexOf(&#x27;\t&#x27;) &gt;= 0 || title.indexOf(&#x27;\n&#x27;) &gt;= 0 || title.indexOf(&#x27;\r&#x27;) &gt;= 0) {
+            throw new IllegalArgumentException(&quot;标题不能包含制表符或换行&quot;);
+        }
+        return title.strip();
+    }
+
+    private static List&lt;Task&gt; load(Path file) throws IOException {
+        List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();
+        if (!Files.exists(file)) return tasks;
+        List&lt;String&gt; lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+        var ids = new HashSet&lt;Integer&gt;();
+        for (int i = 0; i &lt; lines.size(); i++) {
+            String[] parts = lines.get(i).split(&quot;\t&quot;, -1);
+            try {
+                if (parts.length != 3) throw new IllegalArgumentException(&quot;需要 ID、状态、标题三列&quot;);
+                Task task = new Task(Integer.parseInt(parts[0]), parts[2], Status.valueOf(parts[1]));
+                if (!ids.add(task.id())) throw new IllegalArgumentException(&quot;ID 重复&quot;);
+                tasks.add(task);
+            } catch (IllegalArgumentException e) {
+                throw new IOException(&quot;文件第 &quot; + (i + 1) + &quot; 行格式错误：&quot; + e.getMessage(), e);
+            }
+        }
+        return tasks;
+    }
+
+    private static void save(Path file, List&lt;Task&gt; tasks) throws IOException {
+        Path destination = file.toAbsolutePath();
+        Files.createDirectories(destination.getParent());
+        Path temp = Files.createTempFile(destination.getParent(), &quot;.study-tasks-&quot;, &quot;.tmp&quot;);
+        try {
+            List&lt;String&gt; lines = tasks.stream()
+                    .map(task -&gt; task.id() + &quot;\t&quot; + task.status() + &quot;\t&quot; + task.title())
+                    .toList();
+            Files.write(temp, lines, StandardCharsets.UTF_8);
+            try {
+                Files.move(temp, destination, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException e) {
+                Files.move(temp, destination, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } finally {
+            Files.deleteIfExists(temp);
+        }
+    }
+
+    private static void usage(PrintStream output) {
+        output.println(&quot;用法：java StudyTasks &lt;数据文件&gt; list|add &lt;标题&gt;|done &lt;ID&gt;&quot;);
+        output.println(&quot;示例：java StudyTasks tasks.tsv add \&quot;学习泛型\&quot;&quot;);
+    }
+}
+</code></pre><h3>第三步：读懂测试，不依赖碰运气</h3><p>测试文件通过 <code>Files.createTempDirectory</code> 隔离真实数据，用 <code>ByteArrayOutputStream</code> 捕获输出，检查退出码和用户可见结果。每个断言失败会主动抛出 <code>AssertionError</code>，因此不依赖默认关闭的 Java <code>assert</code> 开关。生产应用可以把这些检查迁移到 JUnit 5。</p><p>逐步试错：把 add 的标题改为空白，把 done 的 ID 改成不存在的数字，把文件手工改成错误格式，然后看程序如何拒绝输入。检查错误后再次运行 list，确认正确的数据没有因为输入错误被覆盖。</p><div class="warning"><p><strong>这个项目的边界：</strong>它是单用户、单进程、少量数据的练习。整个文件一次读入内存，没有多进程锁、数据库事务、权限管理或备份策略。两个实例同时修改同一文件仍可能丢失更新。标题不能含制表符或换行，这是所选 TSV 存储格式的明确约束。</p></div><h3>第四步：自己把它扩展一轮</h3><div class="exercise"><p>练习 A：增加 <code>count</code> 命令输出 TODO 与 DONE 数量。练习 B：增加按关键词查找的 <code>search</code> 命令。练习 C：给任务加到期日，明确旧文件迁移策略并补测试，再修改存储格式。</p><details><summary>参考答案：实现 count 的思路</summary><p>先把命令校验放行 count，然后在 switch 增加分支。下面片段放在 run 的 switch 中；Task、Status 和 tasks 都来自现有代码。先在测试中增加空列表、全部完成、部分完成三种情况。</p><pre><code>case "count" -&gt; {
+    long done = tasks.stream()
+            .filter(task -&gt; task.status() == Status.DONE)
+            .count();
+    output.printf("TODO: %d, DONE: %d%n", tasks.size() - done, done);
+}</code></pre><p>只添加 switch 分支仍然无法运行，因为前置参数校验也需要接受 count。这个练习是在训练完整开发思路：入口校验、业务实现、结果反馈和自动测试要一起改变。</p></details></div><h3>掌握标准</h3><p>不看源码解释一个任务从命令行参数变成 record，再变成磁盘数据的过程；能独立增加一个命令，并覆盖正常与错误输入。做到这里，再学习 Spring 的 Controller、Service、Repository 分层会更有抓手。</p><div class="chapter-footer"><button type="button" class="mark-done js-only" aria-pressed="false">○ 我已理解本章</button><a href="#top">回到顶部 ↑</a></div></section>
+<section class="intro-note" aria-labelledby="official-references"><h2 id="official-references">继续查证：官方资料</h2><p>遇到语法边界，以版本对应的语言规范与 API 文档为准，而不是凭相似的 JavaScript 行为猜测。</p><ul><li><a href="https://dev.java/learn/">dev.java 官方学习入口</a></li><li><a href="https://docs.oracle.com/javase/specs/jls/se21/html/index.html">Java SE 21 Language Specification</a></li><li><a href="https://docs.oracle.com/en/java/javase/21/docs/api/index.html">Java SE 21 API 文档</a></li><li><a href="https://openjdk.org/jeps/444">JEP 444：虚拟线程</a></li><li><a href="https://openjdk.org/jeps/512">JEP 512：Java 25 紧凑源文件与实例 main 方法</a></li><li><a href="https://maven.apache.org/guides/getting-started/">Maven 入门指南</a></li><li><a href="https://docs.junit.org/5.11.4/user-guide/">JUnit 5.11.4 用户指南</a></li></ul><p><a class="back-top" href="#top">回到顶部 ↑</a></p></section>
+</main></div></div><footer><div class="shell"><span>全站研发学习实践 · Java 语法篇 · Java 21 baseline</span><a href="../">返回学习主题 ↗</a></div></footer></body></html>

@@ -1,0 +1,63 @@
+// Run with a static server rooted at the repository on port 8765.
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const assert = require('node:assert/strict');
+const base = process.env.BASE_URL || 'http://127.0.0.1:8765/fullstack-learning';
+(async () => {
+ const browser = await chromium.launch({executablePath:process.env.CHROMIUM_PATH || '/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+ const errors=[];
+ const page=await browser.newPage();
+ page.on('pageerror', e=>errors.push(e.message));
+ await page.goto(base+'/java/');
+ assert.equal(await page.locator('h1').innerText(),'从前端出发，读懂 Java。');
+ assert.ok(await page.locator('.chapter').count()>=21);
+ for (const width of [320,390,768,1440]) {
+   await page.setViewportSize({width,height:900});
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Overflow at ${width}`);
+ }
+ await page.setViewportSize({width:390,height:844});
+ await page.reload();
+ const toc=page.locator('#contents');
+ assert.equal(await toc.getAttribute('open'),null);
+ await toc.locator('summary').click();
+ await page.locator('#toc a[href="#generics"]').click();
+ assert.equal(await toc.getAttribute('open'),null);
+ assert.ok(page.url().endsWith('#generics'));
+ await page.locator('#search').fill('不存在的章节abcdefgh');
+ assert.equal(await page.locator('.chapter:visible').count(),0);
+ assert.equal(await page.locator('#no-results').isVisible(),true);
+ await page.locator('#clear-search').click();
+ assert.ok(await page.locator('.chapter:visible').count()>=21);
+ await page.locator('#search').fill('BigDecimal');
+ assert.ok(await page.locator('.chapter:visible').count()>0);
+ await page.evaluate(()=>{location.hash='concurrency'});
+ await page.waitForTimeout(100);
+ assert.equal(await page.locator('#concurrency').isVisible(),true);
+ assert.equal(await page.locator('#search').inputValue(),'');
+ const done=page.locator('#concurrency .mark-done');
+ await done.click(); assert.equal(await done.getAttribute('aria-pressed'),'true');
+ await page.reload(); assert.equal(await page.locator('#concurrency .mark-done').getAttribute('aria-pressed'),'true');
+ await page.locator('#concurrency .mark-done').click();
+ assert.equal(await page.locator('#concurrency .mark-done').getAttribute('aria-pressed'),'false');
+ await page.context().grantPermissions(['clipboard-read','clipboard-write']);
+ await page.locator('.copy-code').first().click();
+ assert.ok((await page.evaluate(()=>navigator.clipboard.readText())).length>10);
+ await page.screenshot({path:'/tmp/java-mobile.png',fullPage:false});
+ await page.setViewportSize({width:1440,height:1000});
+ await page.goto(base+'/java/');
+ await page.screenshot({path:'/tmp/java-desktop.png',fullPage:false});
+ const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
+ const plain=await nojs.newPage(); await plain.goto(base+'/java/');
+ assert.ok(await plain.locator('.chapter:visible').count()>=21);
+ assert.equal(await plain.locator('#search').isVisible(),false);
+ await plain.locator('#contents summary').click();
+ await plain.locator('#toc a[href="#types"]').click();
+ assert.ok(plain.url().endsWith('#types'));
+ const blocked=await browser.newContext();
+ await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('Blocked')}})});
+ const limited=await blocked.newPage(); limited.on('pageerror',e=>errors.push(e.message)); await limited.goto(base+'/java/');
+ await limited.locator('.mark-done').first().click();
+ assert.equal(await limited.locator('.mark-done').first().getAttribute('aria-pressed'),'true');
+ for (const path of ['/','/java/']) { await page.goto(base+path); assert.equal(await page.locator('h1').count(),1); }
+ assert.deepEqual(errors,[]);
+ await browser.close(); console.log('PASS: 4 viewport widths, mobile navigation, filtering/reset/hash recovery, progress reload/toggle, clipboard, no-JS, blocked storage, console');
+})().catch(e=>{console.error(e);process.exitCode=1});
