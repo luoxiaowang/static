@@ -4,8 +4,8 @@
 
 ## 当前内容
 
-- `index.html`：学习主题入口。
-- `java/index.html`：21 章 Java 语法与应用开发手册，中文解释、示例、练习及答案。
+- [学习主题入口](index.html)：查看当前可用的学习主题。
+- [Java 语法与应用开发手册](java/index.html)：21 章中文解释、示例、练习及答案。
 - `java/examples/StudyTasks.java`：Java 21 标准库命令行任务管理应用。
 - `java/examples/StudyTasksTest.java`：无需第三方依赖的 29 项自动检查。
 - `assets/guide.css`、`assets/guide.js`：移动端阅读、目录、全文章节筛选、复制代码、学习进度和打印样式。
