@@ -21,7 +21,7 @@
 python3 -m http.server 8765
 ```
 
-然后访问 `http://localhost:8765/fullstack-learning/`。禁用 JavaScript 时正文、目录链接和原生折叠练习仍可用。学习进度仅保存到当前浏览器的 localStorage，清除站点数据后会丢失，不会上传。
+然后访问 `http://localhost:8765/fullstack-learning/`，或直接访问 Java 手册：`http://localhost:8765/fullstack-learning/java/`。禁用 JavaScript 时正文、目录链接和原生折叠练习仍可用。学习进度仅保存到当前浏览器的 localStorage，清除站点数据后会丢失，不会上传。
 
 ## Java 练习
 
